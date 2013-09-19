@@ -1,4 +1,6 @@
-package com.android.icecave;
+package com.android.icecave.gui;
+
+import com.android.icecave.R;
 
 import android.os.Bundle;
 import android.app.Activity;
