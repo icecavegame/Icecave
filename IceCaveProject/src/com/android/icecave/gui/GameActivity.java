@@ -1,6 +1,17 @@
 package com.android.icecave.gui;
 
-public class GameActivity
-{
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
+import android.media.AudioManager;
+import android.os.Bundle;
 
+public class GameActivity extends Activity
+{
+	@Override
+	protected void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+	}
 }

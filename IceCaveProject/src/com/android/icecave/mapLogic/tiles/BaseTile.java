@@ -1,6 +1,8 @@
 package com.android.icecave.mapLogic.tiles;
 
-public abstract class BaseTile
-{
+import android.graphics.Point;
 
+public abstract class BaseTile implements ITile
+{
+	protected Point mLocation;
 }

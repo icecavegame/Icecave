@@ -1,10 +1,10 @@
 package com.android.icecave.gui;
 
-import com.android.icecave.R;
-
-import android.os.Bundle;
 import android.app.Activity;
-import android.view.Menu;
+import android.content.pm.ActivityInfo;
+import android.media.AudioManager;
+import android.os.Bundle;
+import com.android.icecave.R;
 
 public class MainActivity extends Activity
 {
@@ -14,14 +14,7 @@ public class MainActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-
 }
