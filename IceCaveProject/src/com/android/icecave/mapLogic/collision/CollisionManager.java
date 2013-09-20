@@ -2,12 +2,17 @@ package com.android.icecave.mapLogic.collision;
 
 import java.lang.reflect.Type;
 import java.util.Dictionary;
+import java.util.HashMap;
 
 public abstract class CollisionManager
 {
-	protected Dictionary<Type, ICollisionInvoker> mCollisionInvokers;
+	@SuppressWarnings("rawtypes")
+	protected HashMap<Type, ICollisionInvoker> mCollisionInvokers = 
+			new HashMap<Type, ICollisionInvoker>();
 	
-	static {}
-	
-	protected abstract void HandleCollision();
+	/**
+	 * Handles a collision with an object.
+	 * @param ICollisionable collisionable - Object collisioned with.
+	 */
+	protected abstract void handleCollision(ICollisionable collisionable);
 }

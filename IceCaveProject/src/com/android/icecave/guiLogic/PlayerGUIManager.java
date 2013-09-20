@@ -1,6 +1,6 @@
 package com.android.icecave.guiLogic;
 
-import com.android.icecave.globals.EDirection;
+import com.android.icecave.general.EDirection;
 
 public class PlayerGUIManager
 {

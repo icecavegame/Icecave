@@ -1,10 +1,17 @@
 package com.android.icecave.mapLogic;
 
 import android.graphics.Point;
-import com.android.icecave.globals.EDifficulty;
-import com.android.icecave.globals.EDirection;
+
+import com.android.icecave.general.EDifficulty;
+import com.android.icecave.general.EDirection;
+import com.android.icecave.general.IFunction;
+import com.android.icecave.mapLogic.collision.BaseCollisionInvoker;
 import com.android.icecave.mapLogic.collision.CollisionManager;
+import com.android.icecave.mapLogic.collision.ICollisionable;
+import com.android.icecave.mapLogic.tiles.BoulderTile;
+import com.android.icecave.mapLogic.tiles.FlagTile;
 import com.android.icecave.mapLogic.tiles.ITile;
+import com.android.icecave.mapLogic.tiles.WallTile;
 
 public class IceCaveGame extends CollisionManager
 {
@@ -26,26 +33,63 @@ public class IceCaveGame extends CollisionManager
 		
 		mStage = new IceCaveStage();
 		mPlayerLocation = new Point();
-	}
-	
-	private void endStage() {
 		
+		// Create invokers.
+		IFunction<Void> stopPlayer = new IFunction<Void>() {
+			
+			@Override
+			public Void invoke() {
+				mPlayerMoving = false;
+				return null;
+			}
+		};
+		
+		IFunction<Void> endStage = new IFunction<Void>() {
+			
+			@Override
+			public Void invoke() {
+				mPlayerMoving = false;
+
+				// TODO: Add report to the GUI logic on end stage.
+				return null;
+			}
+		};
+		
+		// Add invokers.
+		mCollisionInvokers.put(BoulderTile.class, new BaseCollisionInvoker<Void>(stopPlayer));
+		mCollisionInvokers.put(WallTile.class, new BaseCollisionInvoker<Void>(stopPlayer));
+		mCollisionInvokers.put(FlagTile.class, new BaseCollisionInvoker<Void>(endStage));
+		
+		MapLogicServiceProvider.getInstance().registerCollisionManager(this);
 	}
 	
 	public int getStageMoves() {
 		return mStage.getMoves();
 	}
 	
+	/**
+	 * Move the player on the board.
+	 * @param direction - Direction to move the player in.
+	 * @return Point - New location of the player.
+	 */
 	public Point movePlayer(EDirection direction) {
-		return null;
+		// Check if the requested direction is the last direction moved.
+		if(!direction.equals(mLastDirectionMoved))
+		{
+			// Start moving.
+			mPlayerMoving = true;
+			
+			// While we are moving.
+			while (mPlayerMoving){
+				mStage.movePlayerOneTile(mPlayerLocation, direction);
+			}
+		}
+		
+		return mPlayerLocation;
 	}
 	
 	public int getOverallMoves() {
 		return mOverallMoves;
-	}
-	
-	public void stopPlayer() {
-		
 	}
 	
 	public ITile[][] getBoard() {
@@ -53,8 +97,8 @@ public class IceCaveGame extends CollisionManager
 	}
 
 	@Override
-	protected void HandleCollision()
+	protected void handleCollision(ICollisionable collisionable)
 	{
-
+		mCollisionInvokers.get(collisionable).onCollision();
 	}
 }

@@ -1,6 +1,6 @@
 package com.android.icecave.mapLogic.collision;
 
-public interface ICollisionInvoker
+public interface ICollisionInvoker<return_type>
 {
-	public void onCollision();
+	public return_type onCollision();
 }
