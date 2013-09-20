@@ -1,4 +1,4 @@
-package com.android.icecave.globals;
+package com.android.icecave.general;
 
 public enum EDifficulty
 {
