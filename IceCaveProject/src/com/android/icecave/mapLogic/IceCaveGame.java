@@ -1,12 +1,12 @@
 package com.android.icecave.mapLogic;
 
-import com.android.icecave.mapLogic.tiles.ITile;
-
 import android.graphics.Point;
 import com.android.icecave.globals.EDifficulty;
 import com.android.icecave.globals.EDirection;
+import com.android.icecave.mapLogic.collision.CollisionManager;
+import com.android.icecave.mapLogic.tiles.ITile;
 
-public class IceCaveGame
+public class IceCaveGame extends CollisionManager
 {
 	private int mOverallMoves;
 	private EDirection mLastDirectionMoved;
@@ -50,5 +50,11 @@ public class IceCaveGame
 	
 	public ITile[][] getBoard() {
 		return mStage.getBoard();
+	}
+
+	@Override
+	protected void HandleCollision()
+	{
+
 	}
 }
