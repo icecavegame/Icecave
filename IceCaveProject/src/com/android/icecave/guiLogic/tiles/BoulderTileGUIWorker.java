@@ -1,9 +1,9 @@
-package com.android.icecave.guiLogic.tile;
+package com.android.icecave.guiLogic.tiles;
 
 import com.android.icecave.guiLogic.TileImageView;
 import com.android.icecave.mapLogic.tiles.ITile;
 
-public class EmptyTileGUIWorker implements IGUITileWorker
+public class BoulderTileGUIWorker implements IGUITileWorker
 {
 
 	@Override
