@@ -25,6 +25,13 @@ public class IceCaveGame extends CollisionManager
 	private int mBoardSizeY;
 	private EDifficulty mDifficulty;
 	
+	/**
+	 * Create a new instance of the IceCaveGame object.
+	 * @param boulderNum - Number of boulders to place on board.
+	 * @param boardSizeX - Board width  (in tiles).
+	 * @param boardSizeY - Board height (in tiles).
+	 * @param difficulty - Game difficulty.
+	 */
 	public IceCaveGame(int boulderNum, int boardSizeX, int boardSizeY, EDifficulty difficulty) {
 		mBoulderNum = boulderNum;
 		mBoardSizeX = boardSizeX;
@@ -63,6 +70,27 @@ public class IceCaveGame extends CollisionManager
 		MapLogicServiceProvider.getInstance().registerCollisionManager(this);
 	}
 	
+	/**
+	 * Start a new stage.
+	 * 
+	 * @param playerStart - The starting position of the player.
+	 * @param wallWidth - Width of the walls in tiles.
+	 */
+	public void newStage(Point playerStart, int wallWidth)
+	{
+		mStage.buildBoard(mDifficulty, 
+						  mBoardSizeX, 
+						  mBoardSizeY,
+						  wallWidth, 
+						  new Point(playerStart),
+						  mBoulderNum, 
+						  EDirection.RIGHT);
+	}
+	
+	/**
+	 * Get the number of moves that were done in the current stage.
+	 * @return Number of moves in current stage.
+	 */
 	public int getStageMoves() {
 		return mStage.getMoves();
 	}
@@ -88,10 +116,18 @@ public class IceCaveGame extends CollisionManager
 		return mPlayerLocation;
 	}
 	
+	/**
+	 * Return overall moves taken in game.
+	 * @return Overall moves.
+	 */
 	public int getOverallMoves() {
 		return mOverallMoves;
 	}
 	
+	/**
+	 * Get the current board of the stage.
+	 * @return Board of the stage.
+	 */
 	public ITile[][] getBoard() {
 		return mStage.getBoard();
 	}
