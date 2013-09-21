@@ -1,6 +1,5 @@
 package com.android.icecave.mapLogic;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import android.graphics.Point;
@@ -90,7 +89,7 @@ public class IceCaveStage
 			for (int j = wallWidth; j < colLen - wallWidth; j++)
 			{
 				// Initializing board.
-				mTiles[i][j] = new EmptyTile(i,j);
+				mTiles[i][j] = new EmptyTile();
 			}
 		}
 	}
@@ -106,7 +105,7 @@ public class IceCaveStage
 		{
 			for (int j = 0; j < colLen; j++)
 			{
-				mTiles[i][j] = new WallTile(i,j);
+				mTiles[i][j] = new WallTile();
 			}
 		}
 	}
@@ -165,8 +164,7 @@ public class IceCaveStage
 		Point flagLocation = 
 				CreateExit(rowLen, colLen, playerLoc);
 		
-		mTiles[flagLocation.y][flagLocation.x] = 
-				new FlagTile(flagLocation);
+		mTiles[flagLocation.y][flagLocation.x] = new FlagTile();
 
 		// Place the boulders on the board.
 		placeBoulders(rowLen,
@@ -213,8 +211,7 @@ public class IceCaveStage
 				continue;
 			}
 			
-			mTiles[boulderRowRand][boulderColRand] = 
-					new BoulderTile(boulderRowRand, boulderColRand);
+			mTiles[boulderRowRand][boulderColRand] = new BoulderTile();
 			
 		}
 	}
@@ -257,7 +254,7 @@ public class IceCaveStage
 	{
 		// TODO: Validate the number of steps is good.
 		// Create the root node
-		MapNode root = new MapNode(null, new EmptyTile(playerPoint));
+		MapNode root = new MapNode(null, new EmptyTile());
 
 		// Clear the previous stuff
 		root.clear();
@@ -400,7 +397,7 @@ public class IceCaveStage
 		if (StopFillingNodes(curNode))
 		{
 			// Add the flag
-			curNode.push(new FlagTile(playerPoint));
+//			curNode.push(new FlagTile());
 		}
 		// Checking if the current place has been checked before from that direction.
 		else if (!mVisitedTiles[playerPoint.y][playerPoint.x])
@@ -412,10 +409,6 @@ public class IceCaveStage
 			for (EDirection eDirection : EDirection.values()) {
 				fillNodesInDirection(curNode,eDirection, lastDirection, playerPoint);
 			}
-		}
-		else
-		{
-			// TODO: Error.
 		}
 
 		return curNode.Peek();
@@ -481,13 +474,19 @@ public class IceCaveStage
 				break;
 			}
 
+			currPoint.x += toMove.getDirection().x;
+			currPoint.y += toMove.getDirection().y;
+			
+			
 			// Advance
 			tileCurr =
-				mTiles[tileCurr.getLocation().x + toMove.getDirection().x]
-					  [tileCurr.getLocation().y + toMove.getDirection().y];
+				mTiles[currPoint.x + toMove.getDirection().x]
+					  [currPoint.y + toMove.getDirection().y];
 		}
 		
-		return (tileCurr.getLocation());
+		currPoint.x += toMove.getDirection().x;
+		currPoint.y += toMove.getDirection().y;
+		return (currPoint);
 	}
 }
 

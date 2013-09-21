@@ -1,7 +1,6 @@
 package com.android.icecave.mapLogic.collision;
 
 import java.lang.reflect.Type;
-import java.util.Dictionary;
 import java.util.HashMap;
 
 public abstract class CollisionManager

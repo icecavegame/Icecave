@@ -1,8 +1,6 @@
 package com.android.icecave.guiLogic;
 
 import com.android.icecave.guiLogic.tiles.GUITileFactory;
-import com.android.icecave.mapLogic.collision.CollisionManager;
-import com.android.icecave.mapLogic.tiles.validators.TileValidatorFactory;
 
 public class GUILogicServiceProvider
 {

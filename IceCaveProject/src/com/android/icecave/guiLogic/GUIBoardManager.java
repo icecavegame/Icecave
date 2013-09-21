@@ -1,13 +1,10 @@
 package com.android.icecave.guiLogic;
 
-import java.util.ArrayList;
-
 import android.graphics.Point;
 
 import com.android.icecave.general.EDifficulty;
 import com.android.icecave.general.EDirection;
 import com.android.icecave.mapLogic.IceCaveGame;
-import com.android.icecave.mapLogic.IceCaveStage;
 import com.android.icecave.mapLogic.tiles.ITile;
 
 /**

@@ -1,7 +1,6 @@
 package com.android.icecave.guiLogic;
 
 import android.content.Context;
-
 import android.widget.ImageView;
 
 public class TileImageView extends ImageView
