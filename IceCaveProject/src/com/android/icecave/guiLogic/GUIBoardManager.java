@@ -28,7 +28,8 @@ public class GUIBoardManager
 						 	  int 		 boardSizeX,
 						 	  int 	     boardSizeY,
 						 	  EDifficulty difficulty){
-		mIceCaveGame = new IceCaveGame(boulderNum, boardSizeX, boardSizeY, difficulty);
+		mIceCaveGame = 
+				new IceCaveGame(boulderNum, boardSizeX, boardSizeY, difficulty);
 		
 		// Get the tiles
 		mTiles = new TileImageView[boardSizeY][boardSizeX];
@@ -58,12 +59,5 @@ public class GUIBoardManager
 	public Point movePlayer(EDirection direction){
 	
 		return mIceCaveGame.movePlayer(direction);
-	}
-	
-	/**
-	 * Create a new instance of the GUIBoardManager.
-	 */
-	public GUIBoardManager() {
-		
 	}
 }

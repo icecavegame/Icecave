@@ -56,7 +56,7 @@ public class IceCaveGame extends CollisionManager
 			@Override
 			public Void invoke() {
 				mPlayerMoving = false;
-
+				
 				// TODO: Add report to the GUI logic on end stage.
 				return null;
 			}
