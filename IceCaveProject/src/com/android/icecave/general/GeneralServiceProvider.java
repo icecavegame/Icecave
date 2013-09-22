@@ -1,5 +1,7 @@
 package com.android.icecave.general;
 
+import android.graphics.drawable.Drawable;
+
 import java.util.Random;
 
 /**
@@ -13,6 +15,8 @@ public class GeneralServiceProvider {
 	 * Random member to provide with random function.
 	 */
 	private Random mRandom;
+
+	private SelectTheme mTheme;
 	
 	/**
 	 * Private instance of this class.
@@ -25,6 +29,15 @@ public class GeneralServiceProvider {
 	 */
 	private GeneralServiceProvider(){
 		mRandom = new Random();
+		mTheme = new SelectTheme();
+	}
+	
+	public void setTheme(Drawable themeId) {
+		mTheme.setThemeId(themeId);
+	}
+	
+	public Drawable getTheme() {
+		return mTheme.getTheme();
 	}
 	
 	/**

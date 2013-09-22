@@ -1,7 +1,7 @@
 package com.android.icecave.guiLogic;
 
+import android.content.Context;
 import android.graphics.Point;
-
 import com.android.icecave.general.EDifficulty;
 import com.android.icecave.general.EDirection;
 import com.android.icecave.mapLogic.IceCaveGame;
@@ -23,13 +23,14 @@ public class GUIBoardManager
 	 * @param boardSizeX - Row length of the map.
 	 * @param boardSizeY - Column length of the map.
 	 * @param difficulty - Difficulty level.
+	 * @param Context - activity creating the game
 	 */
 	public void startNewGame( int 		 boulderNum, 
 						 	  int 		 boardSizeX,
 						 	  int 	     boardSizeY,
-						 	  EDifficulty difficulty){
-		mIceCaveGame = 
-				new IceCaveGame(boulderNum, boardSizeX, boardSizeY, difficulty);
+						 	  EDifficulty difficulty,
+						 	  Context context){
+		mIceCaveGame = new IceCaveGame(boulderNum, boardSizeX, boardSizeY, difficulty);
 		
 		// Get the tiles
 		mTiles = new TileImageView[boardSizeY][boardSizeX];
@@ -44,7 +45,8 @@ public class GUIBoardManager
 							getInstance().
 								getTileFactory().
 									getTiles(board[yAxis]
-												  [xAxis]);
+												  [xAxis],
+												  context);
 			}
 		}
 	}

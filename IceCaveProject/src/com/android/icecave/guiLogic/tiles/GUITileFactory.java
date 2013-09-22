@@ -1,17 +1,12 @@
 package com.android.icecave.guiLogic.tiles;
 
+import android.content.Context;
+import com.android.icecave.guiLogic.TileImageView;
 import com.android.icecave.mapLogic.tiles.BoulderTile;
 import com.android.icecave.mapLogic.tiles.EmptyTile;
 import com.android.icecave.mapLogic.tiles.FlagTile;
 import com.android.icecave.mapLogic.tiles.ITile;
 import com.android.icecave.mapLogic.tiles.WallTile;
-
-import com.android.icecave.guiLogic.TileImageView;
-
-import java.lang.reflect.Type;
-
-import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.HashMap;
 
 /**
@@ -43,12 +38,12 @@ public class GUITileFactory
 	 * @param tile - To get image of.
 	 * @return Image for a tile.
 	 */
-	public TileImageView getTiles(ITile tile) {
+	public TileImageView getTiles(ITile tile, Context context) {
 		// Check if exists.
 		if(!mTileWorkers.containsKey(tile.getClass())){
 			return null;
 		}
 		
-		return mTileWorkers.get(tile.getClass()).makeTile(tile);
+		return mTileWorkers.get(tile.getClass()).makeTile(tile, context);
 	}
 }

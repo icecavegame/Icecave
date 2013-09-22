@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Window;
+import android.view.WindowManager;
 import com.android.icecave.R;
 
 public class OptionsActivity extends Activity
@@ -17,5 +18,9 @@ public class OptionsActivity extends Activity
 		setContentView(R.layout.activity_options);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		
+		// Hide the Status Bar
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+		WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	}
 }

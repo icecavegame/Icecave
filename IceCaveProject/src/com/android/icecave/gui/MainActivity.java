@@ -1,7 +1,5 @@
 package com.android.icecave.gui;
 
-import android.view.Window;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,14 +8,18 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import com.android.icecave.R;
+import com.android.icecave.general.Consts;
+import com.android.icecave.general.GeneralServiceProvider;
 
 public class MainActivity extends Activity
 {
-	final String PREFS_FILE_TAG = "prefsFile";
+	
 	final int DEFAULT_LEVEL = 0;
 	SharedPreferences mShared;
 
@@ -29,8 +31,12 @@ public class MainActivity extends Activity
 		setContentView(R.layout.activity_main);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		
+		// Hide the Status Bar
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+		WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		mShared = getSharedPreferences(PREFS_FILE_TAG, 0);
+		mShared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
 
 		Button optionsActivity = (Button) findViewById(R.id.options_button);
 		Button gameActivity = (Button) findViewById(R.id.game_button);
@@ -38,6 +44,9 @@ public class MainActivity extends Activity
 
 		// Load level selection from prefs if exists
 		levelSelect.check(mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL));
+		
+		// Load theme selection if exists, save it in GSP
+		GeneralServiceProvider.getInstance().setTheme(getResources().getDrawable(mShared.getInt(Consts.THEME_SELECT, Consts.DEFAULT_TILES)));
 		
 		optionsActivity.setOnClickListener(new OnClickListener()
 		{
@@ -57,7 +66,7 @@ public class MainActivity extends Activity
 				
 				// Load selection from prefs if exists
 				i.putExtra(Consts.LEVEL_SELECT_TAG, mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL));
-				i.putExtra(Consts.PLAYER_SELECT_TAG, mShared.getString(Consts.PLAYER_SELECT_TAG, Consts.DEFAULT_PLAYER));
+				i.putExtra(Consts.PLAYER_SELECT_TAG, mShared.getInt(Consts.PLAYER_SELECT_TAG, Consts.DEFAULT_PLAYER));
 				startActivity(i);
 			}
 		});

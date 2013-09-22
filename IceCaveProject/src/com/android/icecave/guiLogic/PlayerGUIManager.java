@@ -1,5 +1,6 @@
 package com.android.icecave.guiLogic;
 
+import android.graphics.drawable.Drawable;
 import com.android.icecave.general.EDirection;
 
 public class PlayerGUIManager
@@ -8,7 +9,7 @@ public class PlayerGUIManager
 	 * Create a new instance of the player GUI manager.
 	 * @param playerTileSetFile - Path file for the player tile set.
 	 */
-	public PlayerGUIManager (String playerTileSetFile) {
+	public PlayerGUIManager (Drawable playerTileSetFile) {
 		
 	}
 	

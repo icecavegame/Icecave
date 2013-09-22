@@ -1,5 +1,9 @@
 package com.android.icecave.gui;
 
+import android.view.WindowManager;
+
+import com.android.icecave.general.Consts;
+
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
@@ -30,6 +34,10 @@ public class GameActivity extends Activity implements ISwipeDetector
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
+		// Hide the Status Bar
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+		WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		// Create once
 		if (sGBM == null)
@@ -39,7 +47,8 @@ public class GameActivity extends Activity implements ISwipeDetector
 			sGBM.startNewGame(Consts.DEFAULT_BOULDER_NUM, 
 							  Consts.DEFAULT_BOARD_SIZE_X, 
 							  Consts.DEFAULT_BOARD_SIZE_Y, 
-							  EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)]);
+							  EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)],
+							  this);
 		}
 
 		// Set up player position
@@ -55,9 +64,9 @@ public class GameActivity extends Activity implements ISwipeDetector
 		if (getIntent().getExtras() != null)
 		{
 			mPGM = 
-				new PlayerGUIManager((String) getIntent().
+				new PlayerGUIManager(getResources().getDrawable((Integer) getIntent().
 						getExtras().
-							get(Consts.PLAYER_SELECT_TAG));
+							get(Consts.PLAYER_SELECT_TAG)));
 		}
 		
 	}
