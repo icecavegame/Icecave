@@ -1,5 +1,7 @@
 package com.android.icecave.gui;
 
+import android.view.Window;
+
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
@@ -27,6 +29,7 @@ public class GameActivity extends Activity implements ISwipeDetector
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		// Create once
 		if (sGBM == null)
