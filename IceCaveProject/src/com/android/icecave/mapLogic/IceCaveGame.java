@@ -57,7 +57,7 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 			@Override
 			public Void invoke() {
 				mPlayerMoving = false;
-				mIsStageEnded = false;
+				mIsStageEnded = true;
 				// TODO: Add report to the GUI logic on end stage.
 				return null;
 			}
@@ -79,6 +79,7 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 	 */
 	public void newStage(Point playerStart, int wallWidth)
 	{
+		mIsStageEnded = false;
 		mStage.buildBoard(mDifficulty, 
 						  mBoardSizeX, 
 						  mBoardSizeY,
