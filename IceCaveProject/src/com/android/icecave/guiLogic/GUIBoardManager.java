@@ -29,18 +29,29 @@ public class GUIBoardManager
 	public void startNewGame( int 		 boulderNum, 
 						 	  int 		 boardSizeX,
 						 	  int 	     boardSizeY,
-						 	  EDifficulty difficulty,
-						 	  Context context){
+						 	  EDifficulty difficulty){
 		mIceCaveGame = new IceCaveGame(boulderNum, boardSizeX, boardSizeY, difficulty);
 		
 		// Get the tiles
 		mTiles = new TileImageView[boardSizeY][boardSizeX];
+	}
+	
+	/**
+	 * Start a new stage.
+	 * @param playerStart - Starting location of the player.
+	 * @param wallWidth - Width of the wall in tiles.
+	 * @param context - Current activity context.
+	 */
+	public void newStage(Point playerStart, 
+	                     int wallWidth,
+	                     Context context){
+		mIceCaveGame.newStage(playerStart, wallWidth);
 		
 		ITile[][] board = mIceCaveGame.getBoard();
 		
 		// Go through the game board.
-		for (int yAxis = 0; yAxis < boardSizeY; yAxis++) {
-			for (int xAxis = 0; xAxis < boardSizeX; xAxis++) {
+		for (int yAxis = 0; yAxis < board.length; yAxis++) {
+			for (int xAxis = 0; xAxis < board[0].length; xAxis++) {
 				mTiles[yAxis][xAxis] =
 						GUILogicServiceProvider.
 							getInstance().
@@ -50,15 +61,7 @@ public class GUIBoardManager
 												  context);
 			}
 		}
-	}
 	
-	/**
-	 * Start a new stage.
-	 * @param playerStart - Starting location of the player.
-	 * @param wallWidth - Width of the wall in tiles.
-	 */
-	public void newStage(Point playerStart, int wallWidth){
-		mIceCaveGame.newStage(playerStart, wallWidth);
 	}
 	
 	/**
