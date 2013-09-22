@@ -11,7 +11,8 @@ public class Consts
 	public final static String THEME_SELECT = "themeSelect";
 	public final static int DEFAULT_PLAYER = R.drawable.default_player;
 	public final static int DEFAULT_TILES = R.drawable.default_tiles;
-	public final static Point START_POS = new Point(1, 1);
+	public final static Point DEFAULT_START_POS = new Point(1, 1);
+	public final static int DEFAULT_WALL_WIDTH = 1;
 	public final static int DEFAULT_BOULDER_NUM = 30;
 	public final static int DEFAULT_BOARD_SIZE_X = 10;
 	public final static int DEFAULT_BOARD_SIZE_Y = 10;
