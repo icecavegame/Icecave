@@ -200,8 +200,8 @@ public class IceCaveStage
 		while (boulderCounter < boulderNum)
 		{
 			// Making random points
-			boulderRowRand = rand.nextInt(rowLen + 1) + 1;
-			boulderColRand = rand.nextInt(colLen + 1) + 1;
+			boulderRowRand = rand.nextInt(rowLen - 2) + 1;
+			boulderColRand = rand.nextInt(colLen - 2) + 1;
 
 			// Validate the position.
 			TileValidatorFactory tileValidatorFactory =
