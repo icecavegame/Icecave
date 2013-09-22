@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Point;
 import com.android.icecave.general.EDifficulty;
 import com.android.icecave.general.EDirection;
+import com.android.icecave.mapLogic.IIceCaveGameStatus;
 import com.android.icecave.mapLogic.IceCaveGame;
 import com.android.icecave.mapLogic.tiles.ITile;
 
@@ -58,7 +59,7 @@ public class GUIBoardManager
 	 * 
 	 * @return new player point.
 	 */
-	public Point movePlayer(EDirection direction){
+	public IIceCaveGameStatus movePlayer(EDirection direction){
 	
 		return mIceCaveGame.movePlayer(direction);
 	}

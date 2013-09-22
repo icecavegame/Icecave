@@ -1,5 +1,7 @@
 package com.android.icecave.mapLogic.tiles;
 
+import android.graphics.Point;
+
 
 /**
  * Basic tile interface.
@@ -8,4 +10,5 @@ package com.android.icecave.mapLogic.tiles;
  */
 public interface ITile
 {
+	Point getLocation();
 }

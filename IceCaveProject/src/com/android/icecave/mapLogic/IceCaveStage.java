@@ -89,7 +89,7 @@ public class IceCaveStage
 			for (int j = wallWidth; j < colLen - wallWidth; j++)
 			{
 				// Initializing board.
-				mTiles[i][j] = new EmptyTile();
+				mTiles[i][j] = new EmptyTile(i,j);
 			}
 		}
 	}
@@ -105,7 +105,7 @@ public class IceCaveStage
 		{
 			for (int j = 0; j < colLen; j++)
 			{
-				mTiles[i][j] = new WallTile();
+				mTiles[i][j] = new WallTile(i,j);
 			}
 		}
 	}
@@ -164,7 +164,7 @@ public class IceCaveStage
 		Point flagLocation = 
 				CreateExit(rowLen, colLen, playerLoc);
 		
-		mTiles[flagLocation.y][flagLocation.x] = new FlagTile();
+		mTiles[flagLocation.y][flagLocation.x] = new FlagTile(flagLocation);
 
 		// Place the boulders on the board.
 		placeBoulders(rowLen,
@@ -211,7 +211,8 @@ public class IceCaveStage
 				continue;
 			}
 			
-			mTiles[boulderRowRand][boulderColRand] = new BoulderTile();
+			mTiles[boulderRowRand][boulderColRand] = 
+					new BoulderTile(boulderRowRand, boulderColRand);
 			
 		}
 	}
@@ -254,7 +255,7 @@ public class IceCaveStage
 	{
 		// TODO: Validate the number of steps is good.
 		// Create the root node
-		MapNode root = new MapNode(null, new EmptyTile());
+		MapNode root = new MapNode(null, null);
 
 		// Clear the previous stuff
 		root.clear();

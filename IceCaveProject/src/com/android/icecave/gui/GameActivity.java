@@ -16,6 +16,7 @@ import com.android.icecave.general.EDirection;
 import com.android.icecave.guiLogic.GUIBoardManager;
 import com.android.icecave.guiLogic.PlayerGUIManager;
 import com.android.icecave.guiLogic.TileImageView;
+import com.android.icecave.mapLogic.IIceCaveGameStatus;
 
 public class GameActivity extends Activity implements ISwipeDetector
 {
@@ -116,7 +117,7 @@ public class GameActivity extends Activity implements ISwipeDetector
 									direction, 
 									true);
 		
-		Point newPlayerPoint = sGBM.movePlayer(direction);
+		IIceCaveGameStatus iceCaveGameStatus = sGBM.movePlayer(direction);
 		
 		// TODO: Sagie make the animation.
 	}

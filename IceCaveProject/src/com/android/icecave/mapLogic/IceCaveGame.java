@@ -13,7 +13,7 @@ import com.android.icecave.mapLogic.tiles.FlagTile;
 import com.android.icecave.mapLogic.tiles.ITile;
 import com.android.icecave.mapLogic.tiles.WallTile;
 
-public class IceCaveGame extends CollisionManager
+public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 {
 	private int mOverallMoves;
 	private EDirection mLastDirectionMoved;
@@ -24,6 +24,7 @@ public class IceCaveGame extends CollisionManager
 	private int mBoardSizeX;
 	private int mBoardSizeY;
 	private EDifficulty mDifficulty;
+	private boolean mIsStageEnded;
 	
 	/**
 	 * Create a new instance of the IceCaveGame object.
@@ -37,7 +38,7 @@ public class IceCaveGame extends CollisionManager
 		mBoardSizeX = boardSizeX;
 		mBoardSizeY = boardSizeY;
 		mDifficulty = difficulty;
-		
+		mIsStageEnded = false;
 		mStage = new IceCaveStage();
 		mPlayerLocation = new Point();
 		
@@ -56,7 +57,7 @@ public class IceCaveGame extends CollisionManager
 			@Override
 			public Void invoke() {
 				mPlayerMoving = false;
-				
+				mIsStageEnded = false;
 				// TODO: Add report to the GUI logic on end stage.
 				return null;
 			}
@@ -100,7 +101,12 @@ public class IceCaveGame extends CollisionManager
 	 * @param direction - Direction to move the player in.
 	 * @return Point - New location of the player.
 	 */
-	public Point movePlayer(EDirection direction) {
+	public IIceCaveGameStatus movePlayer(EDirection direction) {
+		
+		if(mIsStageEnded){
+			return this;
+		}
+		
 		// Check if the requested direction is the last direction moved.
 		if(!direction.equals(mLastDirectionMoved))
 		{
@@ -113,7 +119,7 @@ public class IceCaveGame extends CollisionManager
 			}
 		}
 		
-		return mPlayerLocation;
+		return this;
 	}
 	
 	/**
@@ -136,5 +142,17 @@ public class IceCaveGame extends CollisionManager
 	protected void handleCollision(ICollisionable collisionable)
 	{
 		mCollisionInvokers.get(collisionable).onCollision();
+	}
+
+	@Override
+	public Point getPlayerPoint()
+	{
+		return mPlayerLocation;
+	}
+
+	@Override
+	public boolean getIsStageEnded()
+	{
+		return mIsStageEnded;
 	}
 }
