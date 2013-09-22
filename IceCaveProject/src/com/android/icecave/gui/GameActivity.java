@@ -1,13 +1,13 @@
 package com.android.icecave.gui;
 
-import android.view.Window;
-
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import com.android.icecave.general.EDifficulty;
 import com.android.icecave.general.EDirection;
 import com.android.icecave.guiLogic.GUIBoardManager;
 import com.android.icecave.guiLogic.PlayerGUIManager;
@@ -17,7 +17,7 @@ public class GameActivity extends Activity implements ISwipeDetector
 {
 	private static GUIBoardManager sGBM;
 	private PlayerGUIManager mPGM;
-	private Point mPlayerPosition; // FIXME Where to initialize?
+	private Point mPlayerPosition;
 	private TileImageView mPlayer;
 
 	private final String POSITION_X = "posX";
@@ -36,9 +36,10 @@ public class GameActivity extends Activity implements ISwipeDetector
 		{
 			sGBM = new GUIBoardManager();
 
-			// TODO Create game? Send this somewhere anyways
-			if (getIntent().getExtras() != null)
-				getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG);
+			sGBM.startNewGame(Consts.DEFAULT_BOULDER_NUM, 
+							  Consts.DEFAULT_BOARD_SIZE_X, 
+							  Consts.DEFAULT_BOARD_SIZE_Y, 
+							  EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)]);
 		}
 
 		// Set up player position
