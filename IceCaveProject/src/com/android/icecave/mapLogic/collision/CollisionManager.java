@@ -13,5 +13,5 @@ public abstract class CollisionManager
 	 * Handles a collision with an object.
 	 * @param ICollisionable collisionable - Object collisioned with.
 	 */
-	protected abstract void handleCollision(ICollisionable collisionable);
+	public abstract void handleCollision(ICollisionable collisionable);
 }
