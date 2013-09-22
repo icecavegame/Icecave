@@ -43,7 +43,7 @@ public class MainActivity extends Activity
 		RadioGroup levelSelect = (RadioGroup) findViewById(R.id.levelSelect);
 
 		// Load level selection from prefs if exists
-		levelSelect.check(mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL));
+		levelSelect.check(levelSelect.getChildAt(mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL)).getId());
 		
 		// Load theme selection if exists, save it in GSP
 		GeneralServiceProvider.getInstance().setTheme(getResources().getDrawable(mShared.getInt(Consts.THEME_SELECT, Consts.DEFAULT_TILES)));
@@ -78,7 +78,7 @@ public class MainActivity extends Activity
 			public void onCheckedChanged(RadioGroup group, int checkedId)
 			{
 				// Save level to prefs
-				mShared.edit().putInt(Consts.LEVEL_SELECT_TAG, checkedId).commit();
+				mShared.edit().putInt(Consts.LEVEL_SELECT_TAG, group.indexOfChild(group.findViewById(group.getCheckedRadioButtonId()))).commit();
 			}
 		});
 	}

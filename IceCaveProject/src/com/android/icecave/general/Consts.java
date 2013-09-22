@@ -15,8 +15,10 @@ public class Consts
 	public final static int DEFAULT_BOULDER_NUM = 30;
 	public final static int DEFAULT_BOARD_SIZE_X = 10;
 	public final static int DEFAULT_BOARD_SIZE_Y = 10;
-
-	// TODO PUT REAL POSITIONS
+	public final static int DEFAULT_TILES_BMP_COLUMNS = 6;
+	public final static int DEFAULT_TILES_BMP_ROWS = 3;
+	public static final int DEFAULT_PLAYER_BMP_ROWS = 4;
+	public static final int DEFAULT_PLAYER_BMP_COLUMNS = 3;
 	public final static Point EMPTY_TILE_IN_SPRITE = new Point(4, 0);
 	public final static Point FLAG_TILE_IN_SPRITE = new Point(3, 0);
 	public final static Point WALL_TILE_IN_SPRITE = new Point(4, 2);
