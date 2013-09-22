@@ -53,6 +53,15 @@ public class GUIBoardManager
 	}
 	
 	/**
+	 * Start a new stage.
+	 * @param playerStart - Starting location of the player.
+	 * @param wallWidth - Width of the wall in tiles.
+	 */
+	public void newStage(Point playerStart, int wallWidth){
+		mIceCaveGame.newStage(playerStart, wallWidth);
+	}
+	
+	/**
 	 * Move the player on the board.
 	 * 
 	 * @param direction - Direction to move the player in.
