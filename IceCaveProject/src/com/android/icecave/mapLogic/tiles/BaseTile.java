@@ -11,6 +11,7 @@ public abstract class BaseTile implements ITile
 	 * 
 	 * @return Location of the tile.
 	 */
+	@Override
 	public Point getLocation(){
 		return mLocation;
 	}
