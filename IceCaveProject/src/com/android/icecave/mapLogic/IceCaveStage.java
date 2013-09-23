@@ -220,6 +220,8 @@ public class IceCaveStage
 			mTiles[boulderRowRand][boulderColRand] = 
 					new BoulderTile(boulderRowRand, boulderColRand);
 			
+			// Increase counter after creating a boulder
+			boulderCounter++; // TODO: Tom confirm this code line..
 		}
 	}
 
