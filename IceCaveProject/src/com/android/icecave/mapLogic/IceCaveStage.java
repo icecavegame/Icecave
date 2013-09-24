@@ -27,12 +27,12 @@ public class IceCaveStage
 	 * @param toCheck - Point to validate.
 	 * @return true if point is valid.
 	 */
-	public boolean ValidatePoint(Point toCheck)
+	public boolean validatePoint(Point toCheck)
 	{
 		return ((toCheck.x > 0 			    || 
-				 toCheck.x < mTiles[0].length) && 
-				(toCheck.y > 0 			|| 
-				 toCheck.y < mTiles.length));
+				 toCheck.x < mTiles[0].length - 1) && 
+				(toCheck.y > 0 				|| 
+				 toCheck.y < mTiles.length - 1));
 	}
 	
 	/**
@@ -77,6 +77,11 @@ public class IceCaveStage
 	 */
 	private void initializeBoard(int rowLen, int colLen, int wallWidth)
 	{
+		for (boolean columnIndicators[] : mVisitedTiles){
+			for (boolean rowIndicator : columnIndicators){
+				rowIndicator = false;
+			}
+		}
 		createEmptyBoard(rowLen, colLen);
 
 		fillWithEmptyTles(rowLen, colLen, wallWidth);
@@ -144,7 +149,7 @@ public class IceCaveStage
 	
 		// Validating the matrix path
 		// If the validate turns false
-		while (!Validate(startingMove, playerLoc, difficulty))
+		while (!validate(startingMove, playerLoc, difficulty))
 		{
 			// Re-initializing map
 			placeTiles(rowLen, colLen, wallWidth, playerLoc, boulderNum);			
@@ -168,9 +173,9 @@ public class IceCaveStage
 
 		// Creating exit point
 		Point flagLocation = 
-				CreateExit(rowLen, colLen, playerLoc);
+				createExit(rowLen, colLen, playerLoc);
 		
-		mTiles[flagLocation.y][flagLocation.x] = new FlagTile(flagLocation);
+		mTiles[flagLocation.x][flagLocation.y] = new FlagTile(flagLocation);
 
 		// Place the boulders on the board.
 		placeBoulders(rowLen,
@@ -221,7 +226,7 @@ public class IceCaveStage
 					new BoulderTile(boulderRowRand, boulderColRand);
 			
 			// Increase counter after creating a boulder
-			boulderCounter++; // TODO: Tom confirm this code line..
+			boulderCounter++; 
 		}
 	}
 
@@ -234,7 +239,7 @@ public class IceCaveStage
 	 * 
 	 * @return Location to place the flag.
 	 */
-	private Point CreateExit(int rowSize, int colSize, Point playerLoc)
+	private Point createExit(int rowSize, int colSize, Point playerLoc)
 	{
 		// Get a random number
 		Random rand = GeneralServiceProvider.getInstance().getRandom();
@@ -257,7 +262,7 @@ public class IceCaveStage
 	 * @param difficulty - The difficulty of the stage.
 	 * @return true if valid.
 	 */
-	private boolean Validate(EDirection  defaultMoveDirection,
+	private boolean validate(EDirection  defaultMoveDirection,
 							 Point 	     playerPoint,
 							 EDifficulty difficulty)
 	{
@@ -401,22 +406,20 @@ public class IceCaveStage
 		{
 			return curNode;
 		}
-
-		// Checking if the target was found
-		if (StopFillingNodes(curNode))
-		{
-			// Add the flag
-//			curNode.push(new FlagTile());
-		}
+		
 		// Checking if the current place has been checked before from that direction.
-		else if (!mVisitedTiles[playerPoint.y][playerPoint.x])
+		if (!mVisitedTiles[playerPoint.y][playerPoint.x])
 		{
 			// Making the currently visited place false, to not
 			// visit it again
 			mVisitedTiles[playerPoint.x][playerPoint.y] = true;
 
-			for (EDirection eDirection : EDirection.values()) {
-				fillNodesInDirection(curNode,eDirection, lastDirection, playerPoint);
+			// Go through the available directions and fill the map.
+			for (EDirection direction : EDirection.values()) {
+				fillNodesInDirection(curNode,
+								     direction, 
+								     lastDirection, 
+								     playerPoint);
 			}
 		}
 
@@ -424,9 +427,11 @@ public class IceCaveStage
 	}
 
 	/**
-	 * @param curNode
-	 * @param mvMoves
-	 * @param playerPoint
+	 * Fill the nodes in a specific direction. 
+	 * @param curNode - Current node to be added.
+	 * @param toMove - The direction to move the player in.
+	 * @param toMove - The last direction the player moved in.
+	 * @param playerPoint - The location of the player.
 	 */
 	private void fillNodesInDirection(MapNode    curNode, 
 									  EDirection toMove, 
@@ -434,20 +439,52 @@ public class IceCaveStage
 									  Point playerPoint) {
 		MapNode newNode;
 		Point pntNewPoint;
-		
-		// Checking upper position
-		// TODO: Make this more generic
-		if ((!StopFillingNodes(curNode)) &&
-			(mTiles[playerPoint.x + toMove.getDirection().x]
-				   [playerPoint.y + toMove.getDirection().y] instanceof IBlockingTile &&
-			 !lastMove.equals(toMove.getOpositeDirection())))
-		{
-			pntNewPoint = getMove(toMove, playerPoint);
-			newNode = 
-					curNode.push(mTiles[pntNewPoint.x][pntNewPoint.y]);
 
-			fillNodes(newNode, toMove, pntNewPoint);
+		pntNewPoint = new Point(playerPoint);
+		
+		// Validate the point.
+		if(!validateFillNodesInDirection(curNode, toMove, lastMove, playerPoint)){
+			return;
 		}
+		getMove(toMove, pntNewPoint);
+		
+		// Check if we hit a wall.
+		if(mTiles[pntNewPoint.x][pntNewPoint.y] instanceof WallTile){
+			return;
+		}
+		
+		newNode = 
+				curNode.push(mTiles[pntNewPoint.x][pntNewPoint.y]);
+
+		fillNodes(newNode, toMove, pntNewPoint);
+	}
+
+	/**
+	 * Validate the parameters for the fillNodesInDirection function.
+	 * @param curNode - The current map node checked.
+	 * @param toMove - The direction to move the player in.
+	 * @param lastMove - The last move that was taken out.
+	 * @param playerPoint - The position of the player.
+	 */
+	private boolean validateFillNodesInDirection(MapNode    curNode,
+	                                             EDirection toMove,
+	                                             EDirection lastMove,
+	                                             Point      playerPoint)
+	{
+		if(stopFillingNodes(curNode)){
+			return false;
+		}
+		
+		if(mTiles[playerPoint.x + toMove.getDirection().x]
+				 [playerPoint.y + toMove.getDirection().y] instanceof IBlockingTile){
+			return false;
+	    }
+			
+		if(lastMove.equals(toMove.getOpositeDirection())){
+			return false;
+		}
+		
+		return true;
 	}
 
 	/**
@@ -455,7 +492,7 @@ public class IceCaveStage
 	 * @param curNode - Current node.
 	 * @return true if stop filling node.
 	 */
-	private boolean StopFillingNodes(MapNode curNode)
+	private boolean stopFillingNodes(MapNode curNode)
 	{
 		return curNode.getValue() instanceof FlagTile;
 	}
@@ -495,6 +532,14 @@ public class IceCaveStage
 		
 		currPoint.x += toMove.getDirection().x;
 		currPoint.y += toMove.getDirection().y;
+		
+		if(!validatePoint(currPoint))
+		{
+			int a = 3;
+			int b = 23;
+			int c = a + b;
+		}
+		
 		return (currPoint);
 	}
 }
