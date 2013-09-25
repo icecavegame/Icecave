@@ -2,11 +2,15 @@ package com.android.icecave.general;
 
 public enum EDifficulty
 {
-	Easy,
-	Medium,
-	Hard;
+	Easy(4),
+	Medium(8),
+	Hard(12);
 	
 	int mMinMoves;
+	
+	private EDifficulty(int minSteps){
+		mMinMoves = minSteps;
+	}
 	
 	/**
 	 * Get the min number of moves for this difficulty level.

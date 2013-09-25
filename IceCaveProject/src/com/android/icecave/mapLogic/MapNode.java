@@ -86,7 +86,9 @@ public class MapNode implements INode<ITile>
 	}
 
 	/**
-	 * This function return's the number of touches this object can 'handle' till it will disassemble and disappear. If this value is UNBREAKABLE (-1) then this object is unbreakable.
+	 * This function return's the number of touches this object can 'handle' 
+	 * till it will disassemble and disappear. 
+	 * If this value is UNBREAKABLE (-1) then this object is unbreakable.
 	 * 
 	 * @return The number of touches this object can handle from the player.
 	 */
@@ -132,7 +134,7 @@ public class MapNode implements INode<ITile>
 	 * Peek in the node stack.
 	 * @return Get the last node inserted.
 	 */
-	public MapNode Peek()
+	public MapNode peek()
 	{
 		if (mMapStack.isEmpty())
 		{
@@ -147,7 +149,7 @@ public class MapNode implements INode<ITile>
 	 * @param nCounter
 	 * @return
 	 */
-	MapNode PeekNext(int nCounter)
+	MapNode peekNext(int nCounter)
 	{
 		if (nCounter > mMapStack.size())
 		{

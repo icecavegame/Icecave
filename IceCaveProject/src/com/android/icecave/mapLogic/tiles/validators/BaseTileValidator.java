@@ -23,13 +23,13 @@ public abstract class BaseTileValidator implements ITileValidator {
 				  			  Class<?> 		   tileClass,
 				  			  ITile[][] 	   board){
 		
-		return tileClass.isInstance(board[yLocation - 1][xLocation - 1]) &&
-			   tileClass.isInstance(board[yLocation - 1][xLocation + 0]) &&  
-			   tileClass.isInstance(board[yLocation - 1][xLocation + 1]) &&  
-			   tileClass.isInstance(board[yLocation + 0][xLocation + 1]) &&  
-			   tileClass.isInstance(board[yLocation + 1][xLocation + 1]) &&  
-			   tileClass.isInstance(board[yLocation + 1][xLocation + 0]) &&  
-			   tileClass.isInstance(board[yLocation + 1][xLocation - 1]) &&  
+		return tileClass.isInstance(board[yLocation - 1][xLocation - 1]) ||
+			   tileClass.isInstance(board[yLocation - 1][xLocation + 0]) ||  
+			   tileClass.isInstance(board[yLocation - 1][xLocation + 1]) ||
+			   tileClass.isInstance(board[yLocation + 0][xLocation + 1]) ||
+			   tileClass.isInstance(board[yLocation + 1][xLocation + 1]) ||
+			   tileClass.isInstance(board[yLocation + 1][xLocation + 0]) ||
+			   tileClass.isInstance(board[yLocation + 1][xLocation - 1]) ||
 			   tileClass.isInstance(board[yLocation + 0][xLocation - 1]);  
 	}
 }
