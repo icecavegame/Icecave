@@ -1,5 +1,6 @@
 package com.android.icecave.mapLogic;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import android.graphics.Point;
@@ -77,11 +78,7 @@ public class IceCaveStage
 	 */
 	private void initializeBoard(int rowLen, int colLen, int wallWidth)
 	{
-		for (boolean columnIndicators[] : mVisitedTiles){
-			for (boolean rowIndicator : columnIndicators){
-				rowIndicator = false;
-			}
-		}
+		mVisitedTiles = new boolean[colLen][rowLen];
 		createEmptyBoard(rowLen, colLen);
 
 		fillWithEmptyTles(rowLen, colLen, wallWidth);
@@ -147,14 +144,57 @@ public class IceCaveStage
 		// Place tiles in the board.
 		placeTiles(rowLen, colLen, wallWidth, playerLoc, boulderNum);			
 	
+		printBoard(mTiles);
+		
 		// Validating the matrix path
 		// If the validate turns false
-		while (!validate(startingMove, playerLoc, difficulty))
-		{
+		while (!validate(startingMove, playerLoc, difficulty)){
 			// Re-initializing map
 			placeTiles(rowLen, colLen, wallWidth, playerLoc, boulderNum);			
-
+			
+			printBoard(mTiles);
 		}
+	}
+
+	/**
+	 * 
+	 */
+	private void printBoard(ITile[][] board)
+	{
+		String result = "";
+		int nRowIndex = 0;
+		for (ITile[] rowTiles : board)
+		{
+			result += nRowIndex;
+			result += ")   ";
+			nRowIndex++;
+			for (ITile iTile : rowTiles)
+			{
+				if(iTile instanceof FlagTile)
+				{
+					result += "F";
+				}
+				else if(iTile instanceof BoulderTile)
+				{
+					result += "B";
+				}
+				else if(iTile instanceof WallTile)
+				{
+					result += "W";
+				}
+				else if(iTile instanceof EmptyTile)
+				{
+					result += ".";
+				}
+				else
+				{
+					result += "!";
+				}
+				result += "    ";
+			}
+			result += "\n";
+		}
+		System.out.println(result);
 	}
 
 	/**
@@ -175,7 +215,7 @@ public class IceCaveStage
 		Point flagLocation = 
 				createExit(rowLen, colLen, playerLoc);
 		
-		mTiles[flagLocation.x][flagLocation.y] = new FlagTile(flagLocation);
+		mTiles[flagLocation.y][flagLocation.x] = new FlagTile(flagLocation);
 
 		// Place the boulders on the board.
 		placeBoulders(rowLen,
@@ -202,7 +242,11 @@ public class IceCaveStage
 		
 		// Place boulders.
 		// TODO: Might be an infinite loop.
-		while (boulderCounter < boulderNum)
+		int retryCounter = 0;
+		
+		// Check if we placed all boulders, 
+		// or failed placing one for ten times in a row.
+		while (retryCounter < 10 && boulderCounter < boulderNum)
 		{
 			// Making random points
 			boulderRowRand = rand.nextInt(rowLen - 2) + 1;
@@ -219,11 +263,12 @@ public class IceCaveStage
 											 playerLoc.x, 
 											 playerLoc.y, 
 											 mTiles)){
+				retryCounter++;
 				continue;
 			}
 			
-			mTiles[boulderRowRand][boulderColRand] = 
-					new BoulderTile(boulderRowRand, boulderColRand);
+			mTiles[boulderColRand][boulderRowRand] = 
+					new BoulderTile(boulderColRand, boulderRowRand);
 			
 			// Increase counter after creating a boulder
 			boulderCounter++; 
@@ -244,12 +289,12 @@ public class IceCaveStage
 		// Get a random number
 		Random rand = GeneralServiceProvider.getInstance().getRandom();
 		
-		int flagXposition = rand.nextInt(rowSize);
-		int flagYposition = rand.nextInt(colSize);
+		int flagXposition = rand.nextInt(rowSize - 2) + 1;
+		int flagYposition = rand.nextInt(colSize - 2) + 1;
 		
 		while(playerLoc.equals(flagXposition, flagYposition)){
-			flagXposition = rand.nextInt(rowSize);
-			flagYposition = rand.nextInt(colSize);
+			flagXposition = rand.nextInt(rowSize - 2) + 1;
+			flagYposition = rand.nextInt(colSize - 2) + 1;
 		}
 			
 		return new Point(flagXposition, flagYposition);
@@ -282,10 +327,12 @@ public class IceCaveStage
 						  defaultMoveDirection, 
 						  new Point(playerPoint));
 
+		MapNode flagNode = getTheFlagNode(root);
+		
 		// Check if it's OK.
-		if (node.getValue() instanceof FlagTile && 
-			node.getLevel() >= difficulty.getMinMoves() &&
-			node.getLevel() <= difficulty.getMaxMoves())
+		if (flagNode.getValue() instanceof FlagTile && 
+			flagNode.getLevel() >= difficulty.getMinMoves() &&
+			flagNode.getLevel() <= difficulty.getMaxMoves())
 		{
 			return true;
 //			// Get the number of steps.
@@ -314,6 +361,31 @@ public class IceCaveStage
 		}
 
 		return false;
+	}
+
+	/**
+	 * Get the flag node from the children of the root node.
+	 * @param root - Root node.
+	 * @return The flag node, null if not found.
+	 */
+	private MapNode getTheFlagNode(MapNode root)
+	{
+		if(root.getValue() instanceof FlagTile){
+			return root;
+		}
+		
+		// Get the flag.
+		ArrayList<MapNode> nodes = root.getChildren();
+		for (MapNode mapNode : nodes){
+			
+			MapNode currentMapNode = getTheFlagNode(mapNode);
+			
+			// Check if already found the flag.
+			if(currentMapNode.getValue() instanceof FlagTile){
+				return currentMapNode;
+			}
+		}
+		return root;
 	}
 
 	/**
@@ -412,7 +484,7 @@ public class IceCaveStage
 		{
 			// Making the currently visited place false, to not
 			// visit it again
-			mVisitedTiles[playerPoint.x][playerPoint.y] = true;
+			mVisitedTiles[playerPoint.y][playerPoint.x] = true;
 
 			// Go through the available directions and fill the map.
 			for (EDirection direction : EDirection.values()) {
@@ -423,7 +495,7 @@ public class IceCaveStage
 			}
 		}
 
-		return curNode.Peek();
+		return curNode.peek();
 	}
 
 	/**
@@ -472,6 +544,7 @@ public class IceCaveStage
 	                                             Point      playerPoint)
 	{
 		if(stopFillingNodes(curNode)){
+			System.out.println("Stop filling nodes");
 			return false;
 		}
 		
@@ -532,13 +605,6 @@ public class IceCaveStage
 		
 		currPoint.x += toMove.getDirection().x;
 		currPoint.y += toMove.getDirection().y;
-		
-		if(!validatePoint(currPoint))
-		{
-			int a = 3;
-			int b = 23;
-			int c = a + b;
-		}
 		
 		return (currPoint);
 	}
