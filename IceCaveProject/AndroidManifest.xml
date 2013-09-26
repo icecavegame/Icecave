@@ -4,6 +4,8 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="18" />
@@ -22,10 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-                <activity android:name=".gui.GameActivity" >
+        <activity android:name=".gui.GameActivity" >
         </activity>
-                <activity android:name=".gui.OptionsActivity" >
+        <activity android:name=".gui.OptionsActivity" >
         </activity>
     </application>
 
