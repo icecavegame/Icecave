@@ -101,7 +101,7 @@ public class IceCaveStage
 			for (int j = wallWidth; j < colLen - wallWidth; j++)
 			{
 				// Initializing board.
-				mTiles[i][j] = new EmptyTile(i,j);
+				mTiles[i][j] = new EmptyTile(j,i);
 			}
 		}
 	}
@@ -117,7 +117,7 @@ public class IceCaveStage
 		{
 			for (int j = 0; j < colLen; j++)
 			{
-				mTiles[i][j] = new WallTile(i,j);
+				mTiles[i][j] = new WallTile(j,i);
 			}
 		}
 	}
@@ -272,7 +272,7 @@ public class IceCaveStage
 			}
 			
 			mTiles[boulderColRand][boulderRowRand] = 
-					new BoulderTile(boulderColRand, boulderRowRand);
+					new BoulderTile(boulderRowRand, boulderColRand);
 			
 			// Increase counter after creating a boulder
 			boulderCounter++; 
