@@ -9,7 +9,6 @@ import com.android.icecave.general.EDifficulty;
 import com.android.icecave.general.EDirection;
 import com.android.icecave.general.GeneralServiceProvider;
 import com.android.icecave.mapLogic.collision.ICollisionable;
-import com.android.icecave.mapLogic.tiles.BaseTile;
 import com.android.icecave.mapLogic.tiles.BoulderTile;
 import com.android.icecave.mapLogic.tiles.EmptyTile;
 import com.android.icecave.mapLogic.tiles.FlagTile;
