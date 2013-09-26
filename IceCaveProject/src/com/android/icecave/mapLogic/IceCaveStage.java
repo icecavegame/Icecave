@@ -215,7 +215,10 @@ public class IceCaveStage
 		Point flagLocation = 
 				createExit(rowLen, colLen, playerLoc);
 		
-		mTiles[flagLocation.x][flagLocation.y] = new FlagTile(flagLocation);
+		// Setting location in flag correctly (inverted x,y)
+		Point locationToInit = new Point(flagLocation.y, flagLocation.x);
+		
+		mTiles[flagLocation.y][flagLocation.x] = new FlagTile(locationToInit);
 
 		// Place the boulders on the board.
 		placeBoulders(rowLen,
