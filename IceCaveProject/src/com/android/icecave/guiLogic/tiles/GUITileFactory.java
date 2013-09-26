@@ -1,5 +1,7 @@
 package com.android.icecave.guiLogic.tiles;
 
+import com.android.icecave.guiLogic.GUIScreenManager;
+
 import android.content.Context;
 import com.android.icecave.guiLogic.TileImageView;
 import com.android.icecave.mapLogic.tiles.BoulderTile;
@@ -38,12 +40,12 @@ public class GUITileFactory
 	 * @param tile - To get image of.
 	 * @return Image for a tile.
 	 */
-	public TileImageView getTiles(ITile tile, Context context) {
+	public TileImageView getTiles(ITile tile, Context context, GUIScreenManager screenManager) {
 		// Check if exists.
 		if(!mTileWorkers.containsKey(tile.getClass())){
 			return null;
 		}
 		
-		return mTileWorkers.get(tile.getClass()).makeTile(tile, context);
+		return mTileWorkers.get(tile.getClass()).makeTile(tile, context, screenManager);
 	}
 }

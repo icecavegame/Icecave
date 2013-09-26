@@ -1,16 +1,16 @@
 package com.android.icecave.general;
 
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 
 public class SelectTheme
 {
-	Drawable mTheme;
+	Bitmap mTheme;
 	
-	public void setThemeId(Drawable theme) {
+	public void setThemeId(Bitmap theme) {
 		mTheme = theme;
 	}
 	
-	public Drawable getTheme() {
+	public Bitmap getTheme() {
 		return mTheme;
 	}
 }

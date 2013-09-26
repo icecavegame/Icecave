@@ -17,7 +17,15 @@ public class TileImageView extends ImageView
 	public TileImageView(Context context)
 	{
 		super(context);
-		// TODO Complete
+	}
+	
+	public int getRow()
+	{
+		return mRow;
 	}
 
+	public int getCol()
+	{
+		return mCol;
+	}
 }

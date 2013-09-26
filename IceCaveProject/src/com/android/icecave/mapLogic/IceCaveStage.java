@@ -215,7 +215,7 @@ public class IceCaveStage
 		Point flagLocation = 
 				createExit(rowLen, colLen, playerLoc);
 		
-		mTiles[flagLocation.y][flagLocation.x] = new FlagTile(flagLocation);
+		mTiles[flagLocation.x][flagLocation.y] = new FlagTile(flagLocation);
 
 		// Place the boulders on the board.
 		placeBoulders(rowLen,

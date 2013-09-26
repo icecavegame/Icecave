@@ -1,7 +1,6 @@
 package com.android.icecave.general;
 
-import android.graphics.drawable.Drawable;
-
+import android.graphics.Bitmap;
 import java.util.Random;
 
 /**
@@ -32,11 +31,11 @@ public class GeneralServiceProvider {
 		mTheme = new SelectTheme();
 	}
 	
-	public void setTheme(Drawable themeId) {
+	public void setTheme(Bitmap themeId) {
 		mTheme.setThemeId(themeId);
 	}
 	
-	public Drawable getTheme() {
+	public Bitmap getTheme() {
 		return mTheme.getTheme();
 	}
 	

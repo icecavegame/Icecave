@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.View;
@@ -46,7 +47,7 @@ public class MainActivity extends Activity
 		levelSelect.check(levelSelect.getChildAt(mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL)).getId());
 		
 		// Load theme selection if exists, save it in GSP
-		GeneralServiceProvider.getInstance().setTheme(getResources().getDrawable(mShared.getInt(Consts.THEME_SELECT, Consts.DEFAULT_TILES)));
+		GeneralServiceProvider.getInstance().setTheme(BitmapFactory.decodeResource(getResources(),(mShared.getInt(Consts.THEME_SELECT, Consts.DEFAULT_TILES))));
 		
 		optionsActivity.setOnClickListener(new OnClickListener()
 		{
