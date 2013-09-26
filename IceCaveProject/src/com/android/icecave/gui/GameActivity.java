@@ -94,7 +94,7 @@ public class GameActivity extends Activity implements ISwipeDetector
 	public void addNextTileToView(TileImageView tile)
 	{
 		// Add current tile to the row that matches its index
-		((TableRow) mTilesTable.findViewById(tile.getRow())).addView(tile);
+		((TableRow) mTilesTable.findViewById(tile.getCol())).addView(tile);
 	}
 	
 	private void createRows() {
