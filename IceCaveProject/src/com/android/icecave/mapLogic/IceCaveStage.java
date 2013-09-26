@@ -49,8 +49,8 @@ public class IceCaveStage
 		// Call the tile that the player will meet.
 		MapLogicServiceProvider.getInstance().
 								getCollisionManager().
-								handleCollision((ICollisionable) mTiles[nextPoint.x]
-																	   [nextPoint.y]);
+								handleCollision((ICollisionable) mTiles[nextPoint.y]
+																	   [nextPoint.x]);
 		
 	}
 	
@@ -215,10 +215,7 @@ public class IceCaveStage
 		Point flagLocation = 
 				createExit(rowLen, colLen, playerLoc);
 		
-		// Setting location in flag correctly (inverted x,y)
-		Point locationToInit = new Point(flagLocation.y, flagLocation.x);
-		
-		mTiles[flagLocation.y][flagLocation.x] = new FlagTile(locationToInit);
+		mTiles[flagLocation.y][flagLocation.x] = new FlagTile(flagLocation);
 
 		// Place the boulders on the board.
 		placeBoulders(rowLen,
@@ -523,13 +520,8 @@ public class IceCaveStage
 		}
 		getMove(toMove, pntNewPoint);
 		
-		// Check if we hit a wall.
-		if(mTiles[pntNewPoint.x][pntNewPoint.y] instanceof WallTile){
-			return;
-		}
-		
 		newNode = 
-				curNode.push(mTiles[pntNewPoint.x][pntNewPoint.y]);
+				curNode.push(mTiles[pntNewPoint.y][pntNewPoint.x]);
 
 		fillNodes(newNode, toMove, pntNewPoint);
 	}
@@ -551,8 +543,8 @@ public class IceCaveStage
 			return false;
 		}
 		
-		if(mTiles[playerPoint.x + toMove.getDirection().x]
-				 [playerPoint.y + toMove.getDirection().y] instanceof IBlockingTile){
+		if(mTiles[playerPoint.y + toMove.getDirection().y]
+				 [playerPoint.x + toMove.getDirection().x] instanceof IBlockingTile){
 			return false;
 	    }
 			
@@ -583,12 +575,15 @@ public class IceCaveStage
 	{
 		// Getting the current point
 		ITile tileCurr = 
-				mTiles[currPoint.x + toMove.getDirection().x]
-					  [currPoint.y + toMove.getDirection().y];
+				mTiles[currPoint.y + toMove.getDirection().y]
+					  [currPoint.x + toMove.getDirection().x];
 
 		// While not blocked
 		while (!(tileCurr instanceof IBlockingTile))
 		{
+			currPoint.x += toMove.getDirection().x;
+			currPoint.y += toMove.getDirection().y;
+
 			// Stopping if reached exit.
 			// TODO: make this more generic.
 			if (tileCurr instanceof FlagTile)
@@ -596,18 +591,11 @@ public class IceCaveStage
 				break;
 			}
 
-			currPoint.x += toMove.getDirection().x;
-			currPoint.y += toMove.getDirection().y;
-			
-			
 			// Advance
 			tileCurr =
-				mTiles[currPoint.x + toMove.getDirection().x]
-					  [currPoint.y + toMove.getDirection().y];
+				mTiles[currPoint.y + toMove.getDirection().y]
+					  [currPoint.x + toMove.getDirection().x];
 		}
-		
-		currPoint.x += toMove.getDirection().x;
-		currPoint.y += toMove.getDirection().y;
 		
 		return (currPoint);
 	}
