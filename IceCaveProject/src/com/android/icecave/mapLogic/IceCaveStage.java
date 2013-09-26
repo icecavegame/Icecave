@@ -9,6 +9,7 @@ import com.android.icecave.general.EDifficulty;
 import com.android.icecave.general.EDirection;
 import com.android.icecave.general.GeneralServiceProvider;
 import com.android.icecave.mapLogic.collision.ICollisionable;
+import com.android.icecave.mapLogic.tiles.BaseTile;
 import com.android.icecave.mapLogic.tiles.BoulderTile;
 import com.android.icecave.mapLogic.tiles.EmptyTile;
 import com.android.icecave.mapLogic.tiles.FlagTile;
@@ -46,11 +47,14 @@ public class IceCaveStage
 		Point nextPoint = new Point(playerLocation);
 		nextPoint.offset(direction.getDirection().x,direction.getDirection().y);
 		
+		ICollisionable collisionable = (ICollisionable)
+													mTiles[nextPoint.y]
+														  [nextPoint.x];
+		
 		// Call the tile that the player will meet.
 		MapLogicServiceProvider.getInstance().
 								getCollisionManager().
-								handleCollision((ICollisionable) mTiles[nextPoint.y]
-																	   [nextPoint.x]);
+								handleCollision(collisionable);
 		
 	}
 	

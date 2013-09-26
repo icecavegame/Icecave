@@ -142,7 +142,10 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 	@Override
 	public void handleCollision(ICollisionable collisionable)
 	{
-		mCollisionInvokers.get(collisionable).onCollision();
+		if(mCollisionInvokers.containsKey(collisionable.getClass()))
+		{
+			mCollisionInvokers.get(collisionable.getClass()).onCollision();
+		}
 	}
 
 	@Override
