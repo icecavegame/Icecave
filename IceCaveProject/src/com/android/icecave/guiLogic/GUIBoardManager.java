@@ -61,7 +61,7 @@ public class GUIBoardManager
 												  [xAxis],
 											 context,
 											 screenManager);
-				
+
 				// Add tile to the view
 				context.addNextTileToView(mTiles[yAxis][xAxis]);
 			}

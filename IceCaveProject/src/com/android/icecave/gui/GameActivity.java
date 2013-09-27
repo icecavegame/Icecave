@@ -14,6 +14,7 @@ import com.android.icecave.R;
 import com.android.icecave.general.Consts;
 import com.android.icecave.general.EDifficulty;
 import com.android.icecave.general.EDirection;
+import com.android.icecave.guiLogic.GUIAnimationManager;
 import com.android.icecave.guiLogic.GUIBoardManager;
 import com.android.icecave.guiLogic.PlayerGUIManager;
 import com.android.icecave.guiLogic.TileImageView;
@@ -25,6 +26,7 @@ public class GameActivity extends Activity implements ISwipeDetector
 	private PlayerGUIManager mPGM;
 	private Point mPlayerPosition;
 	private TileImageView mPlayer;
+	private GUIAnimationManager mGAM;
 
 	private final String POSITION_X = "posX";
 	private final String POSITION_Y = "posY";
@@ -54,6 +56,8 @@ public class GameActivity extends Activity implements ISwipeDetector
 		{
 			createRows();
 		}
+		
+		mGAM = new GUIAnimationManager(this, (TileImageView) findViewById(R.id.sprite)); 
 
 		// Set up player position
 		if (savedInstanceState != null)
@@ -100,7 +104,7 @@ public class GameActivity extends Activity implements ISwipeDetector
 	private void createRows() {
 		// Create all rows by the value of board size rows
 		// TODO Change const value to an input
-		for (int i = 0; i < Consts.DEFAULT_BOARD_SIZE_Y; i++)
+		for (int i = 0; i < (Integer)getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_Y); i++)
 		{
 			// Create new row and set its Id as the value of its index
 			TableRow newRow = new TableRow(this);
@@ -153,6 +157,11 @@ public class GameActivity extends Activity implements ISwipeDetector
 		IIceCaveGameStatus iceCaveGameStatus = sGBM.movePlayer(direction);
 
 		// TODO: Sagie make the animation.
+		mGAM.animate(direction, iceCaveGameStatus.getPlayerPoint());
+		
+		if (iceCaveGameStatus.getIsStageEnded()) {
+			
+		}
 	}
 
 	@Override
@@ -167,8 +176,8 @@ public class GameActivity extends Activity implements ISwipeDetector
 			// Initialize the game board & shit
 			// TODO Change const value to an input
 			sGBM.startNewGame(Consts.DEFAULT_BOULDER_NUM,
-					Consts.DEFAULT_BOARD_SIZE_X,
-					Consts.DEFAULT_BOARD_SIZE_Y,
+					(Integer)getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_X),
+					(Integer)getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_Y),
 					EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)]);
 
 			// Create first stage

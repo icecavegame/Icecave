@@ -68,6 +68,8 @@ public class MainActivity extends Activity
 				// Load selection from prefs if exists
 				i.putExtra(Consts.LEVEL_SELECT_TAG, mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL));
 				i.putExtra(Consts.PLAYER_SELECT_TAG, mShared.getInt(Consts.PLAYER_SELECT_TAG, Consts.DEFAULT_PLAYER));
+				i.putExtra(Consts.SELECT_BOARD_SIZE_X, mShared.getInt(Consts.SELECT_BOARD_SIZE_X, Consts.DEFAULT_BOARD_SIZE_X));
+				i.putExtra(Consts.SELECT_BOARD_SIZE_Y, mShared.getInt(Consts.SELECT_BOARD_SIZE_Y, Consts.DEFAULT_BOARD_SIZE_Y));
 				startActivity(i);
 			}
 		});
@@ -79,7 +81,7 @@ public class MainActivity extends Activity
 			public void onCheckedChanged(RadioGroup group, int checkedId)
 			{
 				// Save level to prefs
-				mShared.edit().putInt(Consts.LEVEL_SELECT_TAG, group.indexOfChild(group.findViewById(group.getCheckedRadioButtonId()))).commit();
+				mShared.edit().putInt(Consts.LEVEL_SELECT_TAG, group.indexOfChild(group.findViewById(checkedId))).commit();
 			}
 		});
 	}

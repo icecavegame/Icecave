@@ -5,10 +5,14 @@ import com.android.icecave.R;
 
 public class Consts
 {
+	// Keys
 	public final static String PREFS_FILE_TAG = "prefsFile";
 	public final static String LEVEL_SELECT_TAG = "levelSelect";
 	public final static String PLAYER_SELECT_TAG = "playerSelect";
 	public final static String THEME_SELECT = "themeSelect";
+	public final static String SELECT_BOARD_SIZE_X = "selectBoardX";
+	public final static String SELECT_BOARD_SIZE_Y = "selectBoardY";
+	
 	public final static int DEFAULT_PLAYER = R.drawable.default_player;
 	public final static int DEFAULT_TILES = R.drawable.default_tiles;
 	public final static Point DEFAULT_START_POS = new Point(1, 1);
