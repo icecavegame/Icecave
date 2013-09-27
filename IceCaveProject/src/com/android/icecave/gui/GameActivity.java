@@ -33,6 +33,9 @@ public class GameActivity extends Activity implements ISwipeDetector
 	private DrawablePlayer mPlayer;
 	private TableLayout mTilesTable;
 
+<<<<<<< HEAD
+>>>>>>> 7cae256d21e163f6b6962a330bdf9c3f7c493aeb
+=======
 >>>>>>> 7cae256d21e163f6b6962a330bdf9c3f7c493aeb
 	// private final String POSITION_X = "posX";
 	// private final String POSITION_Y = "posY";
@@ -64,6 +67,7 @@ public class GameActivity extends Activity implements ISwipeDetector
 		}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		SharedPreferences mShared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
 
 		mGameTheme = 
@@ -74,13 +78,19 @@ public class GameActivity extends Activity implements ISwipeDetector
 	
 =======
 >>>>>>> 7cae256d21e163f6b6962a330bdf9c3f7c493aeb
+=======
+>>>>>>> 7cae256d21e163f6b6962a330bdf9c3f7c493aeb
 		// // Set up player position
 		// if (savedInstanceState != null)
 		// {
 		// mPlayerPosition =
 <<<<<<< HEAD
+<<<<<<< HEAD
 		// new Point(savedInstanceState.getInt(POSITION_X),
 		// savedInstanceState.getInt(POSITION_Y));
+=======
+		// new Point(savedInstanceState.getInt(POSITION_X), savedInstanceState.getInt(POSITION_Y));
+>>>>>>> 7cae256d21e163f6b6962a330bdf9c3f7c493aeb
 =======
 		// new Point(savedInstanceState.getInt(POSITION_X), savedInstanceState.getInt(POSITION_Y));
 >>>>>>> 7cae256d21e163f6b6962a330bdf9c3f7c493aeb
@@ -117,8 +127,12 @@ public class GameActivity extends Activity implements ISwipeDetector
 		// Create all rows by the value of board size rows
 		// TODO Change const value to an input
 <<<<<<< HEAD
+<<<<<<< HEAD
 		for (int i = 0; i < (Integer) getIntent().getExtras().get(
 				Consts.SELECT_BOARD_SIZE_Y); i++)
+=======
+		for (int i = 0; i < (Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_Y); i++)
+>>>>>>> 7cae256d21e163f6b6962a330bdf9c3f7c493aeb
 =======
 		for (int i = 0; i < (Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_Y); i++)
 >>>>>>> 7cae256d21e163f6b6962a330bdf9c3f7c493aeb
@@ -171,11 +185,18 @@ public class GameActivity extends Activity implements ISwipeDetector
 	{
 		IIceCaveGameStatus iceCaveGameStatus = sGBM.movePlayer(direction);
 <<<<<<< HEAD
+<<<<<<< HEAD
 		// mPGM.getPlayerImage(mPlayerPosition.x, mPlayerPosition.y, direction,
 		// true);
 
 		// TODO: Sagie make the animation.
 		mPlayer.startDrawImage(direction, iceCaveGameStatus.getPlayerPoint());
+=======
+		// mPGM.getPlayerImage(mPlayerPosition.x, mPlayerPosition.y, direction, true);
+
+		// TODO: Sagie make the animation.
+		mPlayer.movePlayer(direction, iceCaveGameStatus.getPlayerPoint());
+>>>>>>> 7cae256d21e163f6b6962a330bdf9c3f7c493aeb
 =======
 		// mPGM.getPlayerImage(mPlayerPosition.x, mPlayerPosition.y, direction, true);
 
@@ -226,6 +247,9 @@ public class GameActivity extends Activity implements ISwipeDetector
 
 			// Create player image
 			mPlayer.initializePlayer();
+<<<<<<< HEAD
+>>>>>>> 7cae256d21e163f6b6962a330bdf9c3f7c493aeb
+=======
 >>>>>>> 7cae256d21e163f6b6962a330bdf9c3f7c493aeb
 		}
 

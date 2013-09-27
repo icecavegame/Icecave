@@ -41,8 +41,13 @@ public class DrawablePlayer extends SurfaceView implements Callback
 
 		// Set player theme in manager
 <<<<<<< HEAD
+<<<<<<< HEAD
 		mPGM = new PlayerGUIManager(playerTheme);
 		
+=======
+		mPGM = new PlayerGUIManager();
+
+>>>>>>> 7cae256d21e163f6b6962a330bdf9c3f7c493aeb
 =======
 		mPGM = new PlayerGUIManager();
 
@@ -94,6 +99,7 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		canvasThread.setRunning(true);
 
 		// Run on a new thread or on the UI thread
+<<<<<<< HEAD
 		canvasThread.start();
 	}
 
@@ -110,6 +116,24 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		canvasThread.start();
 	}
 
+=======
+		canvasThread.start();
+	}
+
+	public void movePlayer(EDirection direction, Point newPosition)
+	{
+		// Moving player to the new position in the new direction
+		mPlayerNewPosition = newPosition;
+		mDirection = direction;
+		canvasThread = new CanvasThread(getHolder());
+		this.setFocusable(true);
+		canvasThread.setRunning(true);
+
+		// Run on a new thread or on the UI thread
+		canvasThread.start();
+	}
+
+>>>>>>> 7cae256d21e163f6b6962a330bdf9c3f7c493aeb
 	public void update()
 	{
 		// If reached new position, stop
