@@ -45,8 +45,6 @@ public class MainActivity extends Activity
 		// Load level selection from prefs if exists
 		levelSelect.check(levelSelect.getChildAt(mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL)).getId());
 		
-		// Load theme & player selection if exists, save it in GSP
-		
 		optionsActivity.setOnClickListener(new OnClickListener()
 		{
 			@Override

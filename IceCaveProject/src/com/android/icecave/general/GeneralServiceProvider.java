@@ -12,7 +12,7 @@ public class GeneralServiceProvider {
 	/**
 	 * Random member to provide with random function.
 	 */
-	private Random mRandom = new Random();;
+	private Random mRandom = new Random();
 	
 	/**
 	 * Private instance of this class.

@@ -15,41 +15,36 @@ public abstract class BaseTileGUIWorker implements IGUITileWorker
 {
 
 	public abstract Point getTilePointInSprite();
-	
+
 	@Override
-	public TileImageView makeTile(ITile tile,
-	                              Context activityWindow,
-								  ITileScale scaler,
-								  Bitmap theme)
+	public TileImageView makeTile(ITile tile, Context activityWindow, ITileScale scaler, Bitmap theme)
 	{
 		// Create tile
-			TileImageView result = new TileImageView(((BaseTile)tile).getLocation().x, 
-													 ((BaseTile)tile).getLocation().y, 
-													 activityWindow);
-			
-			// Get the width and height of each tile
-			int width  = theme.getWidth() / Consts.DEFAULT_TILES_BMP_COLUMNS;
-			int height = theme.getHeight() / Consts.DEFAULT_TILES_BMP_ROWS;
-			
-			// Crop theme bitmap to select the specific tile wanted
-			Bitmap croppedTile =
-					Bitmap.createBitmap(theme,
-										width * getTilePointInSprite().x,
-										height * getTilePointInSprite().y,
-										width,
-										height);
-			
-			// Create matrix to change the scale of the bitmap to fit the screen
-			Matrix matrix = new Matrix();
-			matrix.postScale((float) scaler.getTileWidth() / width, (float) scaler.getTileHeight() / height);
+		TileImageView result =
+				new TileImageView(	((BaseTile) tile).getLocation().x,
+									((BaseTile) tile).getLocation().y,
+									activityWindow);
 
-			// Resize
-			croppedTile = Bitmap.createBitmap(croppedTile, 0, 0, width, height, matrix, true);
-			
-			// Set the image
-			result.setImageBitmap(croppedTile);
-			
-			return result;
+		// Get the width and height of each tile
+		int width = theme.getWidth() / Consts.DEFAULT_TILES_BMP_COLUMNS;
+		int height = theme.getHeight() / Consts.DEFAULT_TILES_BMP_ROWS;
+
+		// Crop theme bitmap to select the specific tile wanted
+		Bitmap croppedTile =
+				Bitmap.createBitmap(theme, width * getTilePointInSprite().x, height *
+						getTilePointInSprite().y, width, height);
+
+		// Create matrix to change the scale of the bitmap to fit the screen
+		Matrix matrix = new Matrix();
+		matrix.postScale((float) scaler.getTileWidth() / width, (float) scaler.getTileHeight() / height);
+
+		// Resize
+		croppedTile = Bitmap.createBitmap(croppedTile, 0, 0, width, height, matrix, true);
+
+		// Set the image
+		result.setImageBitmap(croppedTile);
+
+		return result;
 	}
 
 }

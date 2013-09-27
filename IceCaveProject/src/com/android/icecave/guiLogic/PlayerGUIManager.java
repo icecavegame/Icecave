@@ -1,11 +1,7 @@
 package com.android.icecave.guiLogic;
 
-import com.android.icecave.general.Consts;
-
-import com.android.icecave.general.GeneralServiceProvider;
-
 import android.graphics.Bitmap;
-
+import com.android.icecave.general.Consts;
 import com.android.icecave.general.EDirection;
 
 public class PlayerGUIManager
@@ -28,11 +24,9 @@ public class PlayerGUIManager
 	public Bitmap getPlayerImage (int row,
 								  int col,
 							 	  EDirection direction, 
-							      boolean isMoving) {
+							      boolean isMoving,
+							      Bitmap theme) {
 		Bitmap result;
-
-		// Get the selected player theme
-		Bitmap theme = GeneralServiceProvider.getInstance().getPlayerTheme();
 		
 		// Get the width and height of each player sprite
 		int width = theme.getWidth() / Consts.DEFAULT_PLAYER_BMP_COLUMNS;

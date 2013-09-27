@@ -20,6 +20,7 @@ public class DrawablePlayer extends SurfaceView implements Callback
 	private Point mPlayerPosition;
 	private Point mPlayerNewPosition;
 	private EDirection mDirection;
+	private Bitmap mPlayerTheme;
 
 	public DrawablePlayer(Context context)
 	{
@@ -31,34 +32,21 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		super(context, attSet);
 	}
 
-	public DrawablePlayer(Context context, AttributeSet attrs, Bitmap playerTheme)
+	public DrawablePlayer(Context context, Bitmap playerTheme)
 	{
-		super(context, attrs);
+		super(context);
 
 		this.getHolder().addCallback(this);
 		this.canvasThread = new CanvasThread(getHolder());
 		this.setFocusable(true);
 
 		// Set player theme in manager
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		mPGM = new PlayerGUIManager(playerTheme);
-		
-=======
 		mPGM = new PlayerGUIManager();
 
->>>>>>> 7cae256d21e163f6b6962a330bdf9c3f7c493aeb
-=======
-		mPGM = new PlayerGUIManager();
-
->>>>>>> 7cae256d21e163f6b6962a330bdf9c3f7c493aeb
-=======
-		mPGM = new PlayerGUIManager();
-
->>>>>>> 7cae256d21e163f6b6962a330bdf9c3f7c493aeb
 		// Init image (draw on the player's current position)
 		mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
+		
+		mPlayerTheme = playerTheme;
 	}
 
 	public void initializePlayer()
@@ -104,8 +92,6 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		canvasThread.setRunning(true);
 
 		// Run on a new thread or on the UI thread
-<<<<<<< HEAD
-<<<<<<< HEAD
 		canvasThread.start();
 	}
 
@@ -122,42 +108,6 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		canvasThread.start();
 	}
 
-=======
-		canvasThread.start();
-	}
-
-	public void movePlayer(EDirection direction, Point newPosition)
-	{
-		// Moving player to the new position in the new direction
-		mPlayerNewPosition = newPosition;
-		mDirection = direction;
-		canvasThread = new CanvasThread(getHolder());
-		this.setFocusable(true);
-		canvasThread.setRunning(true);
-
-		// Run on a new thread or on the UI thread
-		canvasThread.start();
-	}
-
->>>>>>> 7cae256d21e163f6b6962a330bdf9c3f7c493aeb
-=======
-		canvasThread.start();
-	}
-
-	public void movePlayer(EDirection direction, Point newPosition)
-	{
-		// Moving player to the new position in the new direction
-		mPlayerNewPosition = newPosition;
-		mDirection = direction;
-		canvasThread = new CanvasThread(getHolder());
-		this.setFocusable(true);
-		canvasThread.setRunning(true);
-
-		// Run on a new thread or on the UI thread
-		canvasThread.start();
-	}
-
->>>>>>> 7cae256d21e163f6b6962a330bdf9c3f7c493aeb
 	public void update()
 	{
 		// If reached new position, stop
@@ -177,7 +127,7 @@ public class DrawablePlayer extends SurfaceView implements Callback
 	{
 		// FIXME An alternative to drawing the color black. That is refreshing image views, I guess
 		// canvas.drawColor(color.black);
-		mPlayerImage = mPGM.getPlayerImage(mPlayerPosition.x, mPlayerPosition.y, mDirection, true);
+		mPlayerImage = mPGM.getPlayerImage(mPlayerPosition.x, mPlayerPosition.y, mDirection, true, mPlayerTheme);
 		// TODO Set position
 		canvas.drawBitmap(mPlayerImage, 0, 0, null);
 	}
