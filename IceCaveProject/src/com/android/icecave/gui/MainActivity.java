@@ -46,8 +46,9 @@ public class MainActivity extends Activity
 		// Load level selection from prefs if exists
 		levelSelect.check(levelSelect.getChildAt(mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL)).getId());
 		
-		// Load theme selection if exists, save it in GSP
+		// Load theme & player selection if exists, save it in GSP
 		GeneralServiceProvider.getInstance().setTilesTheme(BitmapFactory.decodeResource(getResources(),(mShared.getInt(Consts.THEME_SELECT, Consts.DEFAULT_TILES))));
+		GeneralServiceProvider.getInstance().setPlayerTheme(BitmapFactory.decodeResource(getResources(),(mShared.getInt(Consts.PLAYER_SELECT_TAG, Consts.DEFAULT_PLAYER))));
 		
 		optionsActivity.setOnClickListener(new OnClickListener()
 		{
@@ -67,7 +68,6 @@ public class MainActivity extends Activity
 				
 				// Load selection from prefs if exists
 				i.putExtra(Consts.LEVEL_SELECT_TAG, mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL));
-				i.putExtra(Consts.PLAYER_SELECT_TAG, mShared.getInt(Consts.PLAYER_SELECT_TAG, Consts.DEFAULT_PLAYER));
 				i.putExtra(Consts.SELECT_BOARD_SIZE_X, mShared.getInt(Consts.SELECT_BOARD_SIZE_X, Consts.DEFAULT_BOARD_SIZE_X));
 				i.putExtra(Consts.SELECT_BOARD_SIZE_Y, mShared.getInt(Consts.SELECT_BOARD_SIZE_Y, Consts.DEFAULT_BOARD_SIZE_Y));
 				startActivity(i);

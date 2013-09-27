@@ -1,5 +1,7 @@
 package com.android.icecave.guiLogic;
 
+import com.android.icecave.general.GeneralServiceProvider;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -32,14 +34,15 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		this.getHolder().addCallback(this);
 		this.canvasThread = new CanvasThread(getHolder());
 		this.setFocusable(true);
-	}
-	
-	public void initializePlayerGUIManager(Bitmap playerTheme) {
-		mPGM = new PlayerGUIManager(playerTheme);
 		
-		// Init image
+		// Set player theme in manager
+		mPGM = new PlayerGUIManager(GeneralServiceProvider.getInstance().getPlayerTheme());
+		
+		// Init image (draw on the player's current position)
 		mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
-		mPlayerImage = mPGM.getPlayerImage(mPlayerPosition.x, mPlayerPosition.y, EDirection.DOWN, false);
+		mPlayerNewPosition = new Point(Consts.DEFAULT_START_POS);
+		
+		startDrawImage(EDirection.DOWN, mPlayerPosition);
 	}
 
 	@Override
@@ -80,10 +83,13 @@ public class DrawablePlayer extends SurfaceView implements Callback
 	}
 	
 	public void update() {
+		// If reached new position, stop
 		if (mPlayerPosition.x == mPlayerNewPosition.x && mPlayerPosition.y == mPlayerNewPosition.y) {
 			canvasThread.setRunning(false);
 		} else {
-			// TODO Move towards direction
+			// Move to direction
+			mPlayerPosition.x += mDirection.getDirection().x;
+			mPlayerPosition.y += mDirection.getDirection().y;
 		}
 	}
 	

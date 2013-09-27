@@ -2,8 +2,6 @@ package com.android.icecave.gui;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
-import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.View;
@@ -64,14 +62,6 @@ public class GameActivity extends Activity implements ISwipeDetector
 //		{
 //			mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
 //		}
-
-		// Create player
-		if (getIntent().getExtras() != null)
-		{
-			mPlayer.initializePlayerGUIManager(BitmapFactory.decodeResource(getResources(), (Integer) (getIntent().getExtras()
-							.get(Consts.PLAYER_SELECT_TAG))));
-		}
-
 	}
 
 	public int getHeight()
