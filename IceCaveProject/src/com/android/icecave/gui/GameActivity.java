@@ -58,7 +58,7 @@ public class GameActivity extends Activity implements ISwipeDetector
 		mPlayer =  new DrawablePlayer(this, mGameTheme.getPlayerTheme());
 		mPlayer.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 		mActivityLayout.addView(mPlayer);
-
+		
 		// // Set up player position
 		// if (savedInstanceState != null)
 		// {
@@ -160,14 +160,16 @@ public class GameActivity extends Activity implements ISwipeDetector
 			
 			// Create the tiles view and add it to the layout
 			mTilesView = new TilesView(this, sGBM.getTiles());
+			mTilesView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
 			mActivityLayout.addView(mTilesView);
-			mTilesView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.MATCH_PARENT));
+			
 			
 			// Register swipe events to the layout
 			mTilesView.setOnTouchListener(new ActivitySwipeDetector(this));
 
-			// Create player image
+			// Create player image and bring it to front
 			mPlayer.initializePlayer();
+			mPlayer.bringToFront();
 
 		super.onWindowFocusChanged(hasFocus);
 		}

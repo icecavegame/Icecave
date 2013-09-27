@@ -1,5 +1,7 @@
 package com.android.icecave.guiLogic;
 
+import android.R.color;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -26,7 +28,7 @@ public class DrawablePlayer extends SurfaceView implements Callback
 	{
 		super(context);
 	}
-	
+
 	public DrawablePlayer(Context context, AttributeSet attSet)
 	{
 		super(context, attSet);
@@ -39,13 +41,14 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		this.getHolder().addCallback(this);
 		this.canvasThread = new CanvasThread(getHolder());
 		this.setFocusable(true);
+		this.setBackgroundColor(color.transparent);
 
 		// Set player theme in manager
 		mPGM = new PlayerGUIManager();
 
 		// Init image (draw on the player's current position)
 		mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
-		
+
 		mPlayerTheme = playerTheme;
 	}
 
@@ -126,8 +129,9 @@ public class DrawablePlayer extends SurfaceView implements Callback
 	protected void onDraw(Canvas canvas)
 	{
 		// FIXME An alternative to drawing the color black. That is refreshing image views, I guess
-		// canvas.drawColor(color.black);
-		mPlayerImage = mPGM.getPlayerImage(mPlayerPosition.x, mPlayerPosition.y, mDirection, true, mPlayerTheme);
+//		 canvas.drawColor(color.transparent);
+		mPlayerImage =
+				mPGM.getPlayerImage(mPlayerPosition.x, mPlayerPosition.y, mDirection, true, mPlayerTheme);
 		// TODO Set position
 		canvas.drawBitmap(mPlayerImage, 0, 0, null);
 	}
@@ -158,10 +162,15 @@ public class DrawablePlayer extends SurfaceView implements Callback
 				try
 				{
 					c = this.surfaceHolder.lockCanvas(null);
-					synchronized (this.surfaceHolder)
+					
+					// If received canvas
+					if (c != null)
 					{
-						DrawablePlayer.this.update();
-						DrawablePlayer.this.draw(c);
+						synchronized (c)
+						{
+							DrawablePlayer.this.update();
+							DrawablePlayer.this.draw(c);
+						}
 					}
 				} finally
 				{
