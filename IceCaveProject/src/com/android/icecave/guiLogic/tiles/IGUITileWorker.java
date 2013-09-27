@@ -2,9 +2,7 @@ package com.android.icecave.guiLogic.tiles;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-
 import com.android.icecave.guiLogic.ITileScale;
-import com.android.icecave.guiLogic.TileImageView;
 import com.android.icecave.mapLogic.tiles.ITile;
 
 public interface IGUITileWorker
@@ -16,7 +14,7 @@ public interface IGUITileWorker
 	 * @param scale - Scaler for the tile size.
 	 * @return
 	 */
-	public TileImageView makeTile(ITile tile,
+	public Bitmap makeTile(ITile tile,
 	                              Context activityWindow,
 	                              ITileScale scale,
 	                              Bitmap theme);

@@ -1,7 +1,7 @@
 package com.android.icecave.guiLogic;
 
+import android.graphics.Bitmap;
 import android.graphics.Point;
-
 import com.android.icecave.general.EDifficulty;
 import com.android.icecave.general.EDirection;
 import com.android.icecave.gui.GameActivity;
@@ -17,7 +17,7 @@ import com.android.icecave.mapLogic.tiles.ITile;
  */
 public class GUIBoardManager
 {
-	private TileImageView[][] mTiles;
+	private Bitmap[][] mTiles;
 	private IceCaveGame mIceCaveGame;
 	
 	/**
@@ -35,7 +35,7 @@ public class GUIBoardManager
 		mIceCaveGame = new IceCaveGame(boulderNum, boardSizeX, boardSizeY, difficulty);
 		
 		// Get the tiles
-		mTiles = new TileImageView[boardSizeY][boardSizeX];
+		mTiles = new Bitmap[boardSizeY][boardSizeX];
 	}
 	
 	/**
@@ -69,12 +69,13 @@ public class GUIBoardManager
 											 context,
 											 screenManager,
 											 gameTheme.getTilesTheme());
-
-				// Add tile to the view
-				context.addNextTileToView(mTiles[yAxis][xAxis]);
 			}
 		}
 	
+	}
+	
+	public Bitmap[][] getTiles() {
+		return mTiles;
 	}
 	
 	/**

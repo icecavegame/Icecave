@@ -10,25 +10,22 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout.LayoutParams;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-
 import com.android.icecave.R;
 import com.android.icecave.general.Consts;
 import com.android.icecave.general.EDifficulty;
 import com.android.icecave.general.EDirection;
 import com.android.icecave.guiLogic.DrawablePlayer;
 import com.android.icecave.guiLogic.GUIBoardManager;
-import com.android.icecave.guiLogic.TileImageView;
+import com.android.icecave.guiLogic.TilesView;
 import com.android.icecave.mapLogic.IIceCaveGameStatus;
 
 public class GameActivity extends Activity implements ISwipeDetector
 {
 	private static GUIBoardManager	sGBM;
 	private DrawablePlayer			mPlayer;
-	private TableLayout				mTilesTable;
 	private GameTheme				mGameTheme;
+	private TilesView				mTilesView;
+	private FrameLayout 			mActivityLayout;
 
 	// private final String POSITION_X = "posX";
 	// private final String POSITION_Y = "posY";
@@ -42,21 +39,12 @@ public class GameActivity extends Activity implements ISwipeDetector
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.tiles_layout);
+		
+		mActivityLayout = ((FrameLayout)findViewById(R.id.game_layout));
 
 		// Hide the Status Bar
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-		mTilesTable = (TableLayout) findViewById(R.id.tilesTable);
-
-		// Register swipe events to the layout
-		mTilesTable.setOnTouchListener(new ActivitySwipeDetector(this));
-
-		// Create the first row if none exist
-		if (mTilesTable.getChildCount() == 0)
-		{
-			createRows();
-		}
 
 		SharedPreferences mShared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
 
@@ -68,8 +56,8 @@ public class GameActivity extends Activity implements ISwipeDetector
 		
 		// Create new player view
 		mPlayer =  new DrawablePlayer(this, mGameTheme.getPlayerTheme());
-		mPlayer.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-		//((FrameLayout)findViewById(R.id.game_layout)).addView(mPlayer); Everything turns black if this is called...
+		mPlayer.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+		mActivityLayout.addView(mPlayer);
 
 		// // Set up player position
 		// if (savedInstanceState != null)
@@ -86,36 +74,12 @@ public class GameActivity extends Activity implements ISwipeDetector
 
 	public int getHeight()
 	{
-		return mTilesTable.getBottom();
+		return mActivityLayout.getBottom();
 	}
 	
 	public int getWidth()
 	{
-		return mTilesTable.getWidth();
-	}
-
-	/***
-	 * Add the next tile to the table layout
-	 * 
-	 * @param tile
-	 *            Tile to add
-	 */
-	public void addNextTileToView(TileImageView tile)
-	{
-		// Add current tile to the row that matches its index
-		((TableRow) mTilesTable.findViewById(tile.getCol())).addView(tile);
-	}
-
-	private void createRows()
-	{
-		// Create all rows by the value of board size rows
-		// TODO Change const value to an input
-		for (int i = 0; i < (Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_Y); i++) {
-			// Create new row and set its Id as the value of its index
-			TableRow newRow = new TableRow(this);
-			newRow.setId(i);
-			mTilesTable.addView(newRow);
-		}
+		return mActivityLayout.getWidth();
 	}
 
 	@Override
@@ -193,9 +157,17 @@ public class GameActivity extends Activity implements ISwipeDetector
 						  Consts.DEFAULT_WALL_WIDTH,
 						  this,
 						  mGameTheme);
+			
+			// Create the tiles view and add it to the layout
+			mTilesView = new TilesView(this, sGBM.getTiles());
+			mActivityLayout.addView(mTilesView);
+			mTilesView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.MATCH_PARENT));
+			
+			// Register swipe events to the layout
+			mTilesView.setOnTouchListener(new ActivitySwipeDetector(this));
 
 			// Create player image
-			//mPlayer.initializePlayer(); Cannot call this because of previous reasons
+			mPlayer.initializePlayer();
 
 		super.onWindowFocusChanged(hasFocus);
 		}

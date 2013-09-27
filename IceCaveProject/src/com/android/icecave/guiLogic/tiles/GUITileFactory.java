@@ -1,17 +1,14 @@
 package com.android.icecave.guiLogic.tiles;
 
-import java.util.HashMap;
-
 import android.content.Context;
 import android.graphics.Bitmap;
-
 import com.android.icecave.guiLogic.ITileScale;
-import com.android.icecave.guiLogic.TileImageView;
 import com.android.icecave.mapLogic.tiles.BoulderTile;
 import com.android.icecave.mapLogic.tiles.EmptyTile;
 import com.android.icecave.mapLogic.tiles.FlagTile;
 import com.android.icecave.mapLogic.tiles.ITile;
 import com.android.icecave.mapLogic.tiles.WallTile;
+import java.util.HashMap;
 
 /**
  * Class holding all the GUITile workers.
@@ -42,7 +39,7 @@ public class GUITileFactory
 	 * @param tile - To get image of.
 	 * @return Image for a tile.
 	 */
-	public TileImageView getTiles(ITile tile, Context activityWindow, ITileScale scaler, Bitmap gameTheme) {
+	public Bitmap getTiles(ITile tile, Context activityWindow, ITileScale scaler, Bitmap gameTheme) {
 		// Check if exists.
 		if(!mTileWorkers.containsKey(tile.getClass())){
 			return null;
