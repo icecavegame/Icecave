@@ -13,7 +13,7 @@ public class GeneralServiceProvider {
 	/**
 	 * Random member to provide with random function.
 	 */
-	private Random mRandom;
+	private Random mRandom = new Random();;
 	
 	private Bitmap mTilesTheme;
 	private Bitmap mPlayerTheme;
@@ -28,7 +28,7 @@ public class GeneralServiceProvider {
 	 * Create a new instance of the GeneralServiceProvider class.
 	 */
 	private GeneralServiceProvider(){
-		mRandom = new Random();
+		
 	}
 	
 	/**
