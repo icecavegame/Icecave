@@ -23,9 +23,9 @@ public class GameActivity extends Activity implements ISwipeDetector
 	private static GUIBoardManager sGBM;
 	private DrawablePlayer mPlayer;
 	private TableLayout mTilesTable;
-	
-//	private final String POSITION_X = "posX";
-//	private final String POSITION_Y = "posY";
+
+	// private final String POSITION_X = "posX";
+	// private final String POSITION_Y = "posY";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -40,28 +40,28 @@ public class GameActivity extends Activity implements ISwipeDetector
 		// Hide the Status Bar
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		
+
 		mTilesTable = (TableLayout) findViewById(R.id.tilesTable);
 		mPlayer = (DrawablePlayer) findViewById(R.id.sprite);
 
 		// Register swipe events to the layout
 		mTilesTable.setOnTouchListener(new ActivitySwipeDetector(this));
-		
+
 		// Create the first row if none exist
 		if (mTilesTable.getChildCount() == 0)
 		{
 			createRows();
 		}
 
-//		// Set up player position
-//		if (savedInstanceState != null)
-//		{
-//			mPlayerPosition =
-//					new Point(savedInstanceState.getInt(POSITION_X), savedInstanceState.getInt(POSITION_Y));
-//		} else
-//		{
-//			mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
-//		}
+		// // Set up player position
+		// if (savedInstanceState != null)
+		// {
+		// mPlayerPosition =
+		// new Point(savedInstanceState.getInt(POSITION_X), savedInstanceState.getInt(POSITION_Y));
+		// } else
+		// {
+		// mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
+		// }
 	}
 
 	public int getHeight()
@@ -85,11 +85,12 @@ public class GameActivity extends Activity implements ISwipeDetector
 		// Add current tile to the row that matches its index
 		((TableRow) mTilesTable.findViewById(tile.getCol())).addView(tile);
 	}
-	
-	private void createRows() {
+
+	private void createRows()
+	{
 		// Create all rows by the value of board size rows
 		// TODO Change const value to an input
-		for (int i = 0; i < (Integer)getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_Y); i++)
+		for (int i = 0; i < (Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_Y); i++)
 		{
 			// Create new row and set its Id as the value of its index
 			TableRow newRow = new TableRow(this);
@@ -103,9 +104,9 @@ public class GameActivity extends Activity implements ISwipeDetector
 	{
 		super.onSaveInstanceState(outState);
 
-//		// Put position data
-//		outState.putInt(POSITION_X, mPlayerPosition.x);
-//		outState.putInt(POSITION_Y, mPlayerPosition.y);
+		// // Put position data
+		// outState.putInt(POSITION_X, mPlayerPosition.x);
+		// outState.putInt(POSITION_Y, mPlayerPosition.y);
 	}
 
 	@Override
@@ -138,12 +139,13 @@ public class GameActivity extends Activity implements ISwipeDetector
 	private void commitSwipe(EDirection direction)
 	{
 		IIceCaveGameStatus iceCaveGameStatus = sGBM.movePlayer(direction);
-//		mPGM.getPlayerImage(mPlayerPosition.x, mPlayerPosition.y, direction, true);
-		
+		// mPGM.getPlayerImage(mPlayerPosition.x, mPlayerPosition.y, direction, true);
+
 		// TODO: Sagie make the animation.
-		mPlayer.startDrawImage(direction, iceCaveGameStatus.getPlayerPoint());
-		if (iceCaveGameStatus.getIsStageEnded()) {
-			
+		mPlayer.movePlayer(direction, iceCaveGameStatus.getPlayerPoint());
+		if (iceCaveGameStatus.getIsStageEnded())
+		{
+
 		}
 	}
 
@@ -159,12 +161,15 @@ public class GameActivity extends Activity implements ISwipeDetector
 			// Initialize the game board & shit
 			// TODO Change const value to an input
 			sGBM.startNewGame(Consts.DEFAULT_BOULDER_NUM,
-					(Integer)getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_X),
-					(Integer)getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_Y),
+					(Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_X),
+					(Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_Y),
 					EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)]);
 
 			// Create first stage
 			sGBM.newStage(Consts.DEFAULT_START_POS, Consts.DEFAULT_WALL_WIDTH, this);
+
+			// Create player image
+			mPlayer.initializePlayer();
 		}
 
 		super.onWindowFocusChanged(hasFocus);
