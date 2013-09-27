@@ -2,7 +2,7 @@ package com.android.icecave.general;
 
 import android.graphics.Bitmap;
 
-public class SelectTheme
+public class SelectTilesTheme
 {
 	Bitmap mTheme;
 	

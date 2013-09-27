@@ -14,8 +14,8 @@ public class GeneralServiceProvider {
 	 * Random member to provide with random function.
 	 */
 	private Random mRandom;
-
-	private SelectTheme mTheme;
+	
+	private SelectTilesTheme mTheme;
 	
 	/**
 	 * Private instance of this class.
@@ -28,7 +28,7 @@ public class GeneralServiceProvider {
 	 */
 	private GeneralServiceProvider(){
 		mRandom = new Random();
-		mTheme = new SelectTheme();
+		mTheme = new SelectTilesTheme();
 	}
 	
 	public void setTheme(Bitmap themeId) {

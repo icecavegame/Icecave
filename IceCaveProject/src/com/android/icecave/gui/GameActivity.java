@@ -2,6 +2,7 @@ package com.android.icecave.gui;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -14,23 +15,19 @@ import com.android.icecave.R;
 import com.android.icecave.general.Consts;
 import com.android.icecave.general.EDifficulty;
 import com.android.icecave.general.EDirection;
-import com.android.icecave.guiLogic.GUIAnimationManager;
+import com.android.icecave.guiLogic.DrawablePlayer;
 import com.android.icecave.guiLogic.GUIBoardManager;
-import com.android.icecave.guiLogic.PlayerGUIManager;
 import com.android.icecave.guiLogic.TileImageView;
 import com.android.icecave.mapLogic.IIceCaveGameStatus;
 
 public class GameActivity extends Activity implements ISwipeDetector
 {
 	private static GUIBoardManager sGBM;
-	private PlayerGUIManager mPGM;
-	private Point mPlayerPosition;
-	private TileImageView mPlayer;
-	private GUIAnimationManager mGAM;
-
-	private final String POSITION_X = "posX";
-	private final String POSITION_Y = "posY";
+	private DrawablePlayer mPlayer;
 	private TableLayout mTilesTable;
+	
+//	private final String POSITION_X = "posX";
+//	private final String POSITION_Y = "posY";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -47,6 +44,7 @@ public class GameActivity extends Activity implements ISwipeDetector
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		mTilesTable = (TableLayout) findViewById(R.id.tilesTable);
+		mPlayer = (DrawablePlayer) findViewById(R.id.sprite);
 
 		// Register swipe events to the layout
 		mTilesTable.setOnTouchListener(new ActivitySwipeDetector(this));
@@ -56,25 +54,22 @@ public class GameActivity extends Activity implements ISwipeDetector
 		{
 			createRows();
 		}
-		
-		mGAM = new GUIAnimationManager(this, (TileImageView) findViewById(R.id.sprite)); 
 
-		// Set up player position
-		if (savedInstanceState != null)
-		{
-			mPlayerPosition =
-					new Point(savedInstanceState.getInt(POSITION_X), savedInstanceState.getInt(POSITION_Y));
-		} else
-		{
-			mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
-		}
+//		// Set up player position
+//		if (savedInstanceState != null)
+//		{
+//			mPlayerPosition =
+//					new Point(savedInstanceState.getInt(POSITION_X), savedInstanceState.getInt(POSITION_Y));
+//		} else
+//		{
+//			mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
+//		}
 
 		// Create player
 		if (getIntent().getExtras() != null)
 		{
-			mPGM =
-					new PlayerGUIManager(getResources().getDrawable((Integer) getIntent().getExtras()
-							.get(Consts.PLAYER_SELECT_TAG)));
+			mPlayer.initializePlayerGUIManager(BitmapFactory.decodeResource(getResources(), (Integer) (getIntent().getExtras()
+							.get(Consts.PLAYER_SELECT_TAG))));
 		}
 
 	}
@@ -118,9 +113,9 @@ public class GameActivity extends Activity implements ISwipeDetector
 	{
 		super.onSaveInstanceState(outState);
 
-		// Put position data
-		outState.putInt(POSITION_X, mPlayerPosition.x);
-		outState.putInt(POSITION_Y, mPlayerPosition.y);
+//		// Put position data
+//		outState.putInt(POSITION_X, mPlayerPosition.x);
+//		outState.putInt(POSITION_Y, mPlayerPosition.y);
 	}
 
 	@Override
@@ -152,13 +147,11 @@ public class GameActivity extends Activity implements ISwipeDetector
 	 */
 	private void commitSwipe(EDirection direction)
 	{
-		mPlayer = mPGM.getPlayerImage(mPlayerPosition.x, mPlayerPosition.y, direction, true);
-
 		IIceCaveGameStatus iceCaveGameStatus = sGBM.movePlayer(direction);
-
-		// TODO: Sagie make the animation.
-		mGAM.animate(direction, iceCaveGameStatus.getPlayerPoint());
+//		mPGM.getPlayerImage(mPlayerPosition.x, mPlayerPosition.y, direction, true);
 		
+		// TODO: Sagie make the animation.
+		mPlayer.startDrawImage(direction, iceCaveGameStatus.getPlayerPoint());
 		if (iceCaveGameStatus.getIsStageEnded()) {
 			
 		}
