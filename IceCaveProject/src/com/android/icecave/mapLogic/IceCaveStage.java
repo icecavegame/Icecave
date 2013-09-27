@@ -41,7 +41,7 @@ public class IceCaveStage
 	 * @param playerLocation - Current player location.
 	 * @param direction - Direction to move the player in.
 	 */
-	public void movePlayerOneTile(Point playerLocation, EDirection direction) {
+	public Point movePlayerOneTile(Point playerLocation, EDirection direction) {
 		// Get the next index on the board for the player.
 		Point nextPoint = new Point(playerLocation);
 		nextPoint.offset(direction.getDirection().x,direction.getDirection().y);
@@ -55,6 +55,7 @@ public class IceCaveStage
 								getCollisionManager().
 								handleCollision(collisionable);
 		
+		return nextPoint;
 	}
 	
 	/**

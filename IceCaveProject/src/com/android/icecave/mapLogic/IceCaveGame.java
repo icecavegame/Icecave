@@ -80,6 +80,7 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 	public void newStage(Point playerStart, int wallWidth)
 	{
 		mIsStageEnded = false;
+		mPlayerLocation = new Point(playerStart);
 		mStage.buildBoard(mDifficulty, 
 						  mBoardSizeX, 
 						  mBoardSizeY,
@@ -114,9 +115,12 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 			// Start moving.
 			mPlayerMoving = true;
 			
+			Point nextPlayerPoint = mPlayerLocation;
+			
 			// While we are moving.
 			while (mPlayerMoving){
-				mStage.movePlayerOneTile(mPlayerLocation, direction);
+				mPlayerLocation = new Point(nextPlayerPoint);
+				nextPlayerPoint = mStage.movePlayerOneTile(mPlayerLocation, direction);
 			}
 		}
 		
