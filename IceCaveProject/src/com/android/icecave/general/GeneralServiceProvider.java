@@ -15,7 +15,15 @@ public class GeneralServiceProvider {
 	 */
 	private Random mRandom;
 	
-	private SelectTilesTheme mTheme;
+	private Bitmap mTilesTheme;
+	
+	public void setTilesTheme(Bitmap tilesTheme) {
+		mTilesTheme = tilesTheme;
+	}
+	
+	public Bitmap getTilesTheme() {
+		return mTilesTheme;
+	}
 	
 	/**
 	 * Private instance of this class.
@@ -28,15 +36,6 @@ public class GeneralServiceProvider {
 	 */
 	private GeneralServiceProvider(){
 		mRandom = new Random();
-		mTheme = new SelectTilesTheme();
-	}
-	
-	public void setTheme(Bitmap themeId) {
-		mTheme.setThemeId(themeId);
-	}
-	
-	public Bitmap getTheme() {
-		return mTheme.getTheme();
 	}
 	
 	/**

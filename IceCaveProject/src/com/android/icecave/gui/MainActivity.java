@@ -47,7 +47,7 @@ public class MainActivity extends Activity
 		levelSelect.check(levelSelect.getChildAt(mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL)).getId());
 		
 		// Load theme selection if exists, save it in GSP
-		GeneralServiceProvider.getInstance().setTheme(BitmapFactory.decodeResource(getResources(),(mShared.getInt(Consts.THEME_SELECT, Consts.DEFAULT_TILES))));
+		GeneralServiceProvider.getInstance().setTilesTheme(BitmapFactory.decodeResource(getResources(),(mShared.getInt(Consts.THEME_SELECT, Consts.DEFAULT_TILES))));
 		
 		optionsActivity.setOnClickListener(new OnClickListener()
 		{

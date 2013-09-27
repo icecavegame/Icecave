@@ -25,7 +25,7 @@ public class BoulderTileGUIWorker implements IGUITileWorker
 									context);
 
 		// Get the selected tile theme
-		Bitmap theme = GeneralServiceProvider.getInstance().getTheme();
+		Bitmap theme = GeneralServiceProvider.getInstance().getTilesTheme();
 
 		// Get the width and height of each tile
 		int width = theme.getWidth() / Consts.DEFAULT_TILES_BMP_COLUMNS;

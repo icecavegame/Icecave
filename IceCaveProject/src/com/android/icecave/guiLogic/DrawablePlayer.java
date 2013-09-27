@@ -90,7 +90,7 @@ public class DrawablePlayer extends SurfaceView implements Callback
 	@Override
 	protected void onDraw(Canvas canvas)
 	{
-		// FIXME An alternative to drawing the color black is refreshing image views i guess
+		// FIXME An alternative to drawing the color black. That is refreshing image views, I guess
 		//canvas.drawColor(color.black);
 		mPlayerImage = mPGM.getPlayerImage(mPlayerPosition.x, mPlayerPosition.y, mDirection, true);
 		canvas.drawBitmap(mPlayerImage, 0, 0, null);
