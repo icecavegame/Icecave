@@ -1,6 +1,6 @@
 package com.android.icecave.guiLogic;
 
-public class GUIScreenManager
+public class GUIScreenManager implements ITileScale
 {
 	float mModifiedTileWidth;
 	float mModifiedTileHeight;
@@ -11,11 +11,13 @@ public class GUIScreenManager
 		mModifiedTileHeight = (float)pixelSizeY / tilesNumY;
 	}
 	
-	public float getModifiedTileWidth() {
+	@Override
+	public float getTileWidth() {
 		return mModifiedTileWidth;
 	}
 	
-	public float getModifiedTileHeight() {
+	@Override
+	public float getTileHeight() {
 		return mModifiedTileHeight;
 	}
 }

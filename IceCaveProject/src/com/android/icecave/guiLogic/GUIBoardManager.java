@@ -1,9 +1,11 @@
 package com.android.icecave.guiLogic;
 
 import android.graphics.Point;
+
 import com.android.icecave.general.EDifficulty;
 import com.android.icecave.general.EDirection;
 import com.android.icecave.gui.GameActivity;
+import com.android.icecave.gui.GameTheme;
 import com.android.icecave.mapLogic.IIceCaveGameStatus;
 import com.android.icecave.mapLogic.IceCaveGame;
 import com.android.icecave.mapLogic.tiles.ITile;
@@ -44,11 +46,16 @@ public class GUIBoardManager
 	 */
 	public void newStage(Point playerStart, 
 	                     int wallWidth,
-	                     GameActivity context){
+	                     GameActivity context,
+	                     GameTheme gameTheme){
 		mIceCaveGame.newStage(playerStart, wallWidth);
 		
 		ITile[][] board = mIceCaveGame.getBoard();
-		GUIScreenManager screenManager = new GUIScreenManager(board[0].length, board.length, context.getWidth(), context.getHeight());
+		GUIScreenManager screenManager = 
+				new GUIScreenManager(board[0].length, 
+									 board.length, 
+									 context.getWidth(), 
+									 context.getHeight());
 		
 		// Go through the game board.
 		for (int yAxis = 0; yAxis < board.length; yAxis++) {
@@ -60,7 +67,8 @@ public class GUIBoardManager
 									getTiles(board[yAxis]
 												  [xAxis],
 											 context,
-											 screenManager);
+											 screenManager,
+											 gameTheme.getTilesTheme());
 
 				// Add tile to the view
 				context.addNextTileToView(mTiles[yAxis][xAxis]);

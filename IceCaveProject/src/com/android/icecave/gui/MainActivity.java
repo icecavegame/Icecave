@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.View;
@@ -14,9 +13,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+
 import com.android.icecave.R;
 import com.android.icecave.general.Consts;
-import com.android.icecave.general.GeneralServiceProvider;
 
 public class MainActivity extends Activity
 {
@@ -47,8 +46,6 @@ public class MainActivity extends Activity
 		levelSelect.check(levelSelect.getChildAt(mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL)).getId());
 		
 		// Load theme & player selection if exists, save it in GSP
-		GeneralServiceProvider.getInstance().setTilesTheme(BitmapFactory.decodeResource(getResources(),(mShared.getInt(Consts.THEME_SELECT, Consts.DEFAULT_TILES))));
-		GeneralServiceProvider.getInstance().setPlayerTheme(BitmapFactory.decodeResource(getResources(),(mShared.getInt(Consts.PLAYER_SELECT_TAG, Consts.DEFAULT_PLAYER))));
 		
 		optionsActivity.setOnClickListener(new OnClickListener()
 		{

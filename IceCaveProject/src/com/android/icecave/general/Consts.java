@@ -1,6 +1,7 @@
 package com.android.icecave.general;
 
 import android.graphics.Point;
+
 import com.android.icecave.R;
 
 public class Consts

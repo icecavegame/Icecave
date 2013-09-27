@@ -1,6 +1,7 @@
 package com.android.icecave.guiLogic;
 
 import android.graphics.Bitmap;
+
 import com.android.icecave.general.EDirection;
 
 public class PlayerGUIManager

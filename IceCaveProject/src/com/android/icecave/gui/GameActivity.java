@@ -1,7 +1,9 @@
 package com.android.icecave.gui;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+
 import com.android.icecave.R;
 import com.android.icecave.general.Consts;
 import com.android.icecave.general.EDifficulty;
@@ -20,12 +23,12 @@ import com.android.icecave.mapLogic.IIceCaveGameStatus;
 
 public class GameActivity extends Activity implements ISwipeDetector
 {
-	private static GUIBoardManager sGBM;
-	private DrawablePlayer mPlayer;
-	private TableLayout mTilesTable;
-	
-//	private final String POSITION_X = "posX";
-//	private final String POSITION_Y = "posY";
+	private static GUIBoardManager	sGBM;
+	private DrawablePlayer			mPlayer;
+	private TableLayout				mTilesTable;
+	private GameTheme				mGameTheme;
+	// private final String POSITION_X = "posX";
+	// private final String POSITION_Y = "posY";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -40,35 +43,44 @@ public class GameActivity extends Activity implements ISwipeDetector
 		// Hide the Status Bar
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		
+
 		mTilesTable = (TableLayout) findViewById(R.id.tilesTable);
 		mPlayer = (DrawablePlayer) findViewById(R.id.sprite);
 
 		// Register swipe events to the layout
 		mTilesTable.setOnTouchListener(new ActivitySwipeDetector(this));
-		
+
 		// Create the first row if none exist
 		if (mTilesTable.getChildCount() == 0)
 		{
 			createRows();
 		}
 
-//		// Set up player position
-//		if (savedInstanceState != null)
-//		{
-//			mPlayerPosition =
-//					new Point(savedInstanceState.getInt(POSITION_X), savedInstanceState.getInt(POSITION_Y));
-//		} else
-//		{
-//			mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
-//		}
+		SharedPreferences mShared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
+
+		mGameTheme = 
+				new GameTheme(BitmapFactory.decodeResource(getResources(),
+														  (mShared.getInt(Consts.THEME_SELECT, Consts.DEFAULT_TILES))),
+							  BitmapFactory.decodeResource(getResources(),
+									  				      (mShared.getInt(Consts.PLAYER_SELECT_TAG, Consts.DEFAULT_PLAYER))));
+	
+		// // Set up player position
+		// if (savedInstanceState != null)
+		// {
+		// mPlayerPosition =
+		// new Point(savedInstanceState.getInt(POSITION_X),
+		// savedInstanceState.getInt(POSITION_Y));
+		// } else
+		// {
+		// mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
+		// }
 	}
 
 	public int getHeight()
 	{
 		return mTilesTable.getBottom();
 	}
-
+	
 	public int getWidth()
 	{
 		return mTilesTable.getWidth();
@@ -85,11 +97,13 @@ public class GameActivity extends Activity implements ISwipeDetector
 		// Add current tile to the row that matches its index
 		((TableRow) mTilesTable.findViewById(tile.getCol())).addView(tile);
 	}
-	
-	private void createRows() {
+
+	private void createRows()
+	{
 		// Create all rows by the value of board size rows
 		// TODO Change const value to an input
-		for (int i = 0; i < (Integer)getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_Y); i++)
+		for (int i = 0; i < (Integer) getIntent().getExtras().get(
+				Consts.SELECT_BOARD_SIZE_Y); i++)
 		{
 			// Create new row and set its Id as the value of its index
 			TableRow newRow = new TableRow(this);
@@ -103,9 +117,9 @@ public class GameActivity extends Activity implements ISwipeDetector
 	{
 		super.onSaveInstanceState(outState);
 
-//		// Put position data
-//		outState.putInt(POSITION_X, mPlayerPosition.x);
-//		outState.putInt(POSITION_Y, mPlayerPosition.y);
+		// // Put position data
+		// outState.putInt(POSITION_X, mPlayerPosition.x);
+		// outState.putInt(POSITION_Y, mPlayerPosition.y);
 	}
 
 	@Override
@@ -138,19 +152,22 @@ public class GameActivity extends Activity implements ISwipeDetector
 	private void commitSwipe(EDirection direction)
 	{
 		IIceCaveGameStatus iceCaveGameStatus = sGBM.movePlayer(direction);
-//		mPGM.getPlayerImage(mPlayerPosition.x, mPlayerPosition.y, direction, true);
-		
+		// mPGM.getPlayerImage(mPlayerPosition.x, mPlayerPosition.y, direction,
+		// true);
+
 		// TODO: Sagie make the animation.
 		mPlayer.startDrawImage(direction, iceCaveGameStatus.getPlayerPoint());
-		if (iceCaveGameStatus.getIsStageEnded()) {
-			
+		if (iceCaveGameStatus.getIsStageEnded())
+		{
+
 		}
 	}
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus)
 	{
-		// Create new stage here to make sure layout is made and active and visible
+		// Create new stage here to make sure layout is made and active and
+		// visible
 		if (sGBM == null)
 		{
 			// Create once
@@ -158,13 +175,20 @@ public class GameActivity extends Activity implements ISwipeDetector
 
 			// Initialize the game board & shit
 			// TODO Change const value to an input
-			sGBM.startNewGame(Consts.DEFAULT_BOULDER_NUM,
-					(Integer)getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_X),
-					(Integer)getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_Y),
-					EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)]);
+			sGBM.startNewGame(
+					Consts.DEFAULT_BOULDER_NUM,
+					(Integer) getIntent().getExtras().get(
+							Consts.SELECT_BOARD_SIZE_X),
+					(Integer) getIntent().getExtras().get(
+							Consts.SELECT_BOARD_SIZE_Y),
+					EDifficulty.values()[(Integer) getIntent().getExtras().get(
+							Consts.LEVEL_SELECT_TAG)]);
 
 			// Create first stage
-			sGBM.newStage(Consts.DEFAULT_START_POS, Consts.DEFAULT_WALL_WIDTH, this);
+			sGBM.newStage(Consts.DEFAULT_START_POS, 
+						  Consts.DEFAULT_WALL_WIDTH,
+						  this,
+						  mGameTheme);
 		}
 
 		super.onWindowFocusChanged(hasFocus);

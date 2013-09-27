@@ -1,6 +1,5 @@
 package com.android.icecave.general;
 
-import android.graphics.Bitmap;
 import java.util.Random;
 
 /**
@@ -14,9 +13,6 @@ public class GeneralServiceProvider {
 	 * Random member to provide with random function.
 	 */
 	private Random mRandom = new Random();;
-	
-	private Bitmap mTilesTheme;
-	private Bitmap mPlayerTheme;
 	
 	/**
 	 * Private instance of this class.
@@ -38,23 +34,7 @@ public class GeneralServiceProvider {
 	public Random getRandom(){
 		return mRandom;
 	}
-	
-	public void setTilesTheme(Bitmap tilesTheme) {
-		mTilesTheme = tilesTheme;
-	}
-	
-	public Bitmap getTilesTheme() {
-		return mTilesTheme;
-	}
-	
-	public void setPlayerTheme(Bitmap playerTheme) {
-		mPlayerTheme = playerTheme;
-	}
-	
-	public Bitmap getPlayerTheme() {
-		return mPlayerTheme;
-	}
-	
+		
 	/**
 	 * Get the static instance of the service provider.
 	 * @return Service provider.

@@ -1,7 +1,5 @@
 package com.android.icecave.guiLogic;
 
-import com.android.icecave.general.GeneralServiceProvider;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -10,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
+
 import com.android.icecave.general.Consts;
 import com.android.icecave.general.EDirection;
 
@@ -26,8 +25,13 @@ public class DrawablePlayer extends SurfaceView implements Callback
 	{
 		super(context);
 	}
+	
+	public DrawablePlayer(Context context, AttributeSet attSet)
+	{
+		super(context, attSet);
+	}
 
-	public DrawablePlayer(Context context, AttributeSet attrs)
+	public DrawablePlayer(Context context, AttributeSet attrs, Bitmap playerTheme)
 	{
 		super(context, attrs);
 
@@ -36,7 +40,7 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		this.setFocusable(true);
 		
 		// Set player theme in manager
-		mPGM = new PlayerGUIManager(GeneralServiceProvider.getInstance().getPlayerTheme());
+		mPGM = new PlayerGUIManager(playerTheme);
 		
 		// Init image (draw on the player's current position)
 		mPlayerPosition = new Point(Consts.DEFAULT_START_POS);

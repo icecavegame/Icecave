@@ -6,6 +6,7 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+
 import com.android.icecave.R;
 
 public class OptionsActivity extends Activity
