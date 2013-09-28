@@ -1,7 +1,6 @@
 package com.android.icecave.guiLogic;
 
 import android.R.color;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -10,9 +9,9 @@ import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
-
 import com.android.icecave.general.Consts;
 import com.android.icecave.general.EDirection;
+import com.android.icecave.gui.GameActivity;
 
 public class DrawablePlayer extends SurfaceView implements Callback
 {
@@ -26,6 +25,10 @@ public class DrawablePlayer extends SurfaceView implements Callback
 	private Bitmap mPlayerTheme;
 	private int mHeight;
 	private int mWidth;
+	private GameActivity mContext;
+	private GUIScreenManager mScreenManager;
+
+	private boolean mSurfaceCreated = false;
 
 	public DrawablePlayer(Context context)
 	{
@@ -41,9 +44,9 @@ public class DrawablePlayer extends SurfaceView implements Callback
 	{
 		super(context);
 
+		mContext = (GameActivity) context;
 		this.getHolder().addCallback(this);
 		this.canvasThread = new CanvasThread(getHolder());
-		this.setFocusable(true);
 		this.setBackgroundColor(color.transparent);
 
 		// Set player theme in manager
@@ -56,6 +59,13 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		// Init image (draw on the player's current position)
 		mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
 		mPlayerPositionOnScreen = new Point(mPlayerPosition.x * mWidth, mPlayerPosition.y * mHeight);
+
+		// Set tile rows and columns into scale manager to fit the character into the tiles
+		mScreenManager =
+				new GUIScreenManager(	mContext.getTilesView().getBoardX(),
+										mContext.getTilesView().getBoardY(),
+										mContext.getWidth(),
+										mContext.getHeight());
 	}
 
 	public void initializePlayer()
@@ -73,6 +83,7 @@ public class DrawablePlayer extends SurfaceView implements Callback
 	@Override
 	public void surfaceCreated(SurfaceHolder arg0)
 	{
+		mSurfaceCreated = true;
 	}
 
 	@Override
@@ -110,7 +121,6 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		mPlayerNewPosition = newPosition;
 		mDirection = direction;
 		canvasThread = new CanvasThread(getHolder());
-		this.setFocusable(true);
 		canvasThread.setRunning(true);
 
 		// Run on a new thread or on the UI thread
@@ -138,10 +148,17 @@ public class DrawablePlayer extends SurfaceView implements Callback
 	@Override
 	protected void onDraw(Canvas canvas)
 	{
-		// FIXME An alternative to drawing the color black. That is meant for refreshing image views, I guess
-		// canvas.drawColor(color.transparent);
+		// Draw background after every move. It's a must
+		mContext.getTilesView().draw(canvas);
+
+		// Get the next player image
 		mPlayerImage =
-				mPGM.getPlayerImage(mPlayerPosition.x, mPlayerPosition.y, mDirection, true, mPlayerTheme);
+				mPGM.getPlayerImage(mPlayerPosition.x,
+						mPlayerPosition.y,
+						mDirection,
+						true,
+						mPlayerTheme,
+						mScreenManager);
 		// TODO Set position
 		canvas.drawBitmap(mPlayerImage, mPlayerPositionOnScreen.x, mPlayerPositionOnScreen.y, null);
 	}
@@ -183,42 +200,43 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		{
 			Canvas c;
 
-			while (isRun)
+			// Run while flag is true (also do NOT attempt to run while surface is not yet created)
+			while (isRun && mSurfaceCreated)
 			{
 				c = null;
 				try
 				{
 					c = this.surfaceHolder.lockCanvas(null);
 
-					// If received canvas
-					if (c != null)
+					synchronized (surfaceHolder)
 					{
-						synchronized (c)
-						{
-							DrawablePlayer.this.update();
-							DrawablePlayer.this.draw(c);
-						}
+						DrawablePlayer.this.update();
+						DrawablePlayer.this.draw(c);
+					}
 
-						next_game_tick += SKIP_TICKS;
-						sleep_time = (int) (next_game_tick - GetTickCount());
-						if (sleep_time >= 0)
+					// Count FPS. Put thread to sleep if going too fast
+					next_game_tick += SKIP_TICKS;
+					sleep_time = (int) (next_game_tick - GetTickCount());
+					if (sleep_time >= 0)
+					{
+						try
 						{
-							try
-							{
-								Thread.sleep(sleep_time);
-							} catch (InterruptedException e)
-							{
-								// Print to log
-								e.printStackTrace();
-							}
-						} else
+							Thread.sleep(sleep_time);
+						} catch (InterruptedException e)
 						{
-							// Shit, we are running behind!
+							// TODO Print to log
+							e.printStackTrace();
 						}
+					} else
+					{
+						// Shit, we are running behind!
 					}
 				} finally
 				{
-					surfaceHolder.unlockCanvasAndPost(c);
+					if (c != null)
+					{
+						surfaceHolder.unlockCanvasAndPost(c);
+					}
 				}
 			}
 		}

@@ -21,14 +21,11 @@ import com.android.icecave.mapLogic.IIceCaveGameStatus;
 
 public class GameActivity extends Activity implements ISwipeDetector
 {
-	private static GUIBoardManager	sGBM;
-	private DrawablePlayer			mPlayer;
-	private GameTheme				mGameTheme;
-	private TilesView				mTilesView;
-	private FrameLayout 			mActivityLayout;
-
-	// private final String POSITION_X = "posX";
-	// private final String POSITION_Y = "posY";
+	private static GUIBoardManager sGBM;
+	private DrawablePlayer mPlayer;
+	private GameTheme mGameTheme;
+	private TilesView mTilesView;
+	private FrameLayout mActivityLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -39,8 +36,8 @@ public class GameActivity extends Activity implements ISwipeDetector
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.tiles_layout);
-		
-		mActivityLayout = ((FrameLayout)findViewById(R.id.game_layout));
+
+		mActivityLayout = ((FrameLayout) findViewById(R.id.game_layout));
 
 		// Hide the Status Bar
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -48,48 +45,31 @@ public class GameActivity extends Activity implements ISwipeDetector
 
 		SharedPreferences mShared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
 
-		mGameTheme = 
-				new GameTheme(BitmapFactory.decodeResource(getResources(),
-														  (mShared.getInt(Consts.THEME_SELECT, Consts.DEFAULT_TILES))),
-							  BitmapFactory.decodeResource(getResources(),
-									  				      (mShared.getInt(Consts.PLAYER_SELECT_TAG, Consts.DEFAULT_PLAYER))));
-		
-		// Create new player view
-		mPlayer =  new DrawablePlayer(this, mGameTheme.getPlayerTheme());
-		mPlayer.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-		mActivityLayout.addView(mPlayer);
-		
-		// // Set up player position
-		// if (savedInstanceState != null)
-		// {
-		// mPlayerPosition =
-		// new Point(savedInstanceState.getInt(POSITION_X),
-		// savedInstanceState.getInt(POSITION_Y));
-		// new Point(savedInstanceState.getInt(POSITION_X), savedInstanceState.getInt(POSITION_Y));
-		// } else
-		// {
-		// mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
-		// }
+		mGameTheme =
+				new GameTheme(	BitmapFactory.decodeResource(getResources(),
+										(mShared.getInt(Consts.THEME_SELECT, Consts.DEFAULT_TILES))),
+								BitmapFactory.decodeResource(getResources(),
+										(mShared.getInt(Consts.PLAYER_SELECT_TAG, Consts.DEFAULT_PLAYER))));
 	}
 
 	public int getHeight()
 	{
 		return mActivityLayout.getBottom();
 	}
-	
+
 	public int getWidth()
 	{
 		return mActivityLayout.getWidth();
+	}
+	
+	public TilesView getTilesView() {
+		return mTilesView;
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState)
 	{
 		super.onSaveInstanceState(outState);
-
-		// // Put position data
-		// outState.putInt(POSITION_X, mPlayerPosition.x);
-		// outState.putInt(POSITION_Y, mPlayerPosition.y);
 	}
 
 	@Override
@@ -125,10 +105,11 @@ public class GameActivity extends Activity implements ISwipeDetector
 
 		// TODO: Sagie make the animation.
 		mPlayer.movePlayer(direction, iceCaveGameStatus.getPlayerPoint());
-		
+
 		if (iceCaveGameStatus.getIsStageEnded())
 		{
-
+			// Create new stage
+			sGBM.newStage(Consts.DEFAULT_START_POS, Consts.DEFAULT_WALL_WIDTH, this, mGameTheme);
 		}
 	}
 
@@ -143,27 +124,26 @@ public class GameActivity extends Activity implements ISwipeDetector
 			sGBM = new GUIBoardManager();
 
 			// Initialize the game board & shit
-			sGBM.startNewGame(
-					Consts.DEFAULT_BOULDER_NUM,
-					(Integer) getIntent().getExtras().get(
-							Consts.SELECT_BOARD_SIZE_X),
-					(Integer) getIntent().getExtras().get(
-							Consts.SELECT_BOARD_SIZE_Y),
-					EDifficulty.values()[(Integer) getIntent().getExtras().get(
-							Consts.LEVEL_SELECT_TAG)]);
+			sGBM.startNewGame(Consts.DEFAULT_BOULDER_NUM,
+					(Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_X),
+					(Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_Y),
+					EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)]);
 
 			// Create first stage
-			sGBM.newStage(Consts.DEFAULT_START_POS, 
-						  Consts.DEFAULT_WALL_WIDTH,
-						  this,
-						  mGameTheme);
-			
+			sGBM.newStage(Consts.DEFAULT_START_POS, Consts.DEFAULT_WALL_WIDTH, this, mGameTheme);
+
 			// Create the tiles view and add it to the layout
 			mTilesView = new TilesView(this, sGBM.getTiles());
-			mTilesView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+			mTilesView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+																	FrameLayout.LayoutParams.MATCH_PARENT));
 			mActivityLayout.addView(mTilesView);
 			
-			
+			// Create new player view
+			mPlayer = new DrawablePlayer(this, mGameTheme.getPlayerTheme());
+			mPlayer.setLayoutParams(new FrameLayout.LayoutParams(	FrameLayout.LayoutParams.WRAP_CONTENT,
+																	FrameLayout.LayoutParams.WRAP_CONTENT));
+			mActivityLayout.addView(mPlayer);
+
 			// Register swipe events to the layout
 			mTilesView.setOnTouchListener(new ActivitySwipeDetector(this));
 
@@ -171,7 +151,7 @@ public class GameActivity extends Activity implements ISwipeDetector
 			mPlayer.initializePlayer();
 			mPlayer.bringToFront();
 
-		super.onWindowFocusChanged(hasFocus);
+			super.onWindowFocusChanged(hasFocus);
 		}
 	}
 
