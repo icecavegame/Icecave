@@ -139,7 +139,7 @@ public class GameActivity extends Activity implements ISwipeDetector
 			mActivityLayout.addView(mTilesView);
 			
 			// Create new player view
-			mPlayer = new DrawablePlayer(this, mGameTheme.getPlayerTheme());
+			mPlayer = new DrawablePlayer(this, mGameTheme);
 			mPlayer.setLayoutParams(new FrameLayout.LayoutParams(	FrameLayout.LayoutParams.WRAP_CONTENT,
 																	FrameLayout.LayoutParams.WRAP_CONTENT));
 			mActivityLayout.addView(mPlayer);
