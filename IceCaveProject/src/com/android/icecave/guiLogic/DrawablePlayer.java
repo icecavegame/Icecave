@@ -278,8 +278,9 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		{
 			Canvas c;
 
-			// Run while flag is true (also do NOT attempt to run while surface is not yet created)
-			while (mThreadRunning && mSurfaceCreated)
+			// Run while running flag is true and also do NOT attempt to run while surface is not yet created.
+			// Keep looping if pause flag is up (this is so that the observer update won't happen during a pause)
+			while ((mThreadRunning && mSurfaceCreated) || (mPauseThreadFlag))
 			{
 				// Pause thread if necessary
 				pauseThread();
@@ -315,6 +316,11 @@ public class DrawablePlayer extends SurfaceView implements Callback
 						{
 							// TODO Print to log
 							e.printStackTrace();
+						} catch (IllegalArgumentException e)
+						{
+							// This could happen if the user quickly exits and enters program
+							// TODO Print to log
+							e.printStackTrace();
 						}
 					} else
 					{
@@ -322,6 +328,7 @@ public class DrawablePlayer extends SurfaceView implements Callback
 					}
 				} finally
 				{
+					// Only draw if canvas isn't null (can't do && mSurfaceCreate for some reason... won't resume)
 					if (c != null)
 					{
 						surfaceHolder.unlockCanvasAndPost(c);
