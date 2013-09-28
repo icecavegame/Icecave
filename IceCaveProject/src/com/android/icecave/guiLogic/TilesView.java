@@ -30,4 +30,12 @@ public class TilesView extends View
 			}
 		}
 	}
+	
+	public int getBoardX() {
+		return mBoard[0].length;
+	}
+	
+	public int getBoardY() {
+		return mBoard.length;
+	}
 }
