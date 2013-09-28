@@ -20,9 +20,12 @@ public class DrawablePlayer extends SurfaceView implements Callback
 	private Bitmap mPlayerImage;
 	private PlayerGUIManager mPGM;
 	private Point mPlayerPosition;
+	private Point mPlayerPositionOnScreen;
 	private Point mPlayerNewPosition;
 	private EDirection mDirection;
 	private Bitmap mPlayerTheme;
+	private int mHeight;
+	private int mWidth;
 
 	public DrawablePlayer(Context context)
 	{
@@ -45,11 +48,14 @@ public class DrawablePlayer extends SurfaceView implements Callback
 
 		// Set player theme in manager
 		mPGM = new PlayerGUIManager();
+		mPlayerTheme = playerTheme;
+
+		mHeight = mPlayerTheme.getHeight() / Consts.DEFAULT_PLAYER_BMP_ROWS;
+		mWidth = mPlayerTheme.getWidth() / Consts.DEFAULT_PLAYER_BMP_COLUMNS;
 
 		// Init image (draw on the player's current position)
 		mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
-
-		mPlayerTheme = playerTheme;
+		mPlayerPositionOnScreen = new Point(mPlayerPosition.x * mWidth, mPlayerPosition.y * mHeight);
 	}
 
 	public void initializePlayer()
@@ -122,24 +128,41 @@ public class DrawablePlayer extends SurfaceView implements Callback
 			// Move to direction
 			mPlayerPosition.x += mDirection.getDirection().x;
 			mPlayerPosition.y += mDirection.getDirection().y;
+
+			// Move pixelwise
+			// TODO Currently jumping by blocks, should change this somehow to make it smooth
+			mPlayerPositionOnScreen = new Point(mPlayerPosition.x * mWidth, mPlayerPosition.y * mHeight);
 		}
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas)
 	{
-		// FIXME An alternative to drawing the color black. That is refreshing image views, I guess
-//		 canvas.drawColor(color.transparent);
+		// FIXME An alternative to drawing the color black. That is meant for refreshing image views, I guess
+		// canvas.drawColor(color.transparent);
 		mPlayerImage =
 				mPGM.getPlayerImage(mPlayerPosition.x, mPlayerPosition.y, mDirection, true, mPlayerTheme);
 		// TODO Set position
-		canvas.drawBitmap(mPlayerImage, 0, 0, null);
+		canvas.drawBitmap(mPlayerImage, mPlayerPositionOnScreen.x, mPlayerPositionOnScreen.y, null);
 	}
 
 	private class CanvasThread extends Thread
 	{
 		private SurfaceHolder surfaceHolder;
 		private boolean isRun = false;
+		final int FRAMES_PER_SECOND = 25;
+		final int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
+		long first_tick;
+		long next_game_tick;
+
+		// returns the current number of milliseconds
+		// that have elapsed since the system was started
+		public long GetTickCount()
+		{
+			return first_tick - System.currentTimeMillis();
+		}
+
+		int sleep_time = 0;
 
 		public CanvasThread(SurfaceHolder holder)
 		{
@@ -149,6 +172,10 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		public void setRunning(boolean run)
 		{
 			this.isRun = run;
+
+			// If running is set to true, reset first tick and next tick
+			first_tick = System.currentTimeMillis();
+			next_game_tick = GetTickCount();
 		}
 
 		@Override
@@ -162,7 +189,7 @@ public class DrawablePlayer extends SurfaceView implements Callback
 				try
 				{
 					c = this.surfaceHolder.lockCanvas(null);
-					
+
 					// If received canvas
 					if (c != null)
 					{
@@ -170,6 +197,23 @@ public class DrawablePlayer extends SurfaceView implements Callback
 						{
 							DrawablePlayer.this.update();
 							DrawablePlayer.this.draw(c);
+						}
+
+						next_game_tick += SKIP_TICKS;
+						sleep_time = (int) (next_game_tick - GetTickCount());
+						if (sleep_time >= 0)
+						{
+							try
+							{
+								Thread.sleep(sleep_time);
+							} catch (InterruptedException e)
+							{
+								// Print to log
+								e.printStackTrace();
+							}
+						} else
+						{
+							// Shit, we are running behind!
 						}
 					}
 				} finally
