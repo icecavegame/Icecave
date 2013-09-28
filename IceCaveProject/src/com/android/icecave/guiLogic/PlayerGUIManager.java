@@ -1,18 +1,20 @@
 package com.android.icecave.guiLogic;
 
-import android.graphics.Matrix;
-
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import com.android.icecave.general.Consts;
 import com.android.icecave.general.EDirection;
+import com.android.icecave.guiLogic.tiles.BaseTileGUIWorker;
 
-public class PlayerGUIManager
+public class PlayerGUIManager extends BaseTileGUIWorker
 {
+	private Point mCurrentSprite;
+	
 	/**
 	 * Create a new instance of the player GUI manager.
 	 */
 	public PlayerGUIManager () {
-		
+		mCurrentSprite = new Point();
 	}
 	
 	/**
@@ -23,32 +25,19 @@ public class PlayerGUIManager
 	 * @param isMoving
 	 * @return
 	 */
-	public Bitmap getPlayerImage (int row,
-								  int col,
-							 	  EDirection direction, 
+	public Bitmap getPlayerImage (EDirection direction, 
 							      boolean isMoving,
 							      Bitmap theme,
 							      ITileScale scaler) {
-		Bitmap result;
+		// Select the current sprite of the player
 		
-		// Get the width and height of each player sprite
-		int width = theme.getWidth() / Consts.DEFAULT_PLAYER_BMP_COLUMNS;
-		int height = theme.getHeight() / Consts.DEFAULT_PLAYER_BMP_ROWS;
 		
-		// TODO Finish up here.. select the appropriate sprite for each movement
-		result = Bitmap.createBitmap(theme,
-				0,
-				0,
-				width,
-				height);
-		
-		// Create matrix to change the scale of the bitmap to fit the screen
-		Matrix matrix = new Matrix();
-		matrix.postScale((float) scaler.getTileWidth() / width, (float) scaler.getTileHeight() / height);
+		return makeTile(scaler, theme, Consts.DEFAULT_PLAYER_BMP_ROWS, Consts.DEFAULT_PLAYER_BMP_COLUMNS);
+	}
 
-		// Resize
-		result = Bitmap.createBitmap(result, 0, 0, width, height, matrix, true);
-				
-		return result;
+	@Override
+	public Point getTilePointInSprite()
+	{
+		return mCurrentSprite;
 	}
 }

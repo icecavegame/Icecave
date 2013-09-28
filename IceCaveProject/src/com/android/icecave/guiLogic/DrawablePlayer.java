@@ -153,12 +153,10 @@ public class DrawablePlayer extends SurfaceView implements Callback
 
 		// Get the next player image
 		mPlayerImage =
-				mPGM.getPlayerImage(mPlayerPosition.x,
-						mPlayerPosition.y,
-						mDirection,
-						true,
-						mPlayerTheme,
-						mScreenManager);
+				mPGM.getPlayerImage(mDirection,
+									true,
+									mPlayerTheme,
+									mScreenManager);
 		// TODO Set position
 		canvas.drawBitmap(mPlayerImage, mPlayerPositionOnScreen.x, mPlayerPositionOnScreen.y, null);
 	}
