@@ -326,10 +326,9 @@ public class IceCaveStage
 		root.addRoot();
 
 		// Fill the nodes
-		MapNode node = 
-				fillNodes(root, 
-						  defaultMoveDirection, 
-						  new Point(playerPoint));
+		fillNodes(root, 
+				  defaultMoveDirection, 
+				  new Point(playerPoint));
 
 		MapNode flagNode = getTheFlagNode(root);
 		
