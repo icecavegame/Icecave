@@ -1,6 +1,7 @@
 package com.android.icecave.guiLogic.tiles;
 
-import android.content.Context;
+import com.android.icecave.general.Consts;
+
 import android.graphics.Bitmap;
 import com.android.icecave.guiLogic.ITileScale;
 import com.android.icecave.mapLogic.tiles.BoulderTile;
@@ -39,15 +40,15 @@ public class GUITileFactory
 	 * @param tile - To get image of.
 	 * @return Image for a tile.
 	 */
-	public Bitmap getTiles(ITile tile, Context activityWindow, ITileScale scaler, Bitmap gameTheme) {
+	public Bitmap getTiles(ITile tile, ITileScale scaler, Bitmap gameTheme) {
 		// Check if exists.
 		if(!mTileWorkers.containsKey(tile.getClass())){
 			return null;
 		}
 		
-		return mTileWorkers.get(tile.getClass()).makeTile(tile,
-														  activityWindow,
-														  scaler, 
-														  gameTheme);
+		return mTileWorkers.get(tile.getClass()).makeTile(scaler,
+														  gameTheme,
+														  Consts.DEFAULT_TILES_BMP_ROWS,
+														  Consts.DEFAULT_TILES_BMP_COLUMNS);
 	}
 }
