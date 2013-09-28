@@ -14,10 +14,11 @@ import com.android.icecave.general.EDirection;
 import com.android.icecave.gui.GameActivity;
 import com.android.icecave.gui.GameTheme;
 import com.android.icecave.utils.AutoObservable;
+import java.lang.Thread.State;
 
 public class DrawablePlayer extends SurfaceView implements Callback
 {
-	private CanvasThread canvasThread;
+	private CanvasThread mCanvasThread;
 	private Bitmap mPlayerImage;
 	private PlayerGUIManager mPGM;
 	private Point mPlayerPosition;
@@ -30,7 +31,8 @@ public class DrawablePlayer extends SurfaceView implements Callback
 	private GameActivity mContext;
 	private GUIScreenManager mScreenManager;
 	private boolean mSurfaceCreated = false;
-	private boolean mIsMoving;
+	private boolean mThreadRunning;
+	private boolean mPauseThreadFlag;
 	final float mSpeed = 5;
 	public AutoObservable mFinishAnimation;
 
@@ -51,10 +53,10 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		// Initialize data
 		mContext = (GameActivity) context;
 		this.getHolder().addCallback(this);
-		this.canvasThread = new CanvasThread(getHolder());
 		this.setBackgroundColor(color.transparent);
 		mFinishAnimation = new AutoObservable();
-		
+		mPauseThreadFlag = false;
+
 		// Add game activity as an observer
 		mFinishAnimation.addObserver(mContext);
 
@@ -69,24 +71,65 @@ public class DrawablePlayer extends SurfaceView implements Callback
 										mContext.getWidth(),
 										mContext.getHeight());
 
-		// Get the first player image
-		mIsMoving = false;
-		mPlayerImage = mPGM.getPlayerImage(EDirection.DOWN, mIsMoving, mGameTheme, mScreenManager);
-
 		// Get height and width of player image
+		mPlayerImage = mPGM.getPlayerImage(EDirection.DOWN, mThreadRunning, mGameTheme, mScreenManager);
 		mHeight = mPlayerImage.getHeight();
 		mWidth = mPlayerImage.getWidth();
 
-		// Init image (draw on the player's current position)
-		mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
-		mPlayerPositionOnScreen = new Point(mPlayerPosition.x * mWidth, mPlayerPosition.y * mHeight);
 	}
 
 	public void initializePlayer()
 	{
+		// Initialize thread data
+		mThreadRunning = false;
+		mCanvasThread = new CanvasThread(getHolder());
+
+		// Init image (draw on the player's current position)
+		mPlayerImage = mPGM.getPlayerImage(EDirection.DOWN, mThreadRunning, mGameTheme, mScreenManager);
+
 		// Initialize new position as player position and draw
+		mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
+		mPlayerPositionOnScreen = new Point(mPlayerPosition.x * mWidth, mPlayerPosition.y * mHeight);
 		mPlayerNewPositionOnScreen = new Point(mPlayerPositionOnScreen);
 		startDrawImage(EDirection.DOWN, mPlayerPosition);
+	}
+
+	public void stopDrawingThread()
+	{
+		// Turn flag to false to ensure that thread has stopped
+		mThreadRunning = false;
+	}
+
+	public void pauseDrawingThread()
+	{
+		// Pause thread if running and game was paused (not quit by back press)
+		if (mCanvasThread != null && mCanvasThread.isAlive() && mThreadRunning)
+		{
+			synchronized (mCanvasThread)
+			{
+				// Turn the pause flag on
+				mPauseThreadFlag = true;
+
+				// Turn surface created flag off again, as it will be needed in the future
+				mSurfaceCreated = false;
+			}
+		}
+	}
+
+	public void resumeDrawingThread()
+	{
+		// Resume thread if waiting
+		if (mCanvasThread != null && mCanvasThread.getState() == State.WAITING)
+		{
+			synchronized (mCanvasThread)
+			{
+				// Turn the pause flag off
+				mPauseThreadFlag = false;
+
+				// Resume drawing thread
+				mCanvasThread.notify();
+			}
+		}
 	}
 
 	@Override
@@ -103,67 +146,73 @@ public class DrawablePlayer extends SurfaceView implements Callback
 	@Override
 	public void surfaceDestroyed(SurfaceHolder arg0)
 	{
-		boolean retry = true;
-		mIsMoving = false;
-		
-		while (retry)
-		{
-			try
-			{
-				canvasThread.join();
-				retry = false;
-			} catch (InterruptedException e)
-			{
-				// TODO Print to log
-				e.printStackTrace();
-			}
-		}
+		// boolean retry = true;
+		// mThreadRunning = false;
+		//
+		// while (retry)
+		// {
+		// try
+		// {
+		// mCanvasThread.join();
+		// retry = false;
+		// } catch (InterruptedException e)
+		// {
+		// // TODO Print to log
+		// e.printStackTrace();
+		// }
+		// }
 	}
 
 	public void startDrawImage(EDirection direction, Point newPosition)
 	{
 		mPlayerNewPositionOnScreen = new Point(newPosition.x * mWidth, newPosition.y * mHeight);
 		mDirection = direction;
-		mIsMoving = true;
+		mThreadRunning = true;
 
 		// Run on a new thread or on the UI thread
-		canvasThread.start();
+		mCanvasThread.start();
 	}
 
 	public void movePlayer(EDirection direction, Point newPosition)
 	{
 		// Moving player to the new position in the new direction
-		canvasThread = new CanvasThread(getHolder());
+		mCanvasThread = new CanvasThread(getHolder());
 		startDrawImage(direction, newPosition);
 	}
 
 	public void update()
 	{
 		// If reached new position, stop
-		if (mPlayerPositionOnScreen.x == mPlayerNewPositionOnScreen.x && mPlayerPositionOnScreen.y == mPlayerNewPositionOnScreen.y)
+		if (mPlayerPositionOnScreen.x == mPlayerNewPositionOnScreen.x &&
+				mPlayerPositionOnScreen.y == mPlayerNewPositionOnScreen.y)
 		{
 			// Stop moving and stop thread
-			mIsMoving = false;
+			mThreadRunning = false;
 		} else
 		{
 			// Move to direction by speed
 			mPlayerPositionOnScreen.x += mDirection.getDirection().x * mSpeed;
 			mPlayerPositionOnScreen.y += mDirection.getDirection().y * mSpeed;
-			
+
 			// Check that move does not exceed new position
-			if (mPlayerPositionOnScreen.x > mPlayerNewPositionOnScreen.x) {
+			// No more than maximum, no less than minimum
+			if ((mDirection.getDirection().x > 0 && mPlayerPositionOnScreen.x > mPlayerNewPositionOnScreen.x) ||
+					(mDirection.getDirection().x < 0 && mPlayerPositionOnScreen.x < mPlayerNewPositionOnScreen.x))
+			{
 				mPlayerPositionOnScreen.x = mPlayerNewPositionOnScreen.x;
 			}
-			
-			if (mPlayerPositionOnScreen.y > mPlayerNewPositionOnScreen.y) {
+
+			if ((mDirection.getDirection().y > 0 && mPlayerPositionOnScreen.y > mPlayerNewPositionOnScreen.y) ||
+					(mDirection.getDirection().y < 0 && mPlayerPositionOnScreen.y < mPlayerNewPositionOnScreen.y))
+			{
 				mPlayerPositionOnScreen.y = mPlayerNewPositionOnScreen.y;
 			}
-			
-			mIsMoving = true;
+
+			mThreadRunning = true;
 		}
-		
+
 		// Get the next player image
-		mPlayerImage = mPGM.getPlayerImage(mDirection, mIsMoving, mGameTheme, mScreenManager);
+		mPlayerImage = mPGM.getPlayerImage(mDirection, mThreadRunning, mGameTheme, mScreenManager);
 	}
 
 	@Override
@@ -173,8 +222,9 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		mContext.getTilesView().draw(canvas);
 
 		canvas.drawBitmap(mPlayerImage, mPlayerPositionOnScreen.x, mPlayerPositionOnScreen.y, null);
-		
-		if (mIsMoving) {
+
+		if (mThreadRunning)
+		{
 			update();
 			postInvalidate();
 		}
@@ -185,17 +235,38 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		private SurfaceHolder surfaceHolder;
 		final int FRAMES_PER_SECOND = 25;
 		final int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
-		long first_tick;
-		long next_game_tick;
+		long mFirstTick;
+		int mSleepTime;
 
-		// returns the current number of milliseconds
-		// that have elapsed since the system was started
-		public long GetTickCount()
+		private void pauseThread()
 		{
-			return first_tick - System.currentTimeMillis();
-		}
+			// Wait as long as pause flag is true
+			synchronized (this)
+			{
+				while (mPauseThreadFlag)
+				{
+					try
+					{
+						this.wait();
+					} catch (InterruptedException e)
+					{
+						e.printStackTrace();
+					}
+				}
+			}
 
-		int sleep_time = 0;
+			// Wait till surface holder is created
+			while (!mSurfaceCreated)
+			{
+				try
+				{
+					Thread.sleep(1);
+				} catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}
 
 		public CanvasThread(SurfaceHolder holder)
 		{
@@ -206,15 +277,18 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		public void run()
 		{
 			Canvas c;
-			
-			// Reset first tick and next tick
-			first_tick = System.currentTimeMillis();
-			next_game_tick = GetTickCount();
 
 			// Run while flag is true (also do NOT attempt to run while surface is not yet created)
-			while (mIsMoving && mSurfaceCreated)
+			while (mThreadRunning && mSurfaceCreated)
 			{
+				// Pause thread if necessary
+				pauseThread();
+
 				c = null;
+
+				// Initialize FPS timer
+				mFirstTick = System.currentTimeMillis();
+
 				try
 				{
 					c = this.surfaceHolder.lockCanvas(null);
@@ -226,13 +300,17 @@ public class DrawablePlayer extends SurfaceView implements Callback
 					}
 
 					// Count FPS. Put thread to sleep if going too fast
-					next_game_tick += SKIP_TICKS;
-					sleep_time = (int) (next_game_tick - GetTickCount());
-					if (sleep_time >= 0)
+					mSleepTime = SKIP_TICKS - (int) (mFirstTick - System.currentTimeMillis());
+
+					// Sleep if needed
+					if (mSleepTime >= 0)
 					{
 						try
 						{
-							Thread.sleep(sleep_time);
+							if (mSleepTime > 0)
+								Thread.sleep(mSleepTime);
+							else
+								Thread.sleep(5);
 						} catch (InterruptedException e)
 						{
 							// TODO Print to log
@@ -250,7 +328,7 @@ public class DrawablePlayer extends SurfaceView implements Callback
 					}
 				}
 			}
-			
+
 			// Notify observers that animation has finished
 			mFinishAnimation.notifyObservers();
 		}
