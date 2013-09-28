@@ -71,7 +71,6 @@ public class GUIBoardManager
 											 gameTheme.getTilesTheme());
 			}
 		}
-	
 	}
 	
 	public Bitmap[][] getTiles() {
