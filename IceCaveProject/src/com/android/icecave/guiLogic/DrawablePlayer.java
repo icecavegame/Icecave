@@ -12,6 +12,7 @@ import android.view.SurfaceView;
 import com.android.icecave.general.Consts;
 import com.android.icecave.general.EDirection;
 import com.android.icecave.gui.GameActivity;
+import com.android.icecave.gui.GameTheme;
 
 public class DrawablePlayer extends SurfaceView implements Callback
 {
@@ -22,7 +23,7 @@ public class DrawablePlayer extends SurfaceView implements Callback
 	private Point mPlayerPositionOnScreen;
 	private Point mPlayerNewPosition;
 	private EDirection mDirection;
-	private Bitmap mPlayerTheme;
+	private GameTheme mGameTheme;
 	private int mHeight;
 	private int mWidth;
 	private GameActivity mContext;
@@ -40,7 +41,7 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		super(context, attSet);
 	}
 
-	public DrawablePlayer(Context context, Bitmap playerTheme)
+	public DrawablePlayer(Context context, GameTheme gameTheme)
 	{
 		super(context);
 
@@ -51,14 +52,7 @@ public class DrawablePlayer extends SurfaceView implements Callback
 
 		// Set player theme in manager
 		mPGM = new PlayerGUIManager();
-		mPlayerTheme = playerTheme;
-
-		mHeight = mPlayerTheme.getHeight() / Consts.DEFAULT_PLAYER_BMP_ROWS;
-		mWidth = mPlayerTheme.getWidth() / Consts.DEFAULT_PLAYER_BMP_COLUMNS;
-
-		// Init image (draw on the player's current position)
-		mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
-		mPlayerPositionOnScreen = new Point(mPlayerPosition.x * mWidth, mPlayerPosition.y * mHeight);
+		mGameTheme = gameTheme;
 
 		// Set tile rows and columns into scale manager to fit the character into the tiles
 		mScreenManager =
@@ -66,6 +60,21 @@ public class DrawablePlayer extends SurfaceView implements Callback
 										mContext.getTilesView().getBoardY(),
 										mContext.getWidth(),
 										mContext.getHeight());
+		
+		// Get the first player image
+		mPlayerImage =
+				mPGM.getPlayerImage(EDirection.DOWN,
+									false,
+									mGameTheme,
+									mScreenManager);
+		
+		// Get height and width of player image
+		mHeight = mPlayerImage.getHeight();
+		mWidth = mPlayerImage.getWidth();
+
+		// Init image (draw on the player's current position)
+		mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
+		mPlayerPositionOnScreen = new Point(mPlayerPosition.x * mWidth, mPlayerPosition.y * mHeight);
 	}
 
 	public void initializePlayer()
@@ -155,9 +164,9 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		mPlayerImage =
 				mPGM.getPlayerImage(mDirection,
 									true,
-									mPlayerTheme,
+									mGameTheme,
 									mScreenManager);
-		// TODO Set position
+
 		canvas.drawBitmap(mPlayerImage, mPlayerPositionOnScreen.x, mPlayerPositionOnScreen.y, null);
 	}
 
