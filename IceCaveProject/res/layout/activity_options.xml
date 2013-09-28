@@ -3,24 +3,69 @@
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blueish"
-    android:gravity="center"
-    android:orientation="vertical" >
+    android:background="@color/blueish" >
 
     <TextView
         android:id="@+id/credits"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
         android:text="@string/credits" />
 
     <TextView
         android:id="@+id/version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/credits"
+        android:layout_centerInParent="true"
         android:text="@string/version_number" />
+
+    <CheckBox
+        android:id="@+id/muteSounds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/selectPlayerThemeText"
+        android:layout_alignParentLeft="true"
+        android:text="@string/mute_sounds" />
+
+    <CheckBox
+        android:id="@+id/muteMusic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/credits"
+        android:layout_alignParentLeft="true"
+        android:text="@string/mute_music" />
+
+    <TextView 
+        android:id="@+id/selectPlayerThemeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/selectPlayerTheme"
+        android:layout_alignParentRight="true"
+        android:text="@string/select_player_theme" />
+    
+    <Spinner
+        android:id="@+id/selectPlayerTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/credits"
+        android:layout_alignParentRight="true"
+        android:text="@string/select_player_theme" />
+    
+        <TextView 
+        android:id="@+id/selectBackgroundThemeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/selectBackgroundTheme"
+        android:layout_alignParentRight="true"
+        android:text="@string/select_background_theme" />
+
+    <Spinner
+        android:id="@+id/selectBackgroundTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/selectPlayerThemeText"
+        android:layout_alignParentRight="true"
+        android:text="@string/select_background_theme" />
 
 </RelativeLayout>

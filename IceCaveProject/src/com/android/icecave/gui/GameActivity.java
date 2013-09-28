@@ -1,9 +1,5 @@
 package com.android.icecave.gui;
 
-import java.util.Observable;
-
-import java.util.Observer;
-
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -22,16 +18,19 @@ import com.android.icecave.guiLogic.DrawablePlayer;
 import com.android.icecave.guiLogic.GUIBoardManager;
 import com.android.icecave.guiLogic.TilesView;
 import com.android.icecave.mapLogic.IIceCaveGameStatus;
+import java.util.Observable;
+import java.util.Observer;
 
 public class GameActivity extends Activity implements ISwipeDetector, Observer
 {
-	private static GUIBoardManager sGBM;
+	private static GUIBoardManager sGBM; // FIXME Do not make this static.. but use onSaveInstanceState to re-create...
 	private DrawablePlayer mPlayer;
 	private GameTheme mGameTheme;
 	private TilesView mTilesView;
 	private FrameLayout mActivityLayout;
 	private boolean mIsAnimationRunning;
 	private boolean mIsFlagReached;
+	private final String BOARD_MANAGER = "BoardManager";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -57,8 +56,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 								BitmapFactory.decodeResource(getResources(),
 										(mShared.getInt(Consts.PLAYER_SELECT_TAG, Consts.DEFAULT_PLAYER))));
 
-		mIsAnimationRunning = false;
-		mIsFlagReached = false;
+		if (savedInstanceState != null)
+		{
+			// sGBM = (GUIBoardManager) savedInstanceState.getSerializable(BOARD_MANAGER);
+		}
 	}
 
 	public int getHeight()
@@ -79,6 +80,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	@Override
 	protected void onSaveInstanceState(Bundle outState)
 	{
+		// outState.
 		super.onSaveInstanceState(outState);
 	}
 
@@ -138,6 +140,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		{
 			// Create once
 			sGBM = new GUIBoardManager();
+
+			// Initialize flags (only the first time the activity is created)
+			mIsAnimationRunning = false;
+			mIsFlagReached = false;
 
 			// Initialize the game board & shit
 			sGBM.startNewGame(Consts.DEFAULT_BOULDER_NUM,
@@ -220,9 +226,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 			// Create new stage
 			sGBM.newStage(Consts.DEFAULT_START_POS, Consts.DEFAULT_WALL_WIDTH, this, mGameTheme);
-			
+
 			// Re-initialize player
-			mPlayer.initializePlayer();	
+			mPlayer.initializePlayer();
 			mPlayer.postInvalidate();
 		}
 
