@@ -67,7 +67,6 @@ public class GUIBoardManager
 								getTileFactory().
 									getTiles(board[yAxis]
 												  [xAxis],
-											 context,
 											 screenManager,
 											 gameTheme.getTilesTheme());
 			}
