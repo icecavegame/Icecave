@@ -1,5 +1,9 @@
 package com.android.icecave.gui;
 
+import java.util.Observable;
+
+import java.util.Observer;
+
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -19,13 +23,15 @@ import com.android.icecave.guiLogic.GUIBoardManager;
 import com.android.icecave.guiLogic.TilesView;
 import com.android.icecave.mapLogic.IIceCaveGameStatus;
 
-public class GameActivity extends Activity implements ISwipeDetector
+public class GameActivity extends Activity implements ISwipeDetector, Observer
 {
 	private static GUIBoardManager sGBM;
 	private DrawablePlayer mPlayer;
 	private GameTheme mGameTheme;
 	private TilesView mTilesView;
 	private FrameLayout mActivityLayout;
+	private boolean mIsAnimationRunning;
+	private boolean mIsFlagReached;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -50,6 +56,9 @@ public class GameActivity extends Activity implements ISwipeDetector
 										(mShared.getInt(Consts.THEME_SELECT, Consts.DEFAULT_TILES))),
 								BitmapFactory.decodeResource(getResources(),
 										(mShared.getInt(Consts.PLAYER_SELECT_TAG, Consts.DEFAULT_PLAYER))));
+		
+		mIsAnimationRunning = false;
+		mIsFlagReached = false;
 	}
 
 	public int getHeight()
@@ -61,8 +70,9 @@ public class GameActivity extends Activity implements ISwipeDetector
 	{
 		return mActivityLayout.getWidth();
 	}
-	
-	public TilesView getTilesView() {
+
+	public TilesView getTilesView()
+	{
 		return mTilesView;
 	}
 
@@ -101,15 +111,21 @@ public class GameActivity extends Activity implements ISwipeDetector
 	 */
 	private void commitSwipe(EDirection direction)
 	{
-		IIceCaveGameStatus iceCaveGameStatus = sGBM.movePlayer(direction);
-
-		// TODO: Sagie make the animation.
-		mPlayer.movePlayer(direction, iceCaveGameStatus.getPlayerPoint());
-
-		if (iceCaveGameStatus.getIsStageEnded())
+		// Commit a swipe only if animation is not running
+		if (!mIsAnimationRunning)
 		{
-			// Create new stage
-			sGBM.newStage(Consts.DEFAULT_START_POS, Consts.DEFAULT_WALL_WIDTH, this, mGameTheme);
+			// Turn animation flag on
+			mIsAnimationRunning = true;
+			
+			// Get status
+			IIceCaveGameStatus iceCaveGameStatus = sGBM.movePlayer(direction);
+			
+			// Set game ended value
+			mIsFlagReached = iceCaveGameStatus.getIsStageEnded();
+
+			// Make movement animation
+			mPlayer.movePlayer(direction, iceCaveGameStatus.getPlayerPoint());
+			mPlayer.invalidate();
 		}
 	}
 
@@ -137,7 +153,7 @@ public class GameActivity extends Activity implements ISwipeDetector
 			mTilesView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
 																	FrameLayout.LayoutParams.MATCH_PARENT));
 			mActivityLayout.addView(mTilesView);
-			
+
 			// Create new player view
 			mPlayer = new DrawablePlayer(this, mGameTheme);
 			mPlayer.setLayoutParams(new FrameLayout.LayoutParams(	FrameLayout.LayoutParams.WRAP_CONTENT,
@@ -161,5 +177,22 @@ public class GameActivity extends Activity implements ISwipeDetector
 		// Reset variable
 		sGBM = null;
 		super.onDestroy();
+	}
+
+	@Override
+	public void update(Observable observable, Object data)
+	{
+		// Run a new game if flag is reached
+		if (mIsFlagReached)
+		{
+			// Reset reached flag
+			mIsFlagReached = false;
+			
+			// Create new stage
+			sGBM.newStage(Consts.DEFAULT_START_POS, Consts.DEFAULT_WALL_WIDTH, this, mGameTheme);
+		}
+		
+		// Reset animation flag
+		mIsAnimationRunning = false;
 	}
 }
