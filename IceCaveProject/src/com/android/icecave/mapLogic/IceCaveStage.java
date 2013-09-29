@@ -175,10 +175,11 @@ public class IceCaveStage
 		// Validating the matrix path
 		// If the validate turns false
 		while (!validate(startingMove, playerLoc, difficulty)){
+
 			// Re-initializing map
 			placeTiles(rowLen, colLen, wallWidth, playerLoc, boulderNum);			
 			
-			printBoard(mTiles);
+//			printBoard(mTiles);
 		}
 	}
 
