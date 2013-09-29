@@ -236,7 +236,7 @@ public class MapNode implements INode<ITile>
 			nLevelCounter = 0;
 		}
 
-		return nLevelCounter + 1;
+		return nLevelCounter;
 	}
 
 	@Override
