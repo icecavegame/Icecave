@@ -21,9 +21,7 @@ public class TilesView extends View
 
 	@Override
 	protected void onDraw(Canvas canvas)
-	{
-		super.onDraw(canvas);
-		
+	{		
 		for (int yAxis = 0; yAxis < mBoard.length; yAxis++) {
 			for (int xAxis = 0; xAxis < mBoard[0].length; xAxis++) {
 				canvas.drawBitmap(mBoard[yAxis][xAxis], mBoard[yAxis][xAxis].getWidth() * xAxis, mBoard[yAxis][xAxis].getHeight() * yAxis, null);
