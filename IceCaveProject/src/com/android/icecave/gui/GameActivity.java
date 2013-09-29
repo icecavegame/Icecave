@@ -50,7 +50,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 		mGameTheme =
 				new GameTheme(	BitmapFactory.decodeResource(getResources(),
-										(mShared.getInt(Consts.THEME_SELECT, Consts.DEFAULT_TILES))),
+										(mShared.getInt(Consts.THEME_SELECT_TAG, Consts.DEFAULT_TILES))),
 								BitmapFactory.decodeResource(getResources(),
 										(mShared.getInt(Consts.PLAYER_SELECT_TAG, Consts.DEFAULT_PLAYER))));
 	}
