@@ -27,7 +27,7 @@ public class BoulderTileValidator extends BaseTileValidator{
 			// Check that the location is an empty tile.
 			EmptyTile.class.isInstance(board[yLocation][xLocation]) &&
 			// Check that it is not adjacent to any boulder.
-			!isAdjacent(xLocation, yLocation, BoulderTile.class,board) &&
-			!isAdjacent(xLocation, yLocation, FlagTile.class, board));
+			(true || !isAdjacent(xLocation, yLocation, BoulderTile.class,board)) &&
+			(true || !isAdjacent(xLocation, yLocation, FlagTile.class, board)));
 	}
 }
