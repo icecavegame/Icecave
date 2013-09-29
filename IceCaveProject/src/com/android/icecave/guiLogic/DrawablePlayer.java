@@ -240,7 +240,7 @@ public class DrawablePlayer extends SurfaceView implements Callback
 	private class CanvasThread extends Thread
 	{
 		private SurfaceHolder surfaceHolder;
-		final int FRAMES_PER_SECOND = 25;
+		final int FRAMES_PER_SECOND = 35;
 		final int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 		long mStartFrame;
 
@@ -286,8 +286,8 @@ public class DrawablePlayer extends SurfaceView implements Callback
 
 			// Run while running flag is true and also do NOT attempt to run while surface is not yet created.
 			// Keep looping if pause flag is up (this is so that the observer update won't happen during a pause)
-			while ((mThreadRunning && mSurfaceCreated) || (mPauseThreadFlag))
-			{
+			//while ((mThreadRunning && mSurfaceCreated) || (mPauseThreadFlag)) NOT NEEDED BECAUSE ONDRAW IS RECURSIVE!!!
+//			{
 				// Pause thread if necessary
 				pauseThread();
 
@@ -342,7 +342,7 @@ public class DrawablePlayer extends SurfaceView implements Callback
 						surfaceHolder.unlockCanvasAndPost(c);
 					}
 				}
-			}
+//			}
 
 			// Notify observers that animation has finished
 			mFinishAnimation.notifyObservers();
