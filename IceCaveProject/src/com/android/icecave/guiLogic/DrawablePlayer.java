@@ -102,6 +102,10 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		// Turn flag to false to ensure that thread has stopped
 		mThreadRunning = false;
 	}
+	
+	public boolean isAnimationRunning() {
+		return mThreadRunning;
+	}
 
 	public void pauseDrawingThread()
 	{
