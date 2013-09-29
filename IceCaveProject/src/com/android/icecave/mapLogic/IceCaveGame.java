@@ -53,9 +53,14 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 		{
 
 			@Override
-			public Void invoke()
+			public Void invoke(Point collisionPoint)
 			{
 				mPlayerMoving = false;
+				collisionPoint.offset(
+						mLastDirectionMoved.getOpositeDirection().getDirection().x,
+						mLastDirectionMoved.getOpositeDirection().getDirection().y);
+				mPlayerLocation = collisionPoint;
+				
 				return null;
 			}
 		};
@@ -64,10 +69,13 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 		{
 
 			@Override
-			public Void invoke()
+			public Void invoke(Point collisionPoint)
 			{
 				mPlayerMoving = false;
 				mIsStageEnded = true;
+				
+				mPlayerLocation = collisionPoint;
+				
 				// TODO: Add report to the GUI logic on end stage.
 				return null;
 			}
@@ -92,6 +100,7 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 	public void newStage(Point playerStart, int wallWidth)
 	{
 		mIsStageEnded = false;
+		mLastDirectionMoved = null;
 		mPlayerLocation = new Point(playerStart);
 		mStage.buildBoard(mDifficulty,
 				mBoardSizeX,
@@ -124,28 +133,18 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 		// Check if the requested direction is the last direction moved.
 		if (!direction.equals(mLastDirectionMoved))
 		{
+			// Set last move
+			mLastDirectionMoved = direction;
+			
 			// Start moving.
 			mPlayerMoving = true;
 
-			Point nextPlayerPoint = new Point(mPlayerLocation);
+			Point nextPlayerPoint = mStage.movePlayerOneTile(mPlayerLocation, direction);
 
 			// While we are moving.
 			while (mPlayerMoving)
 			{
-
-				mPlayerLocation = new Point(nextPlayerPoint);
 				nextPlayerPoint = mStage.movePlayerOneTile(nextPlayerPoint, direction);
-			}
-
-			// If stage has ended clear last direction and set new point as flag position
-			if (mIsStageEnded)
-			{
-				mLastDirectionMoved = null;
-				mPlayerLocation = new Point(nextPlayerPoint);
-			} else
-			{
-				// Set last move
-				mLastDirectionMoved = direction;
 			}
 		}
 
@@ -177,7 +176,8 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 	{
 		if (mCollisionInvokers.containsKey(collisionable.getClass()))
 		{
-			mCollisionInvokers.get(collisionable.getClass()).onCollision();
+			mCollisionInvokers.get(collisionable.getClass()).
+								   onCollision(collisionable.getLocation());
 		}
 	}
 

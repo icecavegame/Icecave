@@ -1,7 +1,5 @@
 package com.android.icecave.mapLogic.tiles;
 
-import android.graphics.Point;
-
 import com.android.icecave.mapLogic.collision.ICollisionable;
 
 
@@ -12,9 +10,5 @@ import com.android.icecave.mapLogic.collision.ICollisionable;
  */
 public interface ITile extends ICollisionable
 {
-	/**
-	 * Get the location of the tile.
-	 * @return Location of the tile.
-	 */
-	Point getLocation();
+
 }
