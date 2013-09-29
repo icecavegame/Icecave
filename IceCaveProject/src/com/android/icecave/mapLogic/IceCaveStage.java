@@ -170,7 +170,7 @@ public class IceCaveStage
 		// Place tiles in the board.
 		placeTiles(rowLen, colLen, wallWidth, playerLoc, boulderNum);			
 	
-		printBoard(mTiles);
+		//printBoard(mTiles);
 		
 		// Validating the matrix path
 		// If the validate turns false
@@ -334,6 +334,7 @@ public class IceCaveStage
 		queue.add(root);
 		
 		MapNode mapNode = null;
+		MapNode flagNode = null; 
 		
 		// While the queue is not empty.
 		while(!queue.isEmpty()){
@@ -341,6 +342,7 @@ public class IceCaveStage
 			mapNode = queue.remove();
 			
 			if(mapNode.getValue() instanceof FlagTile){
+				flagNode = mapNode;
 				break;
 			}
 			
@@ -370,13 +372,17 @@ public class IceCaveStage
 //			}
 //		}
 
-		MapNode flagNode = mapNode; 
 		// Check if it's OK.
 		if (flagNode != null && 
 			flagNode.getLevel() >= difficulty.getMinMoves() &&
 			flagNode.getLevel() <= difficulty.getMaxMoves())
 		{
 			System.out.println("Flag level : " + flagNode.getLevel());
+			MapNode flagParent = flagNode.getParent();
+			while(flagParent != null){
+				System.out.println(flagParent.getValue().getLocation());
+				flagParent = flagParent.getParent();
+			}
 			return true;
 //			// Get the number of steps.
 //			m_nStepsTaken = nCurMinSteps;
