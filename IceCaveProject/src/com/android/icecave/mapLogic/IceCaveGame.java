@@ -25,15 +25,21 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 	private int mBoardSizeY;
 	private EDifficulty mDifficulty;
 	private boolean mIsStageEnded;
-	
+
 	/**
 	 * Create a new instance of the IceCaveGame object.
-	 * @param boulderNum - Number of boulders to place on board.
-	 * @param boardSizeX - Board width  (in tiles).
-	 * @param boardSizeY - Board height (in tiles).
-	 * @param difficulty - Game difficulty.
+	 * 
+	 * @param boulderNum
+	 *            - Number of boulders to place on board.
+	 * @param boardSizeX
+	 *            - Board width (in tiles).
+	 * @param boardSizeY
+	 *            - Board height (in tiles).
+	 * @param difficulty
+	 *            - Game difficulty.
 	 */
-	public IceCaveGame(int boulderNum, int boardSizeX, int boardSizeY, EDifficulty difficulty) {
+	public IceCaveGame(int boulderNum, int boardSizeX, int boardSizeY, EDifficulty difficulty)
+	{
 		mBoulderNum = boulderNum;
 		mBoardSizeX = boardSizeX;
 		mBoardSizeY = boardSizeY;
@@ -41,116 +47,135 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 		mIsStageEnded = false;
 		mStage = new IceCaveStage();
 		mPlayerLocation = new Point();
-		
+
 		// Create invokers.
-		IFunction<Void> stopPlayer = new IFunction<Void>() {
-			
+		IFunction<Void> stopPlayer = new IFunction<Void>()
+		{
+
 			@Override
-			public Void invoke() {
+			public Void invoke()
+			{
 				mPlayerMoving = false;
 				return null;
 			}
 		};
-		
-		IFunction<Void> endStage = new IFunction<Void>() {
-			
+
+		IFunction<Void> endStage = new IFunction<Void>()
+		{
+
 			@Override
-			public Void invoke() {
+			public Void invoke()
+			{
 				mPlayerMoving = false;
 				mIsStageEnded = true;
 				// TODO: Add report to the GUI logic on end stage.
 				return null;
 			}
 		};
-		
+
 		// Add invokers.
 		mCollisionInvokers.put(BoulderTile.class, new BaseCollisionInvoker<Void>(stopPlayer));
 		mCollisionInvokers.put(WallTile.class, new BaseCollisionInvoker<Void>(stopPlayer));
 		mCollisionInvokers.put(FlagTile.class, new BaseCollisionInvoker<Void>(endStage));
-		
+
 		MapLogicServiceProvider.getInstance().registerCollisionManager(this);
 	}
-	
+
 	/**
 	 * Start a new stage.
 	 * 
-	 * @param playerStart - The starting position of the player.
-	 * @param wallWidth - Width of the walls in tiles.
+	 * @param playerStart
+	 *            - The starting position of the player.
+	 * @param wallWidth
+	 *            - Width of the walls in tiles.
 	 */
 	public void newStage(Point playerStart, int wallWidth)
 	{
 		mIsStageEnded = false;
 		mPlayerLocation = new Point(playerStart);
-		mStage.buildBoard(mDifficulty, 
-						  mBoardSizeX, 
-						  mBoardSizeY,
-						  wallWidth, 
-						  new Point(playerStart),
-						  mBoulderNum, 
-						  EDirection.RIGHT);
+		mStage.buildBoard(mDifficulty,
+				mBoardSizeX,
+				mBoardSizeY,
+				wallWidth,
+				new Point(playerStart),
+				mBoulderNum,
+				EDirection.RIGHT);
 	}
-	
+
 	/**
 	 * Get the number of moves that were done in the current stage.
+	 * 
 	 * @return Number of moves in current stage.
 	 */
-	public int getStageMoves() {
+	public int getStageMoves()
+	{
 		return mStage.getMoves();
 	}
-	
+
 	/**
 	 * Move the player on the board.
-	 * @param direction - Direction to move the player in.
+	 * 
+	 * @param direction
+	 *            - Direction to move the player in.
 	 * @return Point - New location of the player.
 	 */
-	public IIceCaveGameStatus movePlayer(EDirection direction) {
-		
-		if(mIsStageEnded){
-			return this;
-		}
-		
+	public IIceCaveGameStatus movePlayer(EDirection direction)
+	{
 		// Check if the requested direction is the last direction moved.
-		if(!direction.equals(mLastDirectionMoved))
+		if (!direction.equals(mLastDirectionMoved))
 		{
 			// Start moving.
 			mPlayerMoving = true;
-			
+
 			Point nextPlayerPoint = new Point(mPlayerLocation);
-			
+
 			// While we are moving.
-			while (mPlayerMoving){
-				
+			while (mPlayerMoving)
+			{
+
 				mPlayerLocation = new Point(nextPlayerPoint);
 				nextPlayerPoint = mStage.movePlayerOneTile(nextPlayerPoint, direction);
 			}
-			
-			// Set last move
-			mLastDirectionMoved = direction;
+
+			// If stage has ended clear last direction and set new point as flag position
+			if (mIsStageEnded)
+			{
+				mLastDirectionMoved = null;
+				mPlayerLocation = new Point(nextPlayerPoint);
+			} else
+			{
+				// Set last move
+				mLastDirectionMoved = direction;
+			}
 		}
-		
+
 		return this;
 	}
-	
+
 	/**
 	 * Return overall moves taken in game.
+	 * 
 	 * @return Overall moves.
 	 */
-	public int getOverallMoves() {
+	public int getOverallMoves()
+	{
 		return mOverallMoves;
 	}
-	
+
 	/**
 	 * Get the current board of the stage.
+	 * 
 	 * @return Board of the stage.
 	 */
-	public ITile[][] getBoard() {
+	public ITile[][] getBoard()
+	{
 		return mStage.getBoard();
 	}
 
 	@Override
 	public void handleCollision(ICollisionable collisionable)
 	{
-		if(mCollisionInvokers.containsKey(collisionable.getClass()))
+		if (mCollisionInvokers.containsKey(collisionable.getClass()))
 		{
 			mCollisionInvokers.get(collisionable.getClass()).onCollision();
 		}
