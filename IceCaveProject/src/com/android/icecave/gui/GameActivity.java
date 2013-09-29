@@ -28,7 +28,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private GameTheme mGameTheme;
 	private TilesView mTilesView;
 	private FrameLayout mActivityLayout;
-	private boolean mIsAnimationRunning;
 	private boolean mIsFlagReached;
 
 	@Override
@@ -54,11 +53,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 										(mShared.getInt(Consts.THEME_SELECT, Consts.DEFAULT_TILES))),
 								BitmapFactory.decodeResource(getResources(),
 										(mShared.getInt(Consts.PLAYER_SELECT_TAG, Consts.DEFAULT_PLAYER))));
-
-		if (savedInstanceState != null)
-		{
-			// sGBM = (GUIBoardManager) savedInstanceState.getSerializable(BOARD_MANAGER);
-		}
 	}
 
 	public int getHeight()
@@ -74,13 +68,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	public TilesView getTilesView()
 	{
 		return mTilesView;
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState)
-	{
-		// outState.
-		super.onSaveInstanceState(outState);
 	}
 
 	@Override
@@ -113,11 +100,8 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private void commitSwipe(EDirection direction)
 	{
 		// Commit a swipe only if animation is not running
-		if (!mIsAnimationRunning)
+		if (!mPlayer.isAnimationRunning())
 		{
-			// Turn animation flag on
-			mIsAnimationRunning = true;
-
 			// Get status
 			IIceCaveGameStatus iceCaveGameStatus = sGBM.movePlayer(direction);
 
@@ -141,7 +125,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			sGBM = new GUIBoardManager();
 
 			// Initialize flags (only the first time the activity is created)
-			mIsAnimationRunning = false;
 			mIsFlagReached = false;
 
 			// Initialize the game board & shit
@@ -236,8 +219,5 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			mPlayer.initializePlayer();
 			mPlayer.postInvalidate();
 		}
-
-		// Reset animation flag
-		mIsAnimationRunning = false;
 	}
 }
