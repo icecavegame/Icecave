@@ -15,6 +15,6 @@ public class BaseCollisionInvoker<return_type> implements ICollisionInvoker<retu
 	@Override
 	public return_type onCollision(Point collisionPoint)
 	{
-		return mFunction.invoke(collisionPoint);
+		return mFunction.invoke(new Point(collisionPoint));
 	}
 }
