@@ -50,6 +50,8 @@ public class GUIBoardManager
 	                     GameActivity context,
 	                     GameTheme gameTheme){
 		mIceCaveGame.newStage(playerStart, wallWidth);
+		mIceCaveGame.newStage(playerStart, wallWidth);
+		mIceCaveGame.newStage(playerStart, wallWidth);
 		
 		ITile[][] board = mIceCaveGame.getBoard();
 		GUIScreenManager screenManager = 

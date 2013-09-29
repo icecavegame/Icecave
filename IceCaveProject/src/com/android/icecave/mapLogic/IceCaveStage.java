@@ -1,6 +1,9 @@
 package com.android.icecave.mapLogic;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Random;
 
 import android.graphics.Point;
@@ -21,8 +24,32 @@ public class IceCaveStage
 {
 	private ITile[][] mTiles;
 	private int mMoves;
-	private boolean[][] mVisitedTiles;
 	
+	/**
+	 * Find a location on the board to place the flag in.
+	 * 
+	 * @param rowSize 	- Row size in tiles of the board.
+	 * @param colSize 	- Column size in tiles of the board.
+	 * @param playerLoc - Location of the player.
+	 * 
+	 * @return Location to place the flag.
+	 */
+	private Point createExit(int rowSize, int colSize, Point playerLoc)
+	{
+		// Get a random number
+		Random rand = GeneralServiceProvider.getInstance().getRandom();
+		
+		int flagXposition = rand.nextInt(rowSize - 2) + 1;
+		int flagYposition = rand.nextInt(colSize - 2) + 1;
+		
+		while(playerLoc.equals(flagXposition, flagYposition)){
+			flagXposition = rand.nextInt(rowSize - 2) + 1;
+			flagYposition = rand.nextInt(colSize - 2) + 1;
+		}
+			
+		return new Point(flagXposition, flagYposition);
+	}
+
 	/**
 	 * Validate a point on the board.
 	 * @param toCheck - Point to validate.
@@ -82,7 +109,6 @@ public class IceCaveStage
 	 */
 	private void initializeBoard(int rowLen, int colLen, int wallWidth)
 	{
-		mVisitedTiles = new boolean[colLen][rowLen];
 		createEmptyBoard(rowLen, colLen);
 
 		fillWithEmptyTles(rowLen, colLen, wallWidth);
@@ -143,7 +169,6 @@ public class IceCaveStage
 	{
 		// Initialize members.
 		mTiles = new ITile[colLen][rowLen];
-		mVisitedTiles = new boolean[colLen][rowLen];
 		
 		// Place tiles in the board.
 		placeTiles(rowLen, colLen, wallWidth, playerLoc, boulderNum);			
@@ -201,6 +226,7 @@ public class IceCaveStage
 		System.out.println(result);
 	}
 
+	
 	/**
 	 * Place all tiles on the board.
 	 * 
@@ -279,31 +305,7 @@ public class IceCaveStage
 		}
 	}
 
-	/**
-	 * Find a location on the board to place the flag in.
-	 * 
-	 * @param rowSize 	- Row size in tiles of the board.
-	 * @param colSize 	- Column size in tiles of the board.
-	 * @param playerLoc - Location of the player.
-	 * 
-	 * @return Location to place the flag.
-	 */
-	private Point createExit(int rowSize, int colSize, Point playerLoc)
-	{
-		// Get a random number
-		Random rand = GeneralServiceProvider.getInstance().getRandom();
-		
-		int flagXposition = rand.nextInt(rowSize - 2) + 1;
-		int flagYposition = rand.nextInt(colSize - 2) + 1;
-		
-		while(playerLoc.equals(flagXposition, flagYposition)){
-			flagXposition = rand.nextInt(rowSize - 2) + 1;
-			flagYposition = rand.nextInt(colSize - 2) + 1;
-		}
-			
-		return new Point(flagXposition, flagYposition);
-	}
-
+	
 	/**
 	 * Validate that the map is solvable in a specific number of moves.
 	 * @param defaultMoveDirection - The first direction the player moves in.
@@ -317,7 +319,7 @@ public class IceCaveStage
 	{
 		// TODO: Validate the number of steps is good.
 		// Create the root node
-		MapNode root = new MapNode(null, null);
+		MapNode root = new MapNode(null, mTiles[playerPoint.y][playerPoint.x]);
 
 		// Clear the previous stuff
 		root.clear();
@@ -325,18 +327,59 @@ public class IceCaveStage
 		// Add the root to the stack
 		root.addRoot();
 
-		// Fill the nodes
-		fillNodes(root, 
-				  defaultMoveDirection, 
-				  new Point(playerPoint));
-
-		MapNode flagNode = getTheFlagNode(root);
+		boolean[][] visited = 
+				new boolean[mTiles.length][mTiles[0].length];
+//						[EDirection.values().length];
 		
+		LinkedList<MapNode> queue = new LinkedList<MapNode>();
+		
+		// Add the root.
+		queue.add(root);
+		
+		MapNode mapNode = null;
+		
+		// While the queue is not empty.
+		while(!queue.isEmpty()){
+			// Pop the node.
+			mapNode = queue.remove();
+			
+			if(mapNode.getValue() instanceof FlagTile){
+				break;
+			}
+			
+			for (EDirection direction : EDirection.values()) {
+				Point currPoint = new Point(mapNode.getValue().getLocation());
+				getMove(direction, currPoint);
+				if(!visited[currPoint.y][currPoint.x]){
+					visited[currPoint.y][currPoint.x] = true;
+					MapNode newNode = new MapNode(mapNode, mTiles[currPoint.y][currPoint.x]);
+					// Push the node.
+					queue.add(newNode);
+					mapNode.push(newNode);
+				}
+			}
+		}
+		
+//		ArrayList<MapNode> flags = new ArrayList<MapNode>();
+//		getTheFlagNode(root, flags);
+//		
+//		MapNode flagNode = null;
+//		int lowestSteps = Integer.MAX_VALUE;
+//		for (MapNode mapNode : flags)
+//		{
+//			if(mapNode.getLevel() < lowestSteps){
+//				lowestSteps = mapNode.getLevel();				
+//				flagNode = mapNode;
+//			}
+//		}
+
+		MapNode flagNode = mapNode; 
 		// Check if it's OK.
-		if (flagNode.getValue() instanceof FlagTile && 
+		if (flagNode != null && 
 			flagNode.getLevel() >= difficulty.getMinMoves() &&
 			flagNode.getLevel() <= difficulty.getMaxMoves())
 		{
+			System.out.println("Flag level : " + flagNode.getLevel());
 			return true;
 //			// Get the number of steps.
 //			m_nStepsTaken = nCurMinSteps;
@@ -366,29 +409,24 @@ public class IceCaveStage
 		return false;
 	}
 
+
 	/**
 	 * Get the flag node from the children of the root node.
 	 * @param root - Root node.
-	 * @return The flag node, null if not found.
+	 * @param flags - Array list of flags.
 	 */
-	private MapNode getTheFlagNode(MapNode root)
+	private void getTheFlagNode(MapNode root, ArrayList<MapNode> flags)
 	{
 		if(root.getValue() instanceof FlagTile){
-			return root;
+			flags.add(root);
 		}
 		
 		// Get the flag.
 		ArrayList<MapNode> nodes = root.getChildren();
 		for (MapNode mapNode : nodes){
+			getTheFlagNode(mapNode, flags);
 			
-			MapNode currentMapNode = getTheFlagNode(mapNode);
-			
-			// Check if already found the flag.
-			if(currentMapNode.getValue() instanceof FlagTile){
-				return currentMapNode;
-			}
 		}
-		return root;
 	}
 
 	/**
@@ -474,7 +512,8 @@ public class IceCaveStage
 	 */
 	private MapNode fillNodes(MapNode      curNode,
 							  EDirection   lastDirection, 
-							  Point        playerPoint)
+							  Point        playerPoint,
+							  boolean[][][] visited)
 	{
 		// Check if root.
 		if (curNode == null)
@@ -483,22 +522,42 @@ public class IceCaveStage
 		}
 		
 		// Checking if the current place has been checked before from that direction.
-		if (!mVisitedTiles[playerPoint.y][playerPoint.x])
+		if (!visited[playerPoint.y][playerPoint.x][lastDirection.ordinal()])
 		{
 			// Making the currently visited place false, to not
 			// visit it again
-			mVisitedTiles[playerPoint.y][playerPoint.x] = true;
+			visited[playerPoint.y][playerPoint.x][lastDirection.ordinal()] = true;
 
 			// Go through the available directions and fill the map.
 			for (EDirection direction : EDirection.values()) {
 				fillNodesInDirection(curNode,
 								     direction, 
 								     lastDirection, 
-								     playerPoint);
+								     playerPoint,
+								     visited);
 			}
 		}
 
 		return curNode.peek();
+	}
+
+	/**
+	 * @param src
+	 * @param dst
+	 */
+	private void copy3dimentionalArray(boolean[][][] src,
+										boolean[][][] dst)
+	{
+		for (int i = 0; i < dst.length; i++)
+		{
+			for (int j = 0; j < dst[0].length; j++)
+			{
+				for (int k = 0; k < dst[0][0].length; k++)
+				{
+					dst[i][j][k] = src[i][j][k];
+				}
+			}
+		}
 	}
 
 	/**
@@ -511,7 +570,8 @@ public class IceCaveStage
 	private void fillNodesInDirection(MapNode    curNode, 
 									  EDirection toMove, 
 									  EDirection lastMove,
-									  Point playerPoint) {
+									  Point playerPoint,
+									  boolean[][][] visited) {
 		MapNode newNode;
 		Point pntNewPoint;
 
@@ -526,7 +586,13 @@ public class IceCaveStage
 		newNode = 
 				curNode.push(mTiles[pntNewPoint.y][pntNewPoint.x]);
 
-		fillNodes(newNode, toMove, pntNewPoint);
+		boolean[][][] newVisited = 	
+				new boolean[mTiles.length][mTiles[0].length][EDirection.values().length];
+
+		copy3dimentionalArray(visited, newVisited);
+
+		
+		fillNodes(newNode, toMove, pntNewPoint, newVisited);
 	}
 
 	/**
