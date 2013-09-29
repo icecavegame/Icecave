@@ -10,7 +10,7 @@ public class Consts
 	public final static String PREFS_FILE_TAG = "prefsFile";
 	public final static String LEVEL_SELECT_TAG = "levelSelect";
 	public final static String PLAYER_SELECT_TAG = "playerSelect";
-	public final static String THEME_SELECT = "themeSelect";
+	public final static String THEME_SELECT_TAG = "themeSelect";
 	public final static String SELECT_BOARD_SIZE_X = "selectBoardX";
 	public final static String SELECT_BOARD_SIZE_Y = "selectBoardY";
 	
