@@ -1,10 +1,13 @@
 package com.android.icecave.guiLogic;
 
+import android.util.Log;
+
 import android.R.color;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -235,8 +238,7 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		private SurfaceHolder surfaceHolder;
 		final int FRAMES_PER_SECOND = 25;
 		final int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
-		long mFirstTick;
-		int mSleepTime;
+		long mStartFrame;
 
 		private void pauseThread()
 		{
@@ -288,7 +290,7 @@ public class DrawablePlayer extends SurfaceView implements Callback
 				c = null;
 
 				// Initialize FPS timer
-				mFirstTick = System.currentTimeMillis();
+				mStartFrame = SystemClock.uptimeMillis();
 
 				try
 				{
@@ -296,35 +298,37 @@ public class DrawablePlayer extends SurfaceView implements Callback
 
 					synchronized (surfaceHolder)
 					{
-						DrawablePlayer.this.update();
+						//DrawablePlayer.this.update(); Char position is being updated through onDraw
 						DrawablePlayer.this.draw(c);
 					}
 
 					// Count FPS. Put thread to sleep if going too fast
-					mSleepTime = SKIP_TICKS - (int) (mFirstTick - System.currentTimeMillis());
+					final long endFrame = SystemClock.uptimeMillis();
+					final long sleepTime = SKIP_TICKS - (endFrame - mStartFrame);
+					
+					Log.d("FPS DEBUGGING", "Sleep time: " + sleepTime + "miliseconds");
 
 					// Sleep if needed
-					if (mSleepTime >= 0)
+					if (sleepTime >= 0)
 					{
 						try
 						{
-							if (mSleepTime > 0)
-								Thread.sleep(mSleepTime);
+							if (sleepTime > 0)
+								Thread.sleep(sleepTime);
 							else
-								Thread.sleep(5);
+								Thread.sleep(1);
 						} catch (InterruptedException e)
 						{
 							// TODO Print to log
 							e.printStackTrace();
 						} catch (IllegalArgumentException e)
 						{
-							// This could happen if the user quickly exits and enters program
 							// TODO Print to log
 							e.printStackTrace();
 						}
 					} else
 					{
-						// Shit, we are running behind!
+						System.out.println("Shit, we are running behind!");
 					}
 				} finally
 				{
