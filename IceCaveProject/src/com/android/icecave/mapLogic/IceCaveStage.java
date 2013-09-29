@@ -1,9 +1,6 @@
 package com.android.icecave.mapLogic;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.Random;
 
 import android.graphics.Point;
@@ -415,19 +412,19 @@ public class IceCaveStage
 	 * @param root - Root node.
 	 * @param flags - Array list of flags.
 	 */
-	private void getTheFlagNode(MapNode root, ArrayList<MapNode> flags)
-	{
-		if(root.getValue() instanceof FlagTile){
-			flags.add(root);
-		}
-		
-		// Get the flag.
-		ArrayList<MapNode> nodes = root.getChildren();
-		for (MapNode mapNode : nodes){
-			getTheFlagNode(mapNode, flags);
-			
-		}
-	}
+//	private void getTheFlagNode(MapNode root, ArrayList<MapNode> flags)
+//	{
+//		if(root.getValue() instanceof FlagTile){
+//			flags.add(root);
+//		}
+//		
+//		// Get the flag.
+//		ArrayList<MapNode> nodes = root.getChildren();
+//		for (MapNode mapNode : nodes){
+//			getTheFlagNode(mapNode, flags);
+//			
+//		}
+//	}
 
 	/**
 	 * Change the types matrix boulders that are breakable to breakable.
@@ -510,55 +507,55 @@ public class IceCaveStage
 	 * @param playerPoint - The current location of the player.
 	 * @return
 	 */
-	private MapNode fillNodes(MapNode      curNode,
-							  EDirection   lastDirection, 
-							  Point        playerPoint,
-							  boolean[][][] visited)
-	{
-		// Check if root.
-		if (curNode == null)
-		{
-			return curNode;
-		}
-		
-		// Checking if the current place has been checked before from that direction.
-		if (!visited[playerPoint.y][playerPoint.x][lastDirection.ordinal()])
-		{
-			// Making the currently visited place false, to not
-			// visit it again
-			visited[playerPoint.y][playerPoint.x][lastDirection.ordinal()] = true;
-
-			// Go through the available directions and fill the map.
-			for (EDirection direction : EDirection.values()) {
-				fillNodesInDirection(curNode,
-								     direction, 
-								     lastDirection, 
-								     playerPoint,
-								     visited);
-			}
-		}
-
-		return curNode.peek();
-	}
+//	private MapNode fillNodes(MapNode      curNode,
+//							  EDirection   lastDirection, 
+//							  Point        playerPoint,
+//							  boolean[][][] visited)
+//	{
+//		// Check if root.
+//		if (curNode == null)
+//		{
+//			return curNode;
+//		}
+//		
+//		// Checking if the current place has been checked before from that direction.
+//		if (!visited[playerPoint.y][playerPoint.x][lastDirection.ordinal()])
+//		{
+//			// Making the currently visited place false, to not
+//			// visit it again
+//			visited[playerPoint.y][playerPoint.x][lastDirection.ordinal()] = true;
+//
+//			// Go through the available directions and fill the map.
+//			for (EDirection direction : EDirection.values()) {
+//				fillNodesInDirection(curNode,
+//								     direction, 
+//								     lastDirection, 
+//								     playerPoint,
+//								     visited);
+//			}
+//		}
+//
+//		return curNode.peek();
+//	}
 
 	/**
 	 * @param src
 	 * @param dst
 	 */
-	private void copy3dimentionalArray(boolean[][][] src,
-										boolean[][][] dst)
-	{
-		for (int i = 0; i < dst.length; i++)
-		{
-			for (int j = 0; j < dst[0].length; j++)
-			{
-				for (int k = 0; k < dst[0][0].length; k++)
-				{
-					dst[i][j][k] = src[i][j][k];
-				}
-			}
-		}
-	}
+//	private void copy3dimentionalArray(boolean[][][] src,
+//										boolean[][][] dst)
+//	{
+//		for (int i = 0; i < dst.length; i++)
+//		{
+//			for (int j = 0; j < dst[0].length; j++)
+//			{
+//				for (int k = 0; k < dst[0][0].length; k++)
+//				{
+//					dst[i][j][k] = src[i][j][k];
+//				}
+//			}
+//		}
+//	}
 
 	/**
 	 * Fill the nodes in a specific direction. 
@@ -567,33 +564,33 @@ public class IceCaveStage
 	 * @param toMove - The last direction the player moved in.
 	 * @param playerPoint - The location of the player.
 	 */
-	private void fillNodesInDirection(MapNode    curNode, 
-									  EDirection toMove, 
-									  EDirection lastMove,
-									  Point playerPoint,
-									  boolean[][][] visited) {
-		MapNode newNode;
-		Point pntNewPoint;
-
-		pntNewPoint = new Point(playerPoint);
-		
-		// Validate the point.
-		if(!validateFillNodesInDirection(curNode, toMove, lastMove, playerPoint)){
-			return;
-		}
-		getMove(toMove, pntNewPoint);
-		
-		newNode = 
-				curNode.push(mTiles[pntNewPoint.y][pntNewPoint.x]);
-
-		boolean[][][] newVisited = 	
-				new boolean[mTiles.length][mTiles[0].length][EDirection.values().length];
-
-		copy3dimentionalArray(visited, newVisited);
-
-		
-		fillNodes(newNode, toMove, pntNewPoint, newVisited);
-	}
+//	private void fillNodesInDirection(MapNode    curNode, 
+//									  EDirection toMove, 
+//									  EDirection lastMove,
+//									  Point playerPoint,
+//									  boolean[][][] visited) {
+//		MapNode newNode;
+//		Point pntNewPoint;
+//
+//		pntNewPoint = new Point(playerPoint);
+//		
+//		// Validate the point.
+//		if(!validateFillNodesInDirection(curNode, toMove, lastMove, playerPoint)){
+//			return;
+//		}
+//		getMove(toMove, pntNewPoint);
+//		
+//		newNode = 
+//				curNode.push(mTiles[pntNewPoint.y][pntNewPoint.x]);
+//
+//		boolean[][][] newVisited = 	
+//				new boolean[mTiles.length][mTiles[0].length][EDirection.values().length];
+//
+//		copy3dimentionalArray(visited, newVisited);
+//
+//		
+//		fillNodes(newNode, toMove, pntNewPoint, newVisited);
+//	}
 
 	/**
 	 * Validate the parameters for the fillNodesInDirection function.
@@ -602,37 +599,37 @@ public class IceCaveStage
 	 * @param lastMove - The last move that was taken out.
 	 * @param playerPoint - The position of the player.
 	 */
-	private boolean validateFillNodesInDirection(MapNode    curNode,
-	                                             EDirection toMove,
-	                                             EDirection lastMove,
-	                                             Point      playerPoint)
-	{
-		if(stopFillingNodes(curNode)){
-			System.out.println("Stop filling nodes");
-			return false;
-		}
-		
-		if(mTiles[playerPoint.y + toMove.getDirection().y]
-				 [playerPoint.x + toMove.getDirection().x] instanceof IBlockingTile){
-			return false;
-	    }
-			
-		if(lastMove.equals(toMove.getOpositeDirection())){
-			return false;
-		}
-		
-		return true;
-	}
+//	private boolean validateFillNodesInDirection(MapNode    curNode,
+//	                                             EDirection toMove,
+//	                                             EDirection lastMove,
+//	                                             Point      playerPoint)
+//	{
+//		if(stopFillingNodes(curNode)){
+//			System.out.println("Stop filling nodes");
+//			return false;
+//		}
+//		
+//		if(mTiles[playerPoint.y + toMove.getDirection().y]
+//				 [playerPoint.x + toMove.getDirection().x] instanceof IBlockingTile){
+//			return false;
+//	    }
+//			
+//		if(lastMove.equals(toMove.getOpositeDirection())){
+//			return false;
+//		}
+//		
+//		return true;
+//	}
 
 	/**
 	 * Check if to stop filling nodes.
 	 * @param curNode - Current node.
 	 * @return true if stop filling node.
 	 */
-	private boolean stopFillingNodes(MapNode curNode)
-	{
-		return curNode.getValue() instanceof FlagTile;
-	}
+//	private boolean stopFillingNodes(MapNode curNode)
+//	{
+//		return curNode.getValue() instanceof FlagTile;
+//	}
 
 	/**
 	 * Get the new location after making move.
