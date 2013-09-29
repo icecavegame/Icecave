@@ -30,7 +30,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private FrameLayout mActivityLayout;
 	private boolean mIsAnimationRunning;
 	private boolean mIsFlagReached;
-//	private final String BOARD_MANAGER = "BoardManager";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
