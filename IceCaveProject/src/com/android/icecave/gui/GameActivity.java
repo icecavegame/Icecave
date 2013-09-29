@@ -23,7 +23,7 @@ import java.util.Observer;
 
 public class GameActivity extends Activity implements ISwipeDetector, Observer
 {
-	private static GUIBoardManager sGBM; // FIXME Do not make this static.. but use onSaveInstanceState to re-create...
+	private static GUIBoardManager sGBM;
 	private DrawablePlayer mPlayer;
 	private GameTheme mGameTheme;
 	private TilesView mTilesView;
@@ -136,7 +136,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	{
 		// Create new stage here to make sure layout is made and active and
 		// visible
-		if (sGBM == null)
+		if (sGBM == null  && !isFinishing())
 		{
 			// Create once
 			sGBM = new GUIBoardManager();
@@ -175,6 +175,12 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 			super.onWindowFocusChanged(hasFocus);
 		}
+		
+		// Resume drawing thread if was running
+		if (mPlayer != null)
+		{
+			mPlayer.resumeDrawingThread();
+		}
 	}
 
 	@Override
@@ -189,17 +195,17 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		super.onPause();
 	}
 
-	@Override
-	protected void onResume()
-	{
-		// Resume drawing thread if was running
-		if (mPlayer != null)
-		{
-			mPlayer.resumeDrawingThread();
-		}
-
-		super.onResume();
-	}
+//	@Override
+//	protected void onResume()
+//	{
+//		// Resume drawing thread if was running
+//		if (mPlayer != null)
+//		{
+//			mPlayer.resumeDrawingThread();
+//		}
+//
+//		super.onResume();
+//	}
 
 	@Override
 	public void onBackPressed()

@@ -22,7 +22,7 @@ public class MapLogicServiceProvider
 	 */
 	public void registerCollisionManager(CollisionManager collisionManager)
 	{
-		if(mCollisionManager == null){			
+		if(mCollisionManager == null){// FIXME Tom there is a bug here, if a game is closed and then re-created this DM isn't null and isn't registered.. causes future exceptions. Maybe make me an unload method in GUIBoardManager to kill such data
 			mCollisionManager = collisionManager;
 		}
 	}

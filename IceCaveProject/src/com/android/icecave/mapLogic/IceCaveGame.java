@@ -123,6 +123,9 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 				mPlayerLocation = new Point(nextPlayerPoint);
 				nextPlayerPoint = mStage.movePlayerOneTile(nextPlayerPoint, direction);
 			}
+			
+			// Set last move
+			mLastDirectionMoved = direction;
 		}
 		
 		return this;
