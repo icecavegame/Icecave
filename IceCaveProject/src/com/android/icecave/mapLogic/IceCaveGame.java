@@ -16,6 +16,7 @@ import com.android.icecave.mapLogic.tiles.WallTile;
 public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 {
 	private int mOverallMoves;
+	private int mCurrentStageMoves;
 	private EDirection mLastDirectionMoved;
 	private IceCaveStage mStage;
 	private Point mPlayerLocation;
@@ -51,7 +52,6 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 		// Create invokers.
 		IFunction<Void> stopPlayer = new IFunction<Void>()
 		{
-
 			@Override
 			public Void invoke(Point collisionPoint)
 			{
@@ -59,7 +59,11 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 				collisionPoint.offset(
 						mLastDirectionMoved.getOpositeDirection().getDirection().x,
 						mLastDirectionMoved.getOpositeDirection().getDirection().y);
-				mPlayerLocation = collisionPoint;
+				if(!collisionPoint.equals(mPlayerLocation.x, mPlayerLocation.y)){
+					mOverallMoves++;
+					mCurrentStageMoves++;
+					mPlayerLocation = collisionPoint;
+				}
 				
 				return null;
 			}
@@ -76,6 +80,8 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 				
 				mPlayerLocation = collisionPoint;
 				
+				mCurrentStageMoves++;
+				mOverallMoves++;
 				// TODO: Add report to the GUI logic on end stage.
 				return null;
 			}
@@ -109,6 +115,7 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 				new Point(playerStart),
 				mBoulderNum,
 				EDirection.RIGHT);
+		mCurrentStageMoves = 0;
 	}
 
 	/**
@@ -159,6 +166,16 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 	public int getOverallMoves()
 	{
 		return mOverallMoves;
+	}
+	
+	/**
+	 * Return number of moves taken in the current stage.
+	 * 
+	 * @return Steps in current stage.
+	 */
+	public int getCurrentStageTakenMoves()
+	{
+		return mCurrentStageMoves;
 	}
 
 	/**
