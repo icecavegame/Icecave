@@ -37,7 +37,6 @@ public class OptionsActivity extends Activity
 		
 		Spinner backgroundThemeSelect = (Spinner) findViewById(R.id.selectBackgroundTheme);
 		Spinner playerThemeSelect = (Spinner) findViewById(R.id.selectPlayerTheme);
-		CheckBox muteSounds = (CheckBox) findViewById(R.id.muteSounds);
 		CheckBox muteMusic = (CheckBox) findViewById(R.id.muteMusic);
 		
 		final PlayerThemes playerThemes = new PlayerThemes();
@@ -61,7 +60,7 @@ public class OptionsActivity extends Activity
 			{
 				// Save selected tile theme
 				shared.edit().putInt(Consts.THEME_SELECT_TAG, tileThemes.getThemeId(pos)).commit();
-			}
+			}	
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0)
@@ -81,16 +80,6 @@ public class OptionsActivity extends Activity
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0)
 			{
-			}
-		});
-		
-		muteSounds.setOnCheckedChangeListener(new OnCheckedChangeListener()
-		{
-			
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-			{
-				// TODO Complete
 			}
 		});
 		

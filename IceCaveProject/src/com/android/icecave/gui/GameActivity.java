@@ -4,12 +4,17 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import com.android.icecave.R;
 import com.android.icecave.general.Consts;
 import com.android.icecave.general.EDifficulty;
@@ -27,8 +32,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private DrawablePlayer mPlayer;
 	private GameTheme mGameTheme;
 	private TilesView mTilesView;
-	private FrameLayout mActivityLayout;
+	private RelativeLayout mActivityLayout;
 	private boolean mIsFlagReached;
+	private TextView mPlayerMoves, mMinimumMoves;
+	private ImageView mResetButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -40,7 +47,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 		setContentView(R.layout.tiles_layout);
 
-		mActivityLayout = ((FrameLayout) findViewById(R.id.game_layout));
+		mActivityLayout = ((RelativeLayout) findViewById(R.id.game_layout));
+		mPlayerMoves = (TextView) findViewById(R.id.player_moves);
+		mMinimumMoves = (TextView) findViewById(R.id.minimum_moves);
+		mResetButton = (ImageView) findViewById(R.id.reset_button);
 
 		// Hide the Status Bar
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -53,6 +63,21 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 										(mShared.getInt(Consts.THEME_SELECT_TAG, Consts.DEFAULT_TILES))),
 								BitmapFactory.decodeResource(getResources(),
 										(mShared.getInt(Consts.PLAYER_SELECT_TAG, Consts.DEFAULT_PLAYER))));
+
+		// Set reset button effect
+		mResetButton.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				// Reset player position on logic level
+				//sGBM.
+				
+				// Re-initialize player on UI level
+				mPlayer.initializePlayer();
+				mPlayer.postInvalidate();
+			}
+		});
 	}
 
 	public int getHeight()
@@ -119,7 +144,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	{
 		// Create new stage here to make sure layout is made and active and
 		// visible
-		if (sGBM == null  && !isFinishing())
+		if (sGBM == null && !isFinishing())
 		{
 			// Create once
 			sGBM = new GUIBoardManager();
@@ -135,6 +160,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 			// Create first stage
 			sGBM.newStage(Consts.DEFAULT_START_POS, Consts.DEFAULT_WALL_WIDTH, this, mGameTheme);
+
+			setMinimumMoves();
+			setPlayerMoves();
 
 			// Create the tiles view and add it to the layout
 			mTilesView = new TilesView(this, sGBM.getTiles());
@@ -157,7 +185,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 			super.onWindowFocusChanged(hasFocus);
 		}
-		
+
 		// Resume drawing thread if was running
 		if (mPlayer != null)
 		{
@@ -177,17 +205,17 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		super.onPause();
 	}
 
-//	@Override
-//	protected void onResume()
-//	{
-//		// Resume drawing thread if was running
-//		if (mPlayer != null)
-//		{
-//			mPlayer.resumeDrawingThread();
-//		}
-//
-//		super.onResume();
-//	}
+	// @Override
+	// protected void onResume()
+	// {
+	// // Resume drawing thread if was running
+	// if (mPlayer != null)
+	// {
+	// mPlayer.resumeDrawingThread();
+	// }
+	//
+	// super.onResume();
+	// }
 
 	@Override
 	public void onBackPressed()
@@ -206,6 +234,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	@Override
 	public void update(Observable observable, Object data)
 	{
+		// Update counter
+		setPlayerMoves();
+
 		// Run a new game if flag is reached
 		if (mIsFlagReached)
 		{
@@ -215,9 +246,54 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			// Create new stage
 			sGBM.newStage(Consts.DEFAULT_START_POS, Consts.DEFAULT_WALL_WIDTH, this, mGameTheme);
 
+			// Reset move texts
+			setMinimumMoves();
+			setPlayerMoves();
+
 			// Re-initialize player
 			mPlayer.initializePlayer();
 			mPlayer.postInvalidate();
 		}
+	}
+
+	private void setPlayerMoves()
+	{
+		// Must run this update on UI thread because it may be called from the update() function
+		runOnUiThread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				// Set player moves value
+				mPlayerMoves.setText(getString(R.string.player_moves_text) + " " +
+						Integer.toString(sGBM.getMovesCarriedOutThisStage()));
+			}
+		});
+	}
+
+	private void setMinimumMoves()
+	{
+		// Must run this update on UI thread because it may be called from the update() function
+		runOnUiThread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				// Set minimum moves value
+				mMinimumMoves.setText(getString(R.string.minimum_moves_text) + " " +
+						Integer.toString(sGBM.getMinimalMovesForStage()));
+			}
+		});
+	}
+
+	// Draws tile background and other widgets on screen
+	public void drawBackground(Canvas canvas)
+	{
+		mTilesView.draw(canvas);
+
+		// Display text fields
+		mMinimumMoves.bringToFront();
+		mPlayerMoves.bringToFront();
+		mResetButton.bringToFront();
 	}
 }

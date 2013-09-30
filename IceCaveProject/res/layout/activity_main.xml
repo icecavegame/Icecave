@@ -34,24 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" >
-
-        <RadioButton
-            android:id="@+id/levelEasy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/level_easy" />
-
-        <RadioButton
-            android:id="@+id/levelMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/level_medium" />
-
-        <RadioButton
-            android:id="@+id/levelHard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/level_hard" />
     </RadioGroup>
 
 </RelativeLayout>

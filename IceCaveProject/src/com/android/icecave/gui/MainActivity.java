@@ -1,5 +1,9 @@
 package com.android.icecave.gui;
 
+import android.widget.RadioButton;
+
+import com.android.icecave.general.EDifficulty;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,10 +23,8 @@ import com.android.icecave.general.Consts;
 
 public class MainActivity extends Activity
 {
-	
-	final int DEFAULT_LEVEL = 0;
 	SharedPreferences mShared;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -35,12 +37,17 @@ public class MainActivity extends Activity
 		// Hide the Status Bar
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 		WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
+		final int DEFAULT_LEVEL = 0;
 
 		mShared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
 
 		Button optionsActivity = (Button) findViewById(R.id.options_button);
 		Button gameActivity = (Button) findViewById(R.id.game_button);
 		RadioGroup levelSelect = (RadioGroup) findViewById(R.id.levelSelect);
+		
+		// Load levels dynamically from EDifficulty class
+		loadLevelsToRadioGroup(levelSelect);
 
 		// Load level selection from prefs if exists
 		levelSelect.check(levelSelect.getChildAt(mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL)).getId());
@@ -79,5 +86,16 @@ public class MainActivity extends Activity
 				mShared.edit().putInt(Consts.LEVEL_SELECT_TAG, group.indexOfChild(group.findViewById(checkedId))).commit();
 			}
 		});
+	}
+	
+	private void loadLevelsToRadioGroup(RadioGroup levelSelect) {
+		int numOfLevels = EDifficulty.values().length;
+		
+		// Go over levels and add them
+		for(int i = 0; i < numOfLevels; i++) {
+			RadioButton newButton = new RadioButton(this);
+			newButton.setText(EDifficulty.values()[i].name()); // An alternative to this is to set another variable (string id) in the enum 
+			levelSelect.addView(newButton);
+		}
 	}
 }

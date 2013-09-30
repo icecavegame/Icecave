@@ -1,14 +1,12 @@
 package com.android.icecave.guiLogic;
 
-import android.util.Log;
-
 import android.R.color;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.os.SystemClock;
-import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
@@ -36,17 +34,15 @@ public class DrawablePlayer extends SurfaceView implements Callback
 	private boolean mSurfaceCreated = false;
 	private boolean mThreadRunning;
 	private boolean mPauseThreadFlag;
-	final float mSpeed = 5;
+	final float mSpeed;
 	public AutoObservable mFinishAnimation;
 
 	public DrawablePlayer(Context context)
 	{
 		super(context);
-	}
-
-	public DrawablePlayer(Context context, AttributeSet attSet)
-	{
-		super(context, attSet);
+		
+		// Set game speed. Depends on the board size
+		mSpeed = ((mContext.getTilesView().getBoardX() + mContext.getTilesView().getBoardY()) / 3) + 2;
 	}
 
 	public DrawablePlayer(Context context, GameTheme gameTheme)
@@ -66,6 +62,9 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		// Set player theme in manager
 		mPGM = new PlayerGUIManager();
 		mGameTheme = gameTheme;
+		
+		// Set game speed. Depends on the board size
+		mSpeed = ((mContext.getTilesView().getBoardX() + mContext.getTilesView().getBoardY()) / 3) + 2;
 
 		// Set tile rows and columns into scale manager to fit the character into the tiles
 		mScreenManager =
@@ -102,8 +101,9 @@ public class DrawablePlayer extends SurfaceView implements Callback
 		// Turn flag to false to ensure that thread has stopped
 		mThreadRunning = false;
 	}
-	
-	public boolean isAnimationRunning() {
+
+	public boolean isAnimationRunning()
+	{
 		return mThreadRunning;
 	}
 
@@ -226,14 +226,19 @@ public class DrawablePlayer extends SurfaceView implements Callback
 	protected void onDraw(Canvas canvas)
 	{
 		// Draw background after every move. It's a must
-		mContext.getTilesView().draw(canvas);
+		mContext.drawBackground(canvas);
 
 		canvas.drawBitmap(mPlayerImage, mPlayerPositionOnScreen.x, mPlayerPositionOnScreen.y, null);
 
+		// If thread running flag is still true, keep drawing and updating character
 		if (mThreadRunning)
 		{
 			update();
 			postInvalidate();
+		} else // If finished updating
+		{
+			// Notify observers that animation has finished
+			mFinishAnimation.notifyObservers();
 		}
 	}
 
@@ -286,66 +291,66 @@ public class DrawablePlayer extends SurfaceView implements Callback
 
 			// Run while running flag is true and also do NOT attempt to run while surface is not yet created.
 			// Keep looping if pause flag is up (this is so that the observer update won't happen during a pause)
-			//while ((mThreadRunning && mSurfaceCreated) || (mPauseThreadFlag)) NOT NEEDED BECAUSE ONDRAW IS RECURSIVE!!!
-//			{
-				// Pause thread if necessary
-				pauseThread();
+			// while ((mThreadRunning && mSurfaceCreated) || (mPauseThreadFlag)) NOT NEEDED BECAUSE ONDRAW IS RECURSIVE!!!
+			// {
+			// Pause thread if necessary
+			pauseThread();
 
-				c = null;
+			c = null;
 
-				// Initialize FPS timer
-				mStartFrame = SystemClock.uptimeMillis();
+			// Initialize FPS timer
+			mStartFrame = SystemClock.uptimeMillis();
 
-				try
+			try
+			{
+				c = this.surfaceHolder.lockCanvas(null);
+
+				synchronized (surfaceHolder)
 				{
-					c = this.surfaceHolder.lockCanvas(null);
-
-					synchronized (surfaceHolder)
-					{
-						//DrawablePlayer.this.update(); Char position is being updated through onDraw
-						DrawablePlayer.this.draw(c);
-					}
-
-					// Count FPS. Put thread to sleep if going too fast
-					final long endFrame = SystemClock.uptimeMillis();
-					final long sleepTime = SKIP_TICKS - (endFrame - mStartFrame);
-					
-					Log.d("FPS DEBUGGING", "Sleep time: " + sleepTime + "miliseconds");
-
-					// Sleep if needed
-					if (sleepTime >= 0)
-					{
-						try
-						{
-							if (sleepTime > 0)
-								Thread.sleep(sleepTime);
-							else
-								Thread.sleep(1);
-						} catch (InterruptedException e)
-						{
-							// TODO Print to log
-							e.printStackTrace();
-						} catch (IllegalArgumentException e)
-						{
-							// TODO Print to log
-							e.printStackTrace();
-						}
-					} else
-					{
-						System.out.println("Shit, we are running behind!");
-					}
-				} finally
-				{
-					// Only draw if canvas isn't null (can't do && mSurfaceCreate for some reason... won't resume)
-					if (c != null)
-					{
-						surfaceHolder.unlockCanvasAndPost(c);
-					}
+					// DrawablePlayer.this.update(); Char position is being updated through onDraw
+					DrawablePlayer.this.draw(c);
 				}
-//			}
+
+				// Count FPS. Put thread to sleep if going too fast
+				final long endFrame = SystemClock.uptimeMillis();
+				final long sleepTime = SKIP_TICKS - (endFrame - mStartFrame);
+
+				Log.d("FPS DEBUGGING", "Sleep time: " + sleepTime + "miliseconds");
+
+				// Sleep if needed
+				if (sleepTime >= 0)
+				{
+					try
+					{
+						if (sleepTime > 0)
+							Thread.sleep(sleepTime);
+						else
+							Thread.sleep(1);
+					} catch (InterruptedException e)
+					{
+						// TODO Print to log
+						e.printStackTrace();
+					} catch (IllegalArgumentException e)
+					{
+						// TODO Print to log
+						e.printStackTrace();
+					}
+				} else
+				{
+					System.out.println("Shit, we are running behind!");
+				}
+			} finally
+			{
+				// Only draw if canvas isn't null (can't do && mSurfaceCreate for some reason... won't resume)
+				if (c != null)
+				{
+					surfaceHolder.unlockCanvasAndPost(c); // FIXME Causes exception when trying to move to blocked area (maybe drawing too short)
+				}
+			}
+			// }
 
 			// Notify observers that animation has finished
-			mFinishAnimation.notifyObservers();
+			// mFinishAnimation.notifyObservers();
 		}
 	}
 }

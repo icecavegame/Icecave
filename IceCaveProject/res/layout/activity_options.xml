@@ -21,14 +21,6 @@
         android:text="@string/version_number" />
 
     <CheckBox
-        android:id="@+id/muteSounds"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/selectPlayerThemeText"
-        android:layout_alignParentLeft="true"
-        android:text="@string/mute_sounds" />
-
-    <CheckBox
         android:id="@+id/muteMusic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
