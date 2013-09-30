@@ -30,6 +30,14 @@ public class GUIBoardManager
 	}
 	
 	/**
+	 * Resets the player location on the board.
+	 * @param startLoc - Starting location of the player to restart to.
+	 */
+	public void resetPlayer(Point startLoc){
+		mIceCaveGame.resetPlayer(startLoc);
+	}
+	
+	/**
 	 * Return the overall moves for the current stage.
 	 * @return Moves player made in stage.
 	 */

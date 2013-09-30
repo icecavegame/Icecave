@@ -209,4 +209,13 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 	{
 		return mIsStageEnded;
 	}
+
+	/**
+	 * Resets the player location.
+	 * @param startLoc - Starting position of the player to reset to.
+	 */
+	public void resetPlayer(Point startLoc)
+	{
+		mPlayerLocation = new Point(startLoc);
+	}
 }

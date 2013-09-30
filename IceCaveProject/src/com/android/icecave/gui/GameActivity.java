@@ -85,7 +85,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			public void onClick(View v)
 			{
 				// Reset player position on logic level
-				// sGBM. FIXME Complete
+				sGBM.resetPlayer(Consts.DEFAULT_START_POS);
 
 				// Re-initialize player on UI level
 				mPlayer.initializePlayer();
