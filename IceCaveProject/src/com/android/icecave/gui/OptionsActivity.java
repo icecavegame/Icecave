@@ -21,7 +21,7 @@ import com.android.icecave.general.PlayerThemes;
 import com.android.icecave.general.TileThemes;
 
 public class OptionsActivity extends Activity
-{	
+{
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -30,51 +30,75 @@ public class OptionsActivity extends Activity
 		setContentView(R.layout.activity_options);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		
+
 		// Hide the Status Bar
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-		WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
 		Spinner backgroundThemeSelect = (Spinner) findViewById(R.id.selectBackgroundTheme);
 		Spinner playerThemeSelect = (Spinner) findViewById(R.id.selectPlayerTheme);
 		CheckBox muteMusic = (CheckBox) findViewById(R.id.muteMusic);
-		
+
 		final PlayerThemes playerThemes = new PlayerThemes();
 		final TileThemes tileThemes = new TileThemes();
 		final SharedPreferences shared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
-		
-		ArrayAdapter<String> tileAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+
+		ArrayAdapter<String> tileAdapter =
+				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
 		tileAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tileAdapter.addAll(tileThemes.getThemeNames());
 		backgroundThemeSelect.setAdapter(tileAdapter);
-		
-		ArrayAdapter<String> playerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+
+		ArrayAdapter<String> playerAdapter =
+				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
 		playerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		playerAdapter.addAll(playerThemes.getThemeNames());
 		playerThemeSelect.setAdapter(playerAdapter);
-		
+
+		// Set initial values in spinners
+		backgroundThemeSelect.setSelection(tileThemes.getTilePositionById(shared.getInt(Consts.THEME_SELECT_TAG,
+				tileThemes.getThemeId(0))));
+		playerThemeSelect.setSelection(playerThemes.getTilePositionById(shared.getInt(Consts.PLAYER_SELECT_TAG,
+				playerThemes.getThemeId(0))));
+
 		backgroundThemeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
 		{
+			boolean isInitialized = false;
+
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
 			{
-				// Save selected tile theme
-				shared.edit().putInt(Consts.THEME_SELECT_TAG, tileThemes.getThemeId(pos)).commit();
-			}	
+				// Avoid automatic selected of first item at creation
+				if (isInitialized)
+				{
+					// Save selected tile theme
+					shared.edit().putInt(Consts.THEME_SELECT_TAG, tileThemes.getThemeId(pos)).commit();
+				}
+
+				isInitialized = true;
+			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0)
 			{
 			}
 		});
-		
+
 		playerThemeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
 		{
+			boolean isInitialized = false;
+
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
 			{
-				// Save selected player theme
-				shared.edit().putInt(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(pos)).commit();
+				// Avoid automatic selected of first item at creation
+				if (isInitialized)
+				{
+					// Save selected player theme
+					shared.edit().putInt(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(pos)).commit();
+				}
+
+				isInitialized = true;
 			}
 
 			@Override
@@ -82,10 +106,10 @@ public class OptionsActivity extends Activity
 			{
 			}
 		});
-		
+
 		muteMusic.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
-			
+
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{

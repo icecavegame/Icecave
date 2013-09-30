@@ -71,8 +71,8 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			public void onClick(View v)
 			{
 				// Reset player position on logic level
-				//sGBM. FIXME Complete
-				
+				// sGBM. FIXME Complete
+
 				// Re-initialize player on UI level
 				mPlayer.initializePlayer();
 				mPlayer.postInvalidate();
@@ -267,6 +267,15 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				// Set player moves value
 				mPlayerMoves.setText(getString(R.string.player_moves_text) + " " +
 						Integer.toString(sGBM.getMovesCarriedOutThisStage()));
+
+				// Color text differently if player exceeded the minimum moves
+				if (sGBM.getMovesCarriedOutThisStage() >= sGBM.getMinimalMovesForStage())
+				{
+					mPlayerMoves.setTextColor(getResources().getColor(R.color.orange));
+				} else if (sGBM.getMovesCarriedOutThisStage() == 0) {
+					// Color text white if player moves reset
+					mPlayerMoves.setTextColor(getResources().getColor(R.color.white));
+				}
 			}
 		});
 	}

@@ -38,4 +38,18 @@ public class PlayerThemes implements ITheme
 		
 		return result;
 	}
+	
+	@Override
+	public int getTilePositionById(int id)
+	{
+		int result = -1;
+		
+		for (int i = 0; i < mHolders.length; i++) {
+			if (id == mHolders[i].getThemeId()) {
+				result = i;
+			}
+		}
+		
+		return result;
+	}
 }

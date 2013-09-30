@@ -7,4 +7,6 @@ public interface ITheme
 	public String getThemeName(int index);
 	
 	public String[] getThemeNames();
+	
+	public int getTilePositionById(int id);
 }
