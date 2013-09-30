@@ -4,7 +4,8 @@ public enum EDifficulty
 {
 	Easy(4),
 	Medium(8),
-	Hard(12);
+	Hard(24),
+	VeryHard(24);
 	
 	int mMinMoves;
 	

@@ -23,9 +23,9 @@ public class Consts
 	 */
 	// Easy
 	public final static int DEFAULT_WALL_WIDTH = 1;
-	public final static int DEFAULT_BOULDER_NUM = 50;
-	public final static int DEFAULT_BOARD_SIZE_X = 20;
-	public final static int DEFAULT_BOARD_SIZE_Y = 20;
+	public final static int DEFAULT_BOULDER_NUM = 90;
+	public final static int DEFAULT_BOARD_SIZE_X = 25;
+	public final static int DEFAULT_BOARD_SIZE_Y = 25;
 	
 	/***
 	 *  Standard tile values and positioning
