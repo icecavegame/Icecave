@@ -28,6 +28,11 @@
         </activity>
         <activity android:name=".gui.OptionsActivity" >
         </activity>
+
+        <service
+            android:name=".general.MusicService"
+            android:enabled="true" >
+        </service>
     </application>
 
 </manifest>

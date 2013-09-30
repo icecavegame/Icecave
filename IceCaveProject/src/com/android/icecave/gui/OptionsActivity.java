@@ -1,6 +1,13 @@
 package com.android.icecave.gui;
 
+import android.os.IBinder;
+
+import android.content.ComponentName;
+
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.media.AudioManager;
@@ -17,11 +24,16 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Spinner;
 import com.android.icecave.R;
 import com.android.icecave.general.Consts;
+import com.android.icecave.general.MusicService;
 import com.android.icecave.general.PlayerThemes;
 import com.android.icecave.general.TileThemes;
 
 public class OptionsActivity extends Activity
 {
+	private boolean mIsBound = false;
+	private MusicService mServ;
+	private ServiceConnection mScon;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -37,7 +49,7 @@ public class OptionsActivity extends Activity
 
 		Spinner backgroundThemeSelect = (Spinner) findViewById(R.id.selectBackgroundTheme);
 		Spinner playerThemeSelect = (Spinner) findViewById(R.id.selectPlayerTheme);
-		CheckBox muteMusic = (CheckBox) findViewById(R.id.muteMusic);
+		final CheckBox muteMusic = (CheckBox) findViewById(R.id.muteMusic);
 
 		final PlayerThemes playerThemes = new PlayerThemes();
 		final TileThemes tileThemes = new TileThemes();
@@ -107,14 +119,88 @@ public class OptionsActivity extends Activity
 			}
 		});
 
-		muteMusic.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		mScon = new ServiceConnection()
 		{
 
+			public void onServiceConnected(ComponentName name, IBinder binder)
+			{
+				mServ = ((MusicService.ServiceBinder) binder).getService();
+				
+				// Set music mode for first time. Can't count on checkbox because flag may not "change" from its initialized value
+				setMusicMode(shared.getBoolean(Consts.MUSIC_MUTE_FLAG, false));
+
+				// Check according to saved data
+				muteMusic.setChecked(shared.getBoolean(Consts.MUSIC_MUTE_FLAG, false));
+			}
+
+			public void onServiceDisconnected(ComponentName name)
+			{
+				mServ = null;
+			}
+		};
+
+		// Bind music service to activity
+		doBindService();
+		Intent music = new Intent();
+		music.setClass(this, MusicService.class);
+		startService(music);
+
+		muteMusic.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{
-				// TODO Complete
+					// Save selection
+					shared.edit().putBoolean(Consts.MUSIC_MUTE_FLAG, isChecked).commit();
+
+					// Play/pause music
+					setMusicMode(isChecked);
 			}
 		});
+	}
+	
+	private void setMusicMode(boolean muteFlag) {
+		if (muteFlag)
+		{
+			mServ.pauseMusic();
+		} else
+		{
+			mServ.startMusic();
+		}
+	}
+
+	private void doBindService()
+	{
+		bindService(new Intent(this, MusicService.class), mScon, Context.BIND_AUTO_CREATE);
+		mIsBound = true;
+	}
+
+	private void doUnbindService()
+	{
+		// Unbind activity from service
+		if (mIsBound)
+		{
+			unbindService(mScon);
+			mIsBound = false;
+		}
+	}
+	
+	@Override
+	protected void onPause()
+	{
+		// Stop music
+		if (mServ != null)
+		{
+			mServ.pauseMusic();
+		}
+		
+		super.onPause();
+	}
+
+	@Override
+	protected void onDestroy()
+	{		
+		doUnbindService();
+		super.onDestroy();
 	}
 }

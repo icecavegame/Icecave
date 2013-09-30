@@ -13,6 +13,7 @@ public class Consts
 	public final static String THEME_SELECT_TAG = "themeSelect";
 	public final static String SELECT_BOARD_SIZE_X = "selectBoardX";
 	public final static String SELECT_BOARD_SIZE_Y = "selectBoardY";
+	public final static String MUSIC_MUTE_FLAG = "musicMuteFlag";
 	
 	public final static int DEFAULT_PLAYER = R.drawable.default_player;
 	public final static int DEFAULT_TILES = R.drawable.default_tiles;

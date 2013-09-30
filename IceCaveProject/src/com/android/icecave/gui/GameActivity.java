@@ -1,5 +1,14 @@
 package com.android.icecave.gui;
 
+import android.content.Context;
+
+import android.content.ComponentName;
+import android.content.Intent;
+import android.os.IBinder;
+
+import android.content.ServiceConnection;
+import com.android.icecave.general.MusicService;
+
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -36,6 +45,11 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private boolean mIsFlagReached;
 	private TextView mPlayerMoves, mMinimumMoves;
 	private ImageView mResetButton;
+
+	// Music data
+	private boolean mIsBound = false;
+	private MusicService mServ;
+	private ServiceConnection mScon;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -78,6 +92,29 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				mPlayer.postInvalidate();
 			}
 		});
+
+		mScon = new ServiceConnection()
+		{
+
+			public void onServiceConnected(ComponentName name, IBinder binder)
+			{
+				mServ = ((MusicService.ServiceBinder) binder).getService();
+
+				// Set music mode for first time
+				initMusic();
+			}
+
+			public void onServiceDisconnected(ComponentName name)
+			{
+				mServ = null;
+			}
+		};
+
+		// Bind music service to activity
+		doBindService();
+		Intent music = new Intent();
+		music.setClass(this, MusicService.class);
+		startService(music);
 	}
 
 	public int getHeight()
@@ -196,6 +233,12 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	@Override
 	protected void onPause()
 	{
+		// Stop music
+		if (mServ != null)
+		{
+			mServ.pauseMusic();
+		}
+
 		// Pause drawing thread if running
 		if (mPlayer != null)
 		{
@@ -225,6 +268,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		{
 			mPlayer.stopDrawingThread();
 		}
+
 		// Reset variable
 		sGBM = null;
 
@@ -264,6 +308,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			@Override
 			public void run()
 			{
+				// FIXME If user exits around when this is called, sGBM turns null and causes exception. synchronize(sGBM) don't work
 				// Set player moves value
 				mPlayerMoves.setText(getString(R.string.player_moves_text) + " " +
 						Integer.toString(sGBM.getMovesCarriedOutThisStage()));
@@ -272,7 +317,8 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				if (sGBM.getMovesCarriedOutThisStage() >= sGBM.getMinimalMovesForStage())
 				{
 					mPlayerMoves.setTextColor(getResources().getColor(R.color.orange));
-				} else if (sGBM.getMovesCarriedOutThisStage() == 0) {
+				} else if (sGBM.getMovesCarriedOutThisStage() == 0)
+				{
 					// Color text white if player moves reset
 					mPlayerMoves.setTextColor(getResources().getColor(R.color.white));
 				}
@@ -304,5 +350,40 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		mMinimumMoves.bringToFront();
 		mPlayerMoves.bringToFront();
 		mResetButton.bringToFront();
+	}
+
+	private void initMusic()
+	{
+		// Initialize music (or pause it) according to saved selection
+		if (getSharedPreferences(Consts.PREFS_FILE_TAG, 0).getBoolean(Consts.MUSIC_MUTE_FLAG, false))
+		{
+			mServ.pauseMusic();
+		} else
+		{
+			mServ.startMusic();
+		}
+	}
+
+	private void doBindService()
+	{
+		bindService(new Intent(this, MusicService.class), mScon, Context.BIND_AUTO_CREATE);
+		mIsBound = true;
+	}
+
+	private void doUnbindService()
+	{
+		// Unbind activity from service
+		if (mIsBound)
+		{
+			unbindService(mScon);
+			mIsBound = false;
+		}
+	}
+
+	@Override
+	protected void onDestroy()
+	{
+		doUnbindService();
+		super.onDestroy();
 	}
 }
