@@ -22,6 +22,30 @@ public class GUIBoardManager
 	private IceCaveGame mIceCaveGame;
 	
 	/**
+	 * Return the minimal moves for the current stage.
+	 * @return Minimal moves for stage.
+	 */
+	public int getMinimalMovesForStage(){
+		return mIceCaveGame.getStageMoves();
+	}
+	
+	/**
+	 * Return the overall moves for the current stage.
+	 * @return Moves player made in stage.
+	 */
+	public int getMovesCarriedOutThisStage(){
+		return mIceCaveGame.getCurrentStageTakenMoves();
+	}
+	
+	/**
+	 * Return the overall moves for the current game.
+	 * @return Overall moves in game.
+	 */
+	public int getOverAllMovesForGame(){
+		return mIceCaveGame.getOverallMoves();
+	}
+	
+	/**
 	 * Start a new game.
 	 * @param boulderNum - Number of boulders to place on map. 
 	 * @param boardSizeX - Row length of the map.
