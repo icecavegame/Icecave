@@ -373,10 +373,15 @@ public class IceCaveStage
 //			}
 //		}
 
+		if(flagNode == null){
+			return false;
+		}
+		
+		mMoves = flagNode.getLevel();
+		
 		// Check if it's OK.
-		if (flagNode != null && 
-			flagNode.getLevel() >= difficulty.getMinMoves() &&
-			flagNode.getLevel() <= difficulty.getMaxMoves())
+		if (mMoves >= difficulty.getMinMoves() &&
+			mMoves <= difficulty.getMaxMoves())
 		{
 			System.out.println("Flag level : " + flagNode.getLevel());
 			MapNode flagParent = flagNode.getParent();
