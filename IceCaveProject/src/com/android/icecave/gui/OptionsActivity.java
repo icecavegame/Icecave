@@ -45,12 +45,12 @@ public class OptionsActivity extends Activity
 		
 		ArrayAdapter<String> tileAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
 		tileAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		tileAdapter.addAll(playerThemes.getThemeNames());
+		tileAdapter.addAll(tileThemes.getThemeNames());
 		backgroundThemeSelect.setAdapter(tileAdapter);
 		
 		ArrayAdapter<String> playerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
 		playerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		playerAdapter.addAll(tileThemes.getThemeNames());
+		playerAdapter.addAll(playerThemes.getThemeNames());
 		playerThemeSelect.setAdapter(playerAdapter);
 		
 		backgroundThemeSelect.setOnItemSelectedListener(new OnItemSelectedListener()

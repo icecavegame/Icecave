@@ -11,12 +11,20 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="@string/credits" />
+    
+        <TextView
+        android:id="@+id/visualArtCredits"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/credits"
+        android:layout_centerInParent="true"
+        android:text="@string/visual_artist_credits" />
 
     <TextView
         android:id="@+id/version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/credits"
+        android:layout_below="@+id/visualArtCredits"
         android:layout_centerInParent="true"
         android:text="@string/version_number" />
 
