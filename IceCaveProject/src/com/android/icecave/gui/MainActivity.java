@@ -25,10 +25,11 @@ import com.android.icecave.general.MusicService;
 
 public class MainActivity extends Activity
 {
-	SharedPreferences mShared;
+	private SharedPreferences mShared;
 	private boolean mIsBound = false;
 	private MusicService mServ;
 	private ServiceConnection mScon;
+	private Intent mIntent;
 
 	private void doBindService()
 	{
@@ -79,7 +80,8 @@ public class MainActivity extends Activity
 			@Override
 			public void onClick(View v)
 			{
-				startActivity(new Intent(v.getContext(), OptionsActivity.class));
+				mIntent =new Intent(v.getContext(), OptionsActivity.class);
+				startActivity(mIntent);
 			}
 		});
 
@@ -88,15 +90,15 @@ public class MainActivity extends Activity
 			@Override
 			public void onClick(View v)
 			{
-				Intent i = new Intent(v.getContext(), GameActivity.class);
+				mIntent = new Intent(v.getContext(), GameActivity.class);
 
 				// Load selection from prefs if exists
-				i.putExtra(Consts.LEVEL_SELECT_TAG, mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL));
-				i.putExtra(Consts.SELECT_BOARD_SIZE_X,
+				mIntent.putExtra(Consts.LEVEL_SELECT_TAG, mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL));
+				mIntent.putExtra(Consts.SELECT_BOARD_SIZE_X,
 						mShared.getInt(Consts.SELECT_BOARD_SIZE_X, Consts.DEFAULT_BOARD_SIZE_X));
-				i.putExtra(Consts.SELECT_BOARD_SIZE_Y,
+				mIntent.putExtra(Consts.SELECT_BOARD_SIZE_Y,
 						mShared.getInt(Consts.SELECT_BOARD_SIZE_Y, Consts.DEFAULT_BOARD_SIZE_Y));
-				startActivity(i);
+				startActivity(mIntent);
 			}
 		});
 
@@ -119,7 +121,7 @@ public class MainActivity extends Activity
 			public void onServiceConnected(ComponentName name, IBinder binder)
 			{
 				mServ = ((MusicService.ServiceBinder) binder).getService();
-				
+
 				// Initialize music for the first time when starting this activity
 				initMusic();
 			}
@@ -166,16 +168,16 @@ public class MainActivity extends Activity
 	protected void onDestroy()
 	{
 		// Stop music
-		if (mServ != null)
+		if (mServ != null && isFinishing())
 		{
 			mServ.pauseMusic();
 		}
-		
+
 		// Unbind activity from service
 		doUnbindService();
 		super.onDestroy();
 	}
-	
+
 	@Override
 	protected void onResume()
 	{
@@ -185,6 +187,21 @@ public class MainActivity extends Activity
 			initMusic();
 		}
 		
+		// Reset intent
+		mIntent = null;
+
 		super.onResume();
+	}
+
+	@Override
+	protected void onPause()
+	{
+		// Stop music but not if user switched activities, therefore, if intent is null, the user didn't switch to another activity
+		if (mServ != null && mIntent == null)
+		{
+			mServ.pauseMusic();
+		}
+
+		super.onPause();
 	}
 }

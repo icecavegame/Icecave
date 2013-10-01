@@ -223,27 +223,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	}
 
 	@Override
-	protected void onPause()
-	{
-		// Stop music
-		if (mServ != null)
-		{
-			mServ.pauseMusic();
-		}
-
-		super.onPause();
-	}
-
-	@Override
-	public void onBackPressed()
-	{
-		// Reset variable
-		sGBM = null;
-
-		super.onBackPressed();
-	}
-
-	@Override
 	public void update(Observable observable, Object data)
 	{
 		// Update counter
@@ -354,5 +333,38 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	{
 		doUnbindService();
 		super.onDestroy();
+	}
+	
+	@Override
+	protected void onResume()
+	{
+		// Resume/pause music
+		if (mServ != null)
+		{
+			initMusic();
+		}
+		
+		super.onResume();
+	}
+	
+	@Override
+	protected void onPause()
+	{
+		// Stop music
+		if (mServ != null)
+		{
+			mServ.pauseMusic();
+		}
+
+		super.onPause();
+	}
+
+	@Override
+	public void onBackPressed()
+	{
+		// Reset variable
+		sGBM = null;
+
+		super.onBackPressed();
 	}
 }

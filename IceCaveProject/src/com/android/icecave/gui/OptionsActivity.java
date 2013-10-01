@@ -128,7 +128,7 @@ public class OptionsActivity extends Activity
 				mServ = ((MusicService.ServiceBinder) binder).getService();
 				
 				// Set music mode for first time. Can't count on checkbox because flag may not "change" from its initialized value
-				setMusicMode(shared.getBoolean(Consts.MUSIC_MUTE_FLAG, false));
+				initMusic();
 
 				// Check according to saved data
 				muteMusic.setChecked(shared.getBoolean(Consts.MUSIC_MUTE_FLAG, false));
@@ -155,13 +155,15 @@ public class OptionsActivity extends Activity
 					shared.edit().putBoolean(Consts.MUSIC_MUTE_FLAG, isChecked).commit();
 
 					// Play/pause music
-					setMusicMode(isChecked);
+					initMusic();
 			}
 		});
 	}
 	
-	private void setMusicMode(boolean muteFlag) {
-		if (muteFlag)
+	private void initMusic()
+	{
+		// Initialize music (or pause it) according to saved selection
+		if (getSharedPreferences(Consts.PREFS_FILE_TAG, 0).getBoolean(Consts.MUSIC_MUTE_FLAG, false))
 		{
 			mServ.pauseMusic();
 		} else
@@ -184,6 +186,18 @@ public class OptionsActivity extends Activity
 			unbindService(mScon);
 			mIsBound = false;
 		}
+	}
+	
+	@Override
+	protected void onResume()
+	{
+		// Resume music if mute flag is off
+		if (mServ != null && !getSharedPreferences(Consts.PREFS_FILE_TAG, 0).getBoolean(Consts.MUSIC_MUTE_FLAG, false))
+		{
+			mServ.resumeMusic();
+		}
+		
+		super.onResume();
 	}
 	
 	@Override
