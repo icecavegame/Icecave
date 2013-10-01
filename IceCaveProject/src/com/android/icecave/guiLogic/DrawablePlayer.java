@@ -18,7 +18,7 @@ public class DrawablePlayer extends ImageView
 	private GUIScreenManager mScreenManager;
 	private boolean mIsAnimationRunning;
 	private AutoObservable mFinishAnimation;
-//	private Point mPlayerPosition;
+	private Point mPlayerPosition;
 
 	public DrawablePlayer(Context context)
 	{
@@ -60,10 +60,11 @@ public class DrawablePlayer extends ImageView
 		setImageBitmap(mPGM.getPlayerImage(EDirection.DOWN, false, mGameTheme, mScreenManager));
 
 		// Initialize new position as player position and draw
-//		mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
-		
+		mPlayerPosition = new Point(Consts.DEFAULT_START_POS);
+
 		// Init player position (if image is set)
-		if (getWidth() != 0 && getHeight() != 0) {
+		if (getWidth() != 0 && getHeight() != 0)
+		{
 			initPlayerPosition();
 		}
 	}
@@ -71,9 +72,14 @@ public class DrawablePlayer extends ImageView
 	public void movePlayer(EDirection direction, Point newPosition)
 	{
 		// Move player to the new position in the new direction
-		update(getPositionOnScreen(newPosition), direction);
+		update(getPositionOnScreen(newPosition),
+				direction,
+				Math.abs((newPosition.x - mPlayerPosition.x) + (newPosition.y - mPlayerPosition.y)));
 		mIsAnimationRunning = true;
 		animate().start();
+
+		// Set new position as current player position
+		mPlayerPosition = newPosition;
 	}
 
 	private Point getPositionOnScreen(Point logicPosition)
@@ -81,7 +87,7 @@ public class DrawablePlayer extends ImageView
 		return new Point(logicPosition.x * getWidth(), logicPosition.y * getHeight());
 	}
 
-	public void update(Point playerNewPositionOnScreen, EDirection direction)
+	public void update(Point playerNewPositionOnScreen, final EDirection direction, int distance)
 	{
 		// Update the player image to a movement stance
 		setImageBitmap(mPGM.getPlayerImage(direction, true, mGameTheme, mScreenManager));
@@ -92,7 +98,7 @@ public class DrawablePlayer extends ImageView
 			public void run()
 			{
 				// Set image back to standing position
-				setImageBitmap(mPGM.getPlayerImage(EDirection.DOWN, false, mGameTheme, mScreenManager));
+				setImageBitmap(mPGM.getPlayerImage(direction, false, mGameTheme, mScreenManager));
 
 				// Notify observers that action has ended
 				mFinishAnimation.notifyObservers();
@@ -103,29 +109,26 @@ public class DrawablePlayer extends ImageView
 		};
 
 		// Set duration of action by the board size
-		final int TENTH_SECOND = 100;
+		final int HUNDREDTH_SECOND = 10;
 
 		// TODO This is a pretty wild guess. Try to come up with a better idea
-		final long DURATION =
+		final long DURATION_PER_TILE =
 				(((mContext.getTilesView().getBoardX() + mContext.getTilesView().getBoardY()) / 5) + 2) *
-						TENTH_SECOND;
+						HUNDREDTH_SECOND;
 
 		// Create animation flow for moving a character
 		ViewPropertyAnimator animator = animate();
-		animator.setDuration(DURATION);
+		animator.setDuration(DURATION_PER_TILE * distance);
 		animator.translationX(playerNewPositionOnScreen.x);
 		animator.translationY(playerNewPositionOnScreen.y);
 		animator.withEndAction(endAction);
 	}
-	
-	public void initPlayerPosition() {
+
+	public void initPlayerPosition()
+	{
 		// Set initial position
-//		setTranslationX(mPlayerPosition.x * getWidth());
-//		setTranslationY(mPlayerPosition.y * getHeight());
-		
-		// Since initial position is constant, use that for now
-		setTranslationX(Consts.DEFAULT_START_POS.x * getWidth());
-		setTranslationY(Consts.DEFAULT_START_POS.y * getHeight());
+		setTranslationX(mPlayerPosition.x * getWidth());
+		setTranslationY(mPlayerPosition.y * getHeight());
 	}
 
 	public boolean isAnimationRunning()
