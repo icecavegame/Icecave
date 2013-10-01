@@ -1,21 +1,16 @@
 package com.android.icecave.gui;
 
-import android.content.Context;
-
-import android.content.ComponentName;
-import android.content.Intent;
-import android.os.IBinder;
-
-import android.content.ServiceConnection;
-import com.android.icecave.general.MusicService;
-
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -28,6 +23,7 @@ import com.android.icecave.R;
 import com.android.icecave.general.Consts;
 import com.android.icecave.general.EDifficulty;
 import com.android.icecave.general.EDirection;
+import com.android.icecave.general.MusicService;
 import com.android.icecave.guiLogic.DrawablePlayer;
 import com.android.icecave.guiLogic.GUIBoardManager;
 import com.android.icecave.guiLogic.TilesView;
@@ -58,6 +54,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		setContentView(R.layout.tiles_layout);
 
@@ -89,7 +86,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 				// Re-initialize player on UI level
 				mPlayer.initializePlayer();
-				mPlayer.postInvalidate();
 			}
 		});
 
@@ -172,7 +168,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 			// Make movement animation
 			mPlayer.movePlayer(direction, iceCaveGameStatus.getPlayerPoint());
-			mPlayer.invalidate();
+			//mPlayer.invalidate();
 		}
 	}
 
@@ -218,15 +214,11 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 			// Create player image and bring it to front
 			mPlayer.initializePlayer();
-			mPlayer.bringToFront();
+			
+			// Show views
+			drawForeground();
 
 			super.onWindowFocusChanged(hasFocus);
-		}
-
-		// Resume drawing thread if was running
-		if (mPlayer != null)
-		{
-			mPlayer.resumeDrawingThread();
 		}
 	}
 
@@ -239,36 +231,12 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			mServ.pauseMusic();
 		}
 
-		// Pause drawing thread if running
-		if (mPlayer != null)
-		{
-			mPlayer.pauseDrawingThread();
-		}
-
 		super.onPause();
 	}
-
-	// @Override
-	// protected void onResume()
-	// {
-	// // Resume drawing thread if was running
-	// if (mPlayer != null)
-	// {
-	// mPlayer.resumeDrawingThread();
-	// }
-	//
-	// super.onResume();
-	// }
 
 	@Override
 	public void onBackPressed()
 	{
-		// Stop thread if not stopped
-		if (mPlayer != null)
-		{
-			mPlayer.stopDrawingThread();
-		}
-
 		// Reset variable
 		sGBM = null;
 
@@ -294,9 +262,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			setMinimumMoves();
 			setPlayerMoves();
 
-			// Re-initialize player
+			// Re-initialize player and refresh map
 			mPlayer.initializePlayer();
-			mPlayer.postInvalidate();
+			mTilesView.postInvalidate();
 		}
 	}
 
@@ -341,10 +309,11 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		});
 	}
 
-	// Draws tile background and other widgets on screen
-	public void drawBackground(Canvas canvas)
+	// Draws all views on top of background
+	public void drawForeground()
 	{
-		mTilesView.draw(canvas);
+		// Display player
+		mPlayer.bringToFront();
 
 		// Display text fields
 		mMinimumMoves.bringToFront();
