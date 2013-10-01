@@ -217,5 +217,6 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
 	public void resetPlayer(Point startLoc)
 	{
 		mPlayerLocation = new Point(startLoc);
+		mLastDirectionMoved = null;
 	}
 }
