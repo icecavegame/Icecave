@@ -1,7 +1,5 @@
 package com.android.icecave.gui;
 
-import android.view.ViewPropertyAnimator;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -77,11 +75,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 		SharedPreferences mShared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
 
-<<<<<<< HEAD
-		// Load Gui Board Manager if exists
-=======
 		// Load GUI Board Manager if exists
->>>>>>> origin/SagieBranch
 		if (savedInstanceState != null)
 		{
 			mGBM = (GUIBoardManager) savedInstanceState.getSerializable(GUI_BOARD_MANAGER_TAG);
@@ -186,10 +180,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 			// Make movement animation
 			mPlayer.movePlayer(direction, iceCaveGameStatus.getPlayerPoint());
-<<<<<<< HEAD
-			// mPlayer.invalidate();
-=======
->>>>>>> origin/SagieBranch
 		}
 	}
 
@@ -281,14 +271,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				setMinimumMoves();
 				setPlayerMoves();
 
-<<<<<<< HEAD
-			// Re-initialize player and refresh map
-			mPlayer.initializePlayer();
-			mTilesView.postInvalidate();
-
-			// Show loading screen in the meantime
-			showLoadingScreen();
-=======
 				// Re-initialize player (must do this on the UI thread)
 				runOnUiThread(new Runnable()
 				{
@@ -302,7 +284,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				// Refresh map
 				mTilesView.postInvalidate();
 			}
->>>>>>> origin/SagieBranch
 		}
 	}
 
@@ -388,18 +369,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 	private void showLoadingScreen()
 	{
-<<<<<<< HEAD
-		final long HIDE_SHOW_TIME = 300;
-		final long DISPLAY_TIME = 3000;
-		RelativeLayout loadingScreen = (RelativeLayout) findViewById(R.id.loading_screen);
-		TextView stageMessage = (TextView) findViewById(R.id.player_stage_moves);
-		final ViewPropertyAnimator animator = loadingScreen.animate();
-
-		// Update text
-		stageMessage.setText(getString(R.string.end_stage_message_1) +
-				Integer.toString(mGBM.getMovesCarriedOutThisStage()) +
-				getString(R.string.end_stage_message_2));
-=======
 		mLoadingScreen.bringToFront();
 
 		TextView stageMessage = (TextView) mLoadingScreen.findViewById(R.id.player_stage_moves);
@@ -408,17 +377,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		String text = getString(R.string.end_stage_message_1) + " " +
 				Integer.toString(mGBM.getMovesCarriedOutThisStage()) + " " +
 				getString(R.string.end_stage_message_2);
->>>>>>> origin/SagieBranch
 
 		// Show extra content if user made more moves than minimum
 		if (mGBM.getMovesCarriedOutThisStage() > mGBM.getMinimalMovesForStage())
 		{
-<<<<<<< HEAD
-			stageMessage.setTextKeepState(Integer.toString(mGBM.getMovesCarriedOutThisStage() -
-					mGBM.getMinimalMovesForStage()) +
-					getString(R.string.end_stage_message_2));
-		}
-=======
 			text += " " +
 					Integer.toString(mGBM.getMovesCarriedOutThisStage() - mGBM.getMinimalMovesForStage()) +
 					" " + getString(R.string.end_stage_message_2);
@@ -428,15 +390,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 		// Set animation & Go!
 		final ViewPropertyAnimator animator = mLoadingScreen.animate();
->>>>>>> origin/SagieBranch
 
 		// Show view
 		animator.alpha(1);
 		animator.setDuration(HIDE_SHOW_TIME);
-<<<<<<< HEAD
-
-		animator.withEndAction(new Runnable()
-=======
 		
 		animator.start();
 	}
@@ -451,27 +408,15 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 		// Go!
 		runOnUiThread(new Runnable()
->>>>>>> origin/SagieBranch
 		{
 
 			@Override
 			public void run()
 			{
-<<<<<<< HEAD
-				// Display view and hide after
-				animator.setStartDelay(DISPLAY_TIME);
-				animator.alpha(0);
-			}
-		});
-
-		// Go!
-		animator.start();
-=======
 				// Make sure to run on UI thread for any case
 				animator.start();
 			}
 		});
->>>>>>> origin/SagieBranch
 	}
 
 	@Override
