@@ -11,13 +11,16 @@ public class Consts
 	public final static String LEVEL_SELECT_TAG = "levelSelect";
 	public final static String PLAYER_SELECT_TAG = "playerSelect";
 	public final static String THEME_SELECT_TAG = "themeSelect";
-	public final static String SELECT_BOARD_SIZE_X = "selectBoardX";
-	public final static String SELECT_BOARD_SIZE_Y = "selectBoardY";
+	public final static String SELECT_BOARD_SIZE_SIZE = "selectBoardSize";
 	public final static String MUSIC_MUTE_FLAG = "musicMuteFlag";
 	
 	public final static int DEFAULT_PLAYER = R.drawable.default_player;
 	public final static int DEFAULT_TILES = R.drawable.default_tiles;
 	public final static Point DEFAULT_START_POS = new Point(1, 1);
+	
+	// Updates
+	public static final int PLAYER_FINISH_MOVE_UPDATE = 0;
+	public static final int LOADING_LEVEL_FINISHED_UPDATE = 1;
 	
 	/***
 	 * Level default values
@@ -25,8 +28,7 @@ public class Consts
 	// Easy
 	public final static int DEFAULT_WALL_WIDTH = 1;
 	public final static int DEFAULT_BOULDER_RELATION = 7;
-	public final static int DEFAULT_BOARD_SIZE_X = 25;
-	public final static int DEFAULT_BOARD_SIZE_Y = 25;
+	public final static int DEFAULT_BOARD_SIZE = 20;
 	
 	/***
 	 *  Standard tile values and positioning

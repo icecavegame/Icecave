@@ -101,7 +101,7 @@ public class DrawablePlayer extends ImageView
 				setImageBitmap(mPGM.getPlayerImage(direction, false, mGameTheme, mScreenManager));
 
 				// Notify observers that action has ended
-				mFinishAnimation.notifyObservers();
+				mFinishAnimation.notifyObservers(Consts.PLAYER_FINISH_MOVE_UPDATE);
 
 				// Set animation running back to false
 				mIsAnimationRunning = false;

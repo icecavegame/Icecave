@@ -94,17 +94,14 @@ public class MainActivity extends Activity
 
 				// Load selection from prefs if exists
 				mIntent.putExtra(Consts.LEVEL_SELECT_TAG, mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL));
-				mIntent.putExtra(Consts.SELECT_BOARD_SIZE_X,
-						mShared.getInt(Consts.SELECT_BOARD_SIZE_X, Consts.DEFAULT_BOARD_SIZE_X));
-				mIntent.putExtra(Consts.SELECT_BOARD_SIZE_Y,
-						mShared.getInt(Consts.SELECT_BOARD_SIZE_Y, Consts.DEFAULT_BOARD_SIZE_Y));
+				mIntent.putExtra(Consts.SELECT_BOARD_SIZE_SIZE,
+						mShared.getInt(Consts.SELECT_BOARD_SIZE_SIZE, Consts.DEFAULT_BOARD_SIZE));
 				startActivity(mIntent);
 			}
 		});
 
 		levelSelect.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
-
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId)
 			{
