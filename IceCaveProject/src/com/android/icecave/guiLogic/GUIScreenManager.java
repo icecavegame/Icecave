@@ -1,6 +1,9 @@
 package com.android.icecave.guiLogic;
 
-public class GUIScreenManager implements ITileScale
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class GUIScreenManager implements ITileScale, Serializable
 {
 	float mModifiedTileWidth;
 	float mModifiedTileHeight;

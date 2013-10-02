@@ -3,9 +3,7 @@
  */
 package com.android.icecave.mapLogic.tiles.validators;
 
-import com.android.icecave.mapLogic.tiles.BoulderTile;
 import com.android.icecave.mapLogic.tiles.EmptyTile;
-import com.android.icecave.mapLogic.tiles.FlagTile;
 import com.android.icecave.mapLogic.tiles.ITile;
 
 /**
@@ -25,9 +23,11 @@ public class BoulderTileValidator extends BaseTileValidator{
 			// Check that the location is not the player.
 			!((xLocation == xPlayerLocation) && (yLocation == yPlayerLocation)) &&			
 			// Check that the location is an empty tile.
-			EmptyTile.class.isInstance(board[yLocation][xLocation]) &&
+			EmptyTile.class.isInstance(board[yLocation][xLocation]) 
+			// &&
 			// Check that it is not adjacent to any boulder.
-			(true || !isAdjacent(xLocation, yLocation, BoulderTile.class,board)) &&
-			(true || !isAdjacent(xLocation, yLocation, FlagTile.class, board)));
+//			(!isAdjacent(xLocation, yLocation, BoulderTile.class,board)) &&
+//			(!isAdjacent(xLocation, yLocation, FlagTile.class, board))
+			);
 	}
 }

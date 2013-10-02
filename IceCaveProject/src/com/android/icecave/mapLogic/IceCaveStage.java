@@ -186,43 +186,43 @@ public class IceCaveStage
 	/**
 	 * 
 	 */
-	private void printBoard(ITile[][] board)
-	{
-		String result = "";
-		int nRowIndex = 0;
-		for (ITile[] rowTiles : board)
-		{
-			result += nRowIndex;
-			result += ")   ";
-			nRowIndex++;
-			for (ITile iTile : rowTiles)
-			{
-				if(iTile instanceof FlagTile)
-				{
-					result += "F";
-				}
-				else if(iTile instanceof BoulderTile)
-				{
-					result += "B";
-				}
-				else if(iTile instanceof WallTile)
-				{
-					result += "W";
-				}
-				else if(iTile instanceof EmptyTile)
-				{
-					result += ".";
-				}
-				else
-				{
-					result += "!";
-				}
-				result += "    ";
-			}
-			result += "\n";
-		}
-		System.out.println(result);
-	}
+//	private void printBoard(ITile[][] board)
+//	{
+//		String result = "";
+//		int nRowIndex = 0;
+//		for (ITile[] rowTiles : board)
+//		{
+//			result += nRowIndex;
+//			result += ")   ";
+//			nRowIndex++;
+//			for (ITile iTile : rowTiles)
+//			{
+//				if(iTile instanceof FlagTile)
+//				{
+//					result += "F";
+//				}
+//				else if(iTile instanceof BoulderTile)
+//				{
+//					result += "B";
+//				}
+//				else if(iTile instanceof WallTile)
+//				{
+//					result += "W";
+//				}
+//				else if(iTile instanceof EmptyTile)
+//				{
+//					result += ".";
+//				}
+//				else
+//				{
+//					result += "!";
+//				}
+//				result += "    ";
+//			}
+//			result += "\n";
+//		}
+//		System.out.println(result);
+//	}
 
 	
 	/**

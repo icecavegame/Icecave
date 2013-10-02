@@ -33,7 +33,7 @@ import java.util.Observer;
 
 public class GameActivity extends Activity implements ISwipeDetector, Observer
 {
-	private static GUIBoardManager sGBM;
+	private GUIBoardManager mGBM;
 	private DrawablePlayer mPlayer;
 	private GameTheme mGameTheme;
 	private TilesView mTilesView;
@@ -82,7 +82,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			public void onClick(View v)
 			{
 				// Reset player position on logic level
-				sGBM.resetPlayer(Consts.DEFAULT_START_POS);
+				mGBM.resetPlayer(Consts.DEFAULT_START_POS);
 
 				// Re-initialize player on UI level
 				mPlayer.initializePlayer();
@@ -161,7 +161,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		if (!mPlayer.isAnimationRunning())
 		{
 			// Get status
-			IIceCaveGameStatus iceCaveGameStatus = sGBM.movePlayer(direction);
+			IIceCaveGameStatus iceCaveGameStatus = mGBM.movePlayer(direction);
 
 			// Set game ended value
 			mIsFlagReached = iceCaveGameStatus.getIsStageEnded();
@@ -177,28 +177,28 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	{
 		// Create new stage here to make sure layout is made and active and
 		// visible
-		if (sGBM == null && !isFinishing())
+		if (mGBM == null && !isFinishing())
 		{
 			// Create once
-			sGBM = new GUIBoardManager();
+			mGBM = new GUIBoardManager();
 
 			// Initialize flags (only the first time the activity is created)
 			mIsFlagReached = false;
 
 			// Initialize the game board & shit
-			sGBM.startNewGame(Consts.DEFAULT_BOULDER_NUM,
+			mGBM.startNewGame(Consts.DEFAULT_BOULDER_NUM,
 					(Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_X),
 					(Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_Y),
 					EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)]);
 
 			// Create first stage
-			sGBM.newStage(Consts.DEFAULT_START_POS, Consts.DEFAULT_WALL_WIDTH, this, mGameTheme);
+			mGBM.newStage(Consts.DEFAULT_START_POS, Consts.DEFAULT_WALL_WIDTH, this, mGameTheme);
 
 			setMinimumMoves();
 			setPlayerMoves();
 
 			// Create the tiles view and add it to the layout
-			mTilesView = new TilesView(this, sGBM.getTiles());
+			mTilesView = new TilesView(this, mGBM.getTiles());
 			mTilesView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
 																	FrameLayout.LayoutParams.MATCH_PARENT));
 			mActivityLayout.addView(mTilesView);
@@ -235,7 +235,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			mIsFlagReached = false;
 
 			// Create new stage
-			sGBM.newStage(Consts.DEFAULT_START_POS, Consts.DEFAULT_WALL_WIDTH, this, mGameTheme);
+			mGBM.newStage(Consts.DEFAULT_START_POS, Consts.DEFAULT_WALL_WIDTH, this, mGameTheme);
 
 			// Reset move texts
 			setMinimumMoves();
@@ -258,13 +258,13 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				// FIXME If user exits around when this is called, sGBM turns null and causes exception. synchronize(sGBM) don't work
 				// Set player moves value
 				mPlayerMoves.setText(getString(R.string.player_moves_text) + " " +
-						Integer.toString(sGBM.getMovesCarriedOutThisStage()));
+						Integer.toString(mGBM.getMovesCarriedOutThisStage()));
 
 				// Color text differently if player exceeded the minimum moves
-				if (sGBM.getMovesCarriedOutThisStage() >= sGBM.getMinimalMovesForStage())
+				if (mGBM.getMovesCarriedOutThisStage() >= mGBM.getMinimalMovesForStage())
 				{
 					mPlayerMoves.setTextColor(getResources().getColor(R.color.orange));
-				} else if (sGBM.getMovesCarriedOutThisStage() == 0)
+				} else if (mGBM.getMovesCarriedOutThisStage() == 0)
 				{
 					// Color text white if player moves reset
 					mPlayerMoves.setTextColor(getResources().getColor(R.color.white));
@@ -283,7 +283,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			{
 				// Set minimum moves value
 				mMinimumMoves.setText(getString(R.string.minimum_moves_text) + " " +
-						Integer.toString(sGBM.getMinimalMovesForStage()));
+						Integer.toString(mGBM.getMinimalMovesForStage()));
 			}
 		});
 	}
@@ -363,7 +363,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	public void onBackPressed()
 	{
 		// Reset variable
-		sGBM = null;
+		mGBM = null;
 
 		super.onBackPressed();
 	}
