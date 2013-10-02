@@ -161,8 +161,8 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus,
 		mLastDirectionMoved = null;
 		mPlayerLocation = new Point(playerStart);
 		mStage.buildBoard(mDifficulty,
-				mBoardSizeX,
 				mBoardSizeY,
+				mBoardSizeX,
 				wallWidth,
 				new Point(playerStart),
 				mBoulderNum,
