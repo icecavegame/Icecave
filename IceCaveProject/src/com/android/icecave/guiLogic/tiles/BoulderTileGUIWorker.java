@@ -1,6 +1,6 @@
 package com.android.icecave.guiLogic.tiles;
 
-import android.graphics.Point;
+import com.android.icecave.utils.Point;
 
 import com.android.icecave.general.Consts;
 

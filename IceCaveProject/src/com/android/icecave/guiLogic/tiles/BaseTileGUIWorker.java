@@ -2,7 +2,7 @@ package com.android.icecave.guiLogic.tiles;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.Point;
+import com.android.icecave.utils.Point;
 import com.android.icecave.guiLogic.ITileScale;
 
 public abstract class BaseTileGUIWorker implements IGUITileWorker

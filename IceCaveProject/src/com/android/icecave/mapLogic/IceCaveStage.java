@@ -1,9 +1,10 @@
 package com.android.icecave.mapLogic;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Random;
 
-import android.graphics.Point;
+import com.android.icecave.utils.Point;
 
 import com.android.icecave.general.EDifficulty;
 import com.android.icecave.general.EDirection;
@@ -17,9 +18,22 @@ import com.android.icecave.mapLogic.tiles.ITile;
 import com.android.icecave.mapLogic.tiles.WallTile;
 import com.android.icecave.mapLogic.tiles.validators.TileValidatorFactory;
 
-public class IceCaveStage
+/**
+ * Class representing a stage in the game.
+ * @author Tom
+ *
+ */
+@SuppressWarnings("serial")
+public class IceCaveStage implements Serializable
 {
+	/**
+	 * The tiles of the current stage board.
+	 */
 	private ITile[][] mTiles;
+	
+	/**
+	 * Number of moves for the current stage.
+	 */
 	private int mMoves;
 	
 	/**
@@ -186,43 +200,43 @@ public class IceCaveStage
 	/**
 	 * 
 	 */
-	private void printBoard(ITile[][] board)
-	{
-		String result = "";
-		int nRowIndex = 0;
-		for (ITile[] rowTiles : board)
-		{
-			result += nRowIndex;
-			result += ")   ";
-			nRowIndex++;
-			for (ITile iTile : rowTiles)
-			{
-				if(iTile instanceof FlagTile)
-				{
-					result += "F";
-				}
-				else if(iTile instanceof BoulderTile)
-				{
-					result += "B";
-				}
-				else if(iTile instanceof WallTile)
-				{
-					result += "W";
-				}
-				else if(iTile instanceof EmptyTile)
-				{
-					result += ".";
-				}
-				else
-				{
-					result += "!";
-				}
-				result += "    ";
-			}
-			result += "\n";
-		}
-		System.out.println(result);
-	}
+//	private void printBoard(ITile[][] board)
+//	{
+//		String result = "";
+//		int nRowIndex = 0;
+//		for (ITile[] rowTiles : board)
+//		{
+//			result += nRowIndex;
+//			result += ")   ";
+//			nRowIndex++;
+//			for (ITile iTile : rowTiles)
+//			{
+//				if(iTile instanceof FlagTile)
+//				{
+//					result += "F";
+//				}
+//				else if(iTile instanceof BoulderTile)
+//				{
+//					result += "B";
+//				}
+//				else if(iTile instanceof WallTile)
+//				{
+//					result += "W";
+//				}
+//				else if(iTile instanceof EmptyTile)
+//				{
+//					result += ".";
+//				}
+//				else
+//				{
+//					result += "!";
+//				}
+//				result += "    ";
+//			}
+//			result += "\n";
+//		}
+//		System.out.println(result);
+//	}
 
 	
 	/**

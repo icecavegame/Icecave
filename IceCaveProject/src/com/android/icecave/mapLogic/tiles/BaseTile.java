@@ -1,9 +1,13 @@
 package com.android.icecave.mapLogic.tiles;
 
-import android.graphics.Point;
+import com.android.icecave.utils.Point;
 
+@SuppressWarnings("serial")
 public abstract class BaseTile implements ITile
 {
+	/**
+	 * Location for the tile.
+	 */
 	Point mLocation;
 	
 	/**

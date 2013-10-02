@@ -1,7 +1,7 @@
 package com.android.icecave.guiLogic;
 
 import android.content.Context;
-import android.graphics.Point;
+import com.android.icecave.utils.Point;
 import android.view.ViewPropertyAnimator;
 import android.widget.ImageView;
 import com.android.icecave.general.Consts;
