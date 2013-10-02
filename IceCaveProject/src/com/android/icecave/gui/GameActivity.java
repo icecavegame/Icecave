@@ -41,6 +41,8 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private boolean mIsFlagReached;
 	private TextView mPlayerMoves, mMinimumMoves;
 	private ImageView mResetButton;
+	
+	private final String GUI_BOARD_MANAGER_TAG = "guiBoardManager";
 
 	// Music data
 	private boolean mIsBound = false;
@@ -68,6 +70,11 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		SharedPreferences mShared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
+		
+		// Load Gui Board Manager if exists
+		if (savedInstanceState != null) {
+			mGBM = (GUIBoardManager) savedInstanceState.getSerializable(GUI_BOARD_MANAGER_TAG);
+		}
 
 		mGameTheme =
 				new GameTheme(	BitmapFactory.decodeResource(getResources(),
@@ -255,7 +262,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			@Override
 			public void run()
 			{
-				// FIXME If user exits around when this is called, sGBM turns null and causes exception. synchronize(sGBM) don't work
 				// Set player moves value
 				mPlayerMoves.setText(getString(R.string.player_moves_text) + " " +
 						Integer.toString(mGBM.getMovesCarriedOutThisStage()));
@@ -336,6 +342,15 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	}
 	
 	@Override
+	protected void onSaveInstanceState(Bundle outState)
+	{
+		// Save GUI Board Manager instance
+		outState.putSerializable(GUI_BOARD_MANAGER_TAG, mGBM);
+		
+		super.onSaveInstanceState(outState);
+	}
+	
+	@Override
 	protected void onResume()
 	{
 		// Resume/pause music
@@ -357,14 +372,5 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		}
 
 		super.onPause();
-	}
-
-	@Override
-	public void onBackPressed()
-	{
-		// Reset variable
-		mGBM = null;
-
-		super.onBackPressed();
 	}
 }
