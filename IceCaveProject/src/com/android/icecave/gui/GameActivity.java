@@ -1,5 +1,7 @@
 package com.android.icecave.gui;
 
+import android.view.ViewPropertyAnimator;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -41,7 +43,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private boolean mIsFlagReached;
 	private TextView mPlayerMoves, mMinimumMoves;
 	private ImageView mResetButton;
-	
+
 	private final String GUI_BOARD_MANAGER_TAG = "guiBoardManager";
 
 	// Music data
@@ -70,9 +72,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		SharedPreferences mShared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
-		
+
 		// Load Gui Board Manager if exists
-		if (savedInstanceState != null) {
+		if (savedInstanceState != null)
+		{
 			mGBM = (GUIBoardManager) savedInstanceState.getSerializable(GUI_BOARD_MANAGER_TAG);
 		}
 
@@ -175,7 +178,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 			// Make movement animation
 			mPlayer.movePlayer(direction, iceCaveGameStatus.getPlayerPoint());
-			//mPlayer.invalidate();
+			// mPlayer.invalidate();
 		}
 	}
 
@@ -221,7 +224,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 			// Create player image and bring it to front
 			mPlayer.initializePlayer();
-			
+
 			// Show views
 			drawForeground();
 
@@ -251,6 +254,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			// Re-initialize player and refresh map
 			mPlayer.initializePlayer();
 			mTilesView.postInvalidate();
+
+			// Show loading screen in the meantime
+			showLoadingScreen();
 		}
 	}
 
@@ -334,22 +340,63 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		}
 	}
 
+	private void showLoadingScreen()
+	{
+		final long HIDE_SHOW_TIME = 300;
+		final long DISPLAY_TIME = 3000;
+		RelativeLayout loadingScreen = (RelativeLayout) findViewById(R.id.loading_screen);
+		TextView stageMessage = (TextView) findViewById(R.id.player_stage_moves);
+		final ViewPropertyAnimator animator = loadingScreen.animate();
+
+		// Update text
+		stageMessage.setText(getString(R.string.end_stage_message_1) +
+				Integer.toString(mGBM.getMovesCarriedOutThisStage()) +
+				getString(R.string.end_stage_message_2));
+
+		// Show extra content if user made more moves than minimum
+		if (mGBM.getMovesCarriedOutThisStage() > mGBM.getMinimalMovesForStage())
+		{
+			stageMessage.setTextKeepState(Integer.toString(mGBM.getMovesCarriedOutThisStage() -
+					mGBM.getMinimalMovesForStage()) +
+					getString(R.string.end_stage_message_2));
+		}
+
+		// Show view
+		animator.alpha(1);
+		animator.setDuration(HIDE_SHOW_TIME);
+
+		animator.withEndAction(new Runnable()
+		{
+
+			@Override
+			public void run()
+			{
+				// Display view and hide after
+				animator.setStartDelay(DISPLAY_TIME);
+				animator.alpha(0);
+			}
+		});
+
+		// Go!
+		animator.start();
+	}
+
 	@Override
 	protected void onDestroy()
 	{
 		doUnbindService();
 		super.onDestroy();
 	}
-	
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState)
 	{
 		// Save GUI Board Manager instance
 		outState.putSerializable(GUI_BOARD_MANAGER_TAG, mGBM);
-		
+
 		super.onSaveInstanceState(outState);
 	}
-	
+
 	@Override
 	protected void onResume()
 	{
@@ -358,10 +405,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		{
 			initMusic();
 		}
-		
+
 		super.onResume();
 	}
-	
+
 	@Override
 	protected void onPause()
 	{
