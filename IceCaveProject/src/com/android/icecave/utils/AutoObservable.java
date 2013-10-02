@@ -16,4 +16,12 @@ public class AutoObservable extends Observable
 		setChanged();
 		super.notifyObservers();
 	}
+	
+	@Override
+	public void notifyObservers(Object data)
+	{
+		// Automatically set changed flag before notifying observers
+		setChanged();
+		super.notifyObservers(data);
+	}
 }

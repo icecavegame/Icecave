@@ -1,7 +1,5 @@
 package com.android.icecave.gui;
 
-import android.view.ViewPropertyAnimator;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -15,6 +13,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewPropertyAnimator;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -28,6 +27,7 @@ import com.android.icecave.general.EDirection;
 import com.android.icecave.general.MusicService;
 import com.android.icecave.guiLogic.DrawablePlayer;
 import com.android.icecave.guiLogic.GUIBoardManager;
+import com.android.icecave.guiLogic.LoadingThread;
 import com.android.icecave.guiLogic.TilesView;
 import com.android.icecave.mapLogic.IIceCaveGameStatus;
 import java.util.Observable;
@@ -39,12 +39,13 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private DrawablePlayer mPlayer;
 	private GameTheme mGameTheme;
 	private TilesView mTilesView;
-	private RelativeLayout mActivityLayout;
+	private RelativeLayout mActivityLayout, mLoadingScreen;
 	private boolean mIsFlagReached;
 	private TextView mPlayerMoves, mMinimumMoves;
 	private ImageView mResetButton;
 
 	private final String GUI_BOARD_MANAGER_TAG = "guiBoardManager";
+	private final long HIDE_SHOW_TIME = 300;
 
 	// Music data
 	private boolean mIsBound = false;
@@ -63,6 +64,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		setContentView(R.layout.tiles_layout);
 
 		mActivityLayout = ((RelativeLayout) findViewById(R.id.game_layout));
+		mLoadingScreen = (RelativeLayout) findViewById(R.id.loading_screen);
 		mPlayerMoves = (TextView) findViewById(R.id.player_moves);
 		mMinimumMoves = (TextView) findViewById(R.id.minimum_moves);
 		mResetButton = (ImageView) findViewById(R.id.reset_button);
@@ -73,7 +75,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 		SharedPreferences mShared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
 
-		// Load Gui Board Manager if exists
+		// Load GUI Board Manager if exists
 		if (savedInstanceState != null)
 		{
 			mGBM = (GUIBoardManager) savedInstanceState.getSerializable(GUI_BOARD_MANAGER_TAG);
@@ -178,7 +180,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 			// Make movement animation
 			mPlayer.movePlayer(direction, iceCaveGameStatus.getPlayerPoint());
-			// mPlayer.invalidate();
 		}
 	}
 
@@ -196,8 +197,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			mIsFlagReached = false;
 
 			// Initialize the game board & shit
-			mGBM.startNewGame(
-					(Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_X),
+			mGBM.startNewGame((Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_SIZE),
 					this,
 					EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)]);
 
@@ -235,28 +235,55 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	@Override
 	public void update(Observable observable, Object data)
 	{
-		// Update counter
-		setPlayerMoves();
-
-		// Run a new game if flag is reached
-		if (mIsFlagReached)
+		// Check update flag
+		if (data != null)
 		{
-			// Reset reached flag
-			mIsFlagReached = false;
+			// Player movement animation complete
+			if (data.equals(Consts.PLAYER_FINISH_MOVE_UPDATE))
+			{
+				// Update counter
+				setPlayerMoves();
 
-			// Create new stage
-			mGBM.newStage(Consts.DEFAULT_START_POS, Consts.DEFAULT_WALL_WIDTH, this, mGameTheme);
+				// Run a new game if flag is reached
+				if (mIsFlagReached)
+				{
+					// Reset reached flag
+					mIsFlagReached = false;
 
-			// Reset move texts
-			setMinimumMoves();
-			setPlayerMoves();
+					// Show loading screen in the meantime
+					showLoadingScreen();
 
-			// Re-initialize player and refresh map
-			mPlayer.initializePlayer();
-			mTilesView.postInvalidate();
+					// Start creating a new stage
+					LoadingThread load =
+							new LoadingThread(	mGBM,
+												Consts.DEFAULT_START_POS,
+												Consts.DEFAULT_WALL_WIDTH,
+												this,
+												mGameTheme);
+					load.start();
+				}
+			} else if (data.equals(Consts.LOADING_LEVEL_FINISHED_UPDATE)) // Level creation complete
+			{
+				// Hide loading screen
+				hideLoadingScreen();
 
-			// Show loading screen in the meantime
-			showLoadingScreen();
+				// Reset move texts
+				setMinimumMoves();
+				setPlayerMoves();
+
+				// Re-initialize player (must do this on the UI thread)
+				runOnUiThread(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						mPlayer.initializePlayer();
+					}
+				});
+
+				// Refresh map
+				mTilesView.postInvalidate();
+			}
 		}
 	}
 
@@ -273,7 +300,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 						Integer.toString(mGBM.getMovesCarriedOutThisStage()));
 
 				// Color text differently if player exceeded the minimum moves
-				if (mGBM.getMovesCarriedOutThisStage() >= mGBM.getMinimalMovesForStage())
+				if (mGBM.getMovesCarriedOutThisStage() > mGBM.getMinimalMovesForStage())
 				{
 					mPlayerMoves.setTextColor(getResources().getColor(R.color.orange));
 				} else if (mGBM.getMovesCarriedOutThisStage() == 0)
@@ -342,43 +369,54 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 	private void showLoadingScreen()
 	{
-		final long HIDE_SHOW_TIME = 300;
-		final long DISPLAY_TIME = 3000;
-		RelativeLayout loadingScreen = (RelativeLayout) findViewById(R.id.loading_screen);
-		TextView stageMessage = (TextView) findViewById(R.id.player_stage_moves);
-		final ViewPropertyAnimator animator = loadingScreen.animate();
+		mLoadingScreen.bringToFront();
+
+		TextView stageMessage = (TextView) mLoadingScreen.findViewById(R.id.player_stage_moves);
 
 		// Update text
-		stageMessage.setText(getString(R.string.end_stage_message_1) +
-				Integer.toString(mGBM.getMovesCarriedOutThisStage()) +
-				getString(R.string.end_stage_message_2));
+		String text = getString(R.string.end_stage_message_1) + " " +
+				Integer.toString(mGBM.getMovesCarriedOutThisStage()) + " " +
+				getString(R.string.end_stage_message_2);
 
 		// Show extra content if user made more moves than minimum
 		if (mGBM.getMovesCarriedOutThisStage() > mGBM.getMinimalMovesForStage())
 		{
-			stageMessage.setTextKeepState(Integer.toString(mGBM.getMovesCarriedOutThisStage() -
-					mGBM.getMinimalMovesForStage()) +
-					getString(R.string.end_stage_message_2));
+			text += " " +
+					Integer.toString(mGBM.getMovesCarriedOutThisStage() - mGBM.getMinimalMovesForStage()) +
+					" " + getString(R.string.end_stage_message_2);
 		}
+		
+		stageMessage.setText(text);
+
+		// Set animation & Go!
+		final ViewPropertyAnimator animator = mLoadingScreen.animate();
 
 		// Show view
 		animator.alpha(1);
 		animator.setDuration(HIDE_SHOW_TIME);
+		
+		animator.start();
+	}
 
-		animator.withEndAction(new Runnable()
+	private void hideLoadingScreen()
+	{
+		final ViewPropertyAnimator animator = mLoadingScreen.animate();
+
+		// Show view
+		animator.alpha(0);
+		animator.setDuration(HIDE_SHOW_TIME);
+
+		// Go!
+		runOnUiThread(new Runnable()
 		{
 
 			@Override
 			public void run()
 			{
-				// Display view and hide after
-				animator.setStartDelay(DISPLAY_TIME);
-				animator.alpha(0);
+				// Make sure to run on UI thread for any case
+				animator.start();
 			}
 		});
-
-		// Go!
-		animator.start();
 	}
 
 	@Override
