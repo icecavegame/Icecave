@@ -374,18 +374,20 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		TextView stageMessage = (TextView) mLoadingScreen.findViewById(R.id.player_stage_moves);
 
 		// Update text
-		String text = getString(R.string.end_stage_message_1) + " " +
-				Integer.toString(mGBM.getMovesCarriedOutThisStage()) + " " +
-				getString(R.string.end_stage_message_2);
+		String text =
+				getString(R.string.end_stage_message_1) + " " +
+						Integer.toString(mGBM.getMovesCarriedOutThisStage()) + " " +
+						getString(R.string.end_stage_message_2);
 
 		// Show extra content if user made more moves than minimum
 		if (mGBM.getMovesCarriedOutThisStage() > mGBM.getMinimalMovesForStage())
 		{
-			text += " " +
-					Integer.toString(mGBM.getMovesCarriedOutThisStage() - mGBM.getMinimalMovesForStage()) +
-					" " + getString(R.string.end_stage_message_2);
+			text +=	" " +
+					Integer.toString(mGBM.getMovesCarriedOutThisStage() -
+								 	 mGBM.getMinimalMovesForStage()) + " " +
+					getString(R.string.end_stage_message_3);
 		}
-		
+
 		stageMessage.setText(text);
 
 		// Set animation & Go!
@@ -394,7 +396,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		// Show view
 		animator.alpha(1);
 		animator.setDuration(HIDE_SHOW_TIME);
-		
+
 		animator.start();
 	}
 
@@ -409,11 +411,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		// Go!
 		runOnUiThread(new Runnable()
 		{
-
 			@Override
 			public void run()
 			{
-				// Make sure to run on UI thread for any case
+				// Run on UI to avoid issues
 				animator.start();
 			}
 		});
