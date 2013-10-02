@@ -195,7 +195,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			// Initialize the game board & shit
 			mGBM.startNewGame(Consts.DEFAULT_BOULDER_NUM,
 					(Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_X),
-					(Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_Y),
+					this,
 					EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)]);
 
 			// Create first stage
