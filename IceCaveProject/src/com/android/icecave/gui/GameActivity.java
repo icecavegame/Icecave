@@ -1,5 +1,7 @@
 package com.android.icecave.gui;
 
+import android.view.ViewPropertyAnimator;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -382,8 +384,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		if (mGBM.getMovesCarriedOutThisStage() > mGBM.getMinimalMovesForStage())
 		{
 			text += " " +
-					Integer.toString(mGBM.getMovesCarriedOutThisStage() - mGBM.getMinimalMovesForStage()) +
-					" " + getString(R.string.end_stage_message_2);
+					mGBM.getMinimalMovesForStage()) +
 		}
 		
 		stageMessage.setText(text);
@@ -407,16 +408,17 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		animator.setDuration(HIDE_SHOW_TIME);
 
 		// Go!
-		runOnUiThread(new Runnable()
 		{
 
 			@Override
 			public void run()
 			{
-				// Make sure to run on UI thread for any case
-				animator.start();
+				animator.setStartDelay(DISPLAY_TIME);
 			}
 		});
+
+		// Go!
+		animator.start();
 	}
 
 	@Override
