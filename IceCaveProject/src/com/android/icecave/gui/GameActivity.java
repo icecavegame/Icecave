@@ -385,6 +385,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		{
 			text += " " +
 					mGBM.getMinimalMovesForStage()) +
+					getString(R.string.end_stage_message_3));
 		}
 		
 		stageMessage.setText(text);
@@ -413,7 +414,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			@Override
 			public void run()
 			{
+				// Display view and hide after
 				animator.setStartDelay(DISPLAY_TIME);
+				animator.alpha(0);
 			}
 		});
 
