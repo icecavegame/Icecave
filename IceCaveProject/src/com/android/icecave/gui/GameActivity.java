@@ -1,7 +1,5 @@
 package com.android.icecave.gui;
 
-import android.view.ViewPropertyAnimator;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -376,18 +374,20 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		TextView stageMessage = (TextView) mLoadingScreen.findViewById(R.id.player_stage_moves);
 
 		// Update text
-		String text = getString(R.string.end_stage_message_1) + " " +
-				Integer.toString(mGBM.getMovesCarriedOutThisStage()) + " " +
-				getString(R.string.end_stage_message_2);
+		String text =
+				getString(R.string.end_stage_message_1) + " " +
+						Integer.toString(mGBM.getMovesCarriedOutThisStage()) + " " +
+						getString(R.string.end_stage_message_2);
 
 		// Show extra content if user made more moves than minimum
 		if (mGBM.getMovesCarriedOutThisStage() > mGBM.getMinimalMovesForStage())
 		{
-			text += " " +
-					mGBM.getMinimalMovesForStage()) +
-					getString(R.string.end_stage_message_3));
+			text +=	" " +
+					Integer.toString(mGBM.getMovesCarriedOutThisStage() -
+								 	 mGBM.getMinimalMovesForStage()) + " " +
+					getString(R.string.end_stage_message_3);
 		}
-		
+
 		stageMessage.setText(text);
 
 		// Set animation & Go!
@@ -396,7 +396,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		// Show view
 		animator.alpha(1);
 		animator.setDuration(HIDE_SHOW_TIME);
-		
+
 		animator.start();
 	}
 
@@ -409,19 +409,15 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		animator.setDuration(HIDE_SHOW_TIME);
 
 		// Go!
+		runOnUiThread(new Runnable()
 		{
-
 			@Override
 			public void run()
 			{
-				// Display view and hide after
-				animator.setStartDelay(DISPLAY_TIME);
-				animator.alpha(0);
+				// Run on UI to avoid issues
+				animator.start();
 			}
 		});
-
-		// Go!
-		animator.start();
 	}
 
 	@Override
