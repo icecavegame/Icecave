@@ -105,6 +105,10 @@ public class GUIBoardManager
 		}
 	}
 	
+	/**
+	 * Get the tiles of the current board.
+	 * @return Map of the current board tiles.
+	 */
 	public Bitmap[][] getTiles() {
 		return mTiles;
 	}
