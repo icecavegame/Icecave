@@ -39,23 +39,23 @@ public class IceCaveStage implements Serializable
 	/**
 	 * Find a location on the board to place the flag in.
 	 * 
-	 * @param rowSize 	- Row size in tiles of the board.
-	 * @param colSize 	- Column size in tiles of the board.
+	 * @param colsNumber 	- Number of columns in the board.
+	 * @param rowsNumber 	- Number of rows in the board.
 	 * @param playerLoc - Location of the player.
 	 * 
 	 * @return Location to place the flag.
 	 */
-	private Point createExit(int rowSize, int colSize, Point playerLoc)
+	private Point createExit(int colsNumber, int rowsNumber, Point playerLoc)
 	{
 		// Get a random number
 		Random rand = GeneralServiceProvider.getInstance().getRandom();
 		
-		int flagXposition = rand.nextInt(rowSize - 2) + 1;
-		int flagYposition = rand.nextInt(colSize - 2) + 1;
+		int flagXposition = rand.nextInt(rowsNumber - 2) + 1;
+		int flagYposition = rand.nextInt(colsNumber - 2) + 1;
 		
 		while(playerLoc.equals(flagXposition, flagYposition)){
-			flagXposition = rand.nextInt(rowSize - 2) + 1;
-			flagYposition = rand.nextInt(colSize - 2) + 1;
+			flagXposition = rand.nextInt(rowsNumber - 2) + 1;
+			flagYposition = rand.nextInt(colsNumber - 2) + 1;
 		}
 			
 		return new Point(flagXposition, flagYposition);
