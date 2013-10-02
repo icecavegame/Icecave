@@ -5,6 +5,7 @@ import java.io.Serializable;
 import android.graphics.Bitmap;
 import com.android.icecave.utils.Point;
 
+import com.android.icecave.general.Consts;
 import com.android.icecave.general.EDifficulty;
 import com.android.icecave.general.EDirection;
 import com.android.icecave.gui.GameActivity;
@@ -59,24 +60,29 @@ public class GUIBoardManager implements Serializable
 	/**
 	 * Start a new game.
 	 * @param boulderNum - Number of boulders to place on map. 
-	 * @param boardSizeX - Row length of the map.
-	 * @param boardSizeY - Column length of the map.
+	 * @param boardSizeHeight - Row length of the map.
 	 * @param difficulty - Difficulty level.
 	 * @param Context - activity creating the game
 	 */
-	public void startNewGame( int 		 boulderNum, 
-						 	  int 		 boardSizeX,
+	public void startNewGame( 
+						 	  int 		 boardSizeHeight,
 						 	  GameActivity context,
 						 	  EDifficulty difficulty){
 		
 		int maxSize = Math.max(context.getWidth(), context.getHeight());
 		int minSize = Math.min(context.getWidth(), context.getHeight());
-		int boardSizeY = (int)((maxSize * 1.0 / minSize) * boardSizeX);
+		int boardSizeWidth = (int)((maxSize * 1.0 / minSize) * boardSizeHeight);
 		
-		mIceCaveGame = new IceCaveGame(boulderNum, boardSizeX, boardSizeY, difficulty);
+		mIceCaveGame = 
+				new IceCaveGame(boardSizeHeight * 
+								    boardSizeWidth / 
+									Consts.DEFAULT_BOULDER_RELATION, 
+								boardSizeHeight, 
+								boardSizeWidth,
+								difficulty);
 		
 		// Get the tiles
-		mTiles = new Bitmap[boardSizeY][boardSizeX];
+		mTiles = new Bitmap[boardSizeHeight][boardSizeWidth];
 	}
 	
 	/**

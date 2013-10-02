@@ -39,23 +39,23 @@ public class IceCaveStage implements Serializable
 	/**
 	 * Find a location on the board to place the flag in.
 	 * 
-	 * @param rowSize 	- Row size in tiles of the board.
-	 * @param colSize 	- Column size in tiles of the board.
+	 * @param colsNumber 	- Number of columns in the board.
+	 * @param rowsNumber 	- Number of rows in the board.
 	 * @param playerLoc - Location of the player.
 	 * 
 	 * @return Location to place the flag.
 	 */
-	private Point createExit(int rowSize, int colSize, Point playerLoc)
+	private Point createExit(int colsNumber, int rowsNumber, Point playerLoc)
 	{
 		// Get a random number
 		Random rand = GeneralServiceProvider.getInstance().getRandom();
 		
-		int flagXposition = rand.nextInt(rowSize - 2) + 1;
-		int flagYposition = rand.nextInt(colSize - 2) + 1;
+		int flagXposition = rand.nextInt(rowsNumber - 2) + 1;
+		int flagYposition = rand.nextInt(colsNumber - 2) + 1;
 		
 		while(playerLoc.equals(flagXposition, flagYposition)){
-			flagXposition = rand.nextInt(rowSize - 2) + 1;
-			flagYposition = rand.nextInt(colSize - 2) + 1;
+			flagXposition = rand.nextInt(rowsNumber - 2) + 1;
+			flagYposition = rand.nextInt(colsNumber - 2) + 1;
 		}
 			
 		return new Point(flagXposition, flagYposition);
@@ -114,47 +114,47 @@ public class IceCaveStage implements Serializable
 	
 	/**
 	 * Initialize the board.
-	 * @param rowLen - Number of rows in board.
-	 * @param colLen - Number of columns in board.
+	 * @param colsNumber - Number of rows in board.
+	 * @param rowsNumber - Number of columns in board.
 	 * @param wallWidth - Width of the wall in tiles.
 	 */
-	private void initializeBoard(int rowLen, int colLen, int wallWidth)
+	private void initializeBoard(int colsNumber, int rowsNumber, int wallWidth)
 	{
-		createEmptyBoard(rowLen, colLen);
+		createEmptyBoard(colsNumber, rowsNumber);
 
-		fillWithEmptyTles(rowLen, colLen, wallWidth);
+		fillWithEmptyTles(colsNumber, rowsNumber, wallWidth);
 	}
 
 	/**
 	 * Fill the initialized board with empty tiles.
 	 * 
-	 * @param rowLen - Number of rows in board.
-	 * @param colLen - Number of columns in board.
+	 * @param colsNumber - Number of rows in board.
+	 * @param rowsNumber - Number of columns in board.
 	 * @param wallWidth - Width of the wall in tiles.
 	 */
-	private void fillWithEmptyTles(int rowLen, int colLen, int wallWidth) {
-		for (int i = wallWidth; i < rowLen - wallWidth; i++)
+	private void fillWithEmptyTles(int colsNumber, int rowsNumber, int wallWidth) {
+		for (int i = wallWidth; i < colsNumber - wallWidth; i++)
 		{
-			for (int j = wallWidth; j < colLen - wallWidth; j++)
+			for (int j = wallWidth; j < rowsNumber - wallWidth; j++)
 			{
 				// Initializing board.
-				mTiles[j][i] = new EmptyTile(j,i);
+				mTiles[i][j] = new EmptyTile(j,i);
 			}
 		}
 	}
 
 	/**
 	 * Creates an empty board, all tiles are walls.
-	 * @param rowLen - Number of rows in board.
-	 * @param colLen - Number of columns in board.
+	 * @param colsNumber - Number of rows in board.
+	 * @param rowsNumber - Number of columns in board.
 	 */
-	private void createEmptyBoard(int rowLen, int colLen) {
+	private void createEmptyBoard(int colsNumber, int rowsNumber) {
 		// Initializing walls
-		for (int i = 0; i < rowLen; i++)
+		for (int i = 0; i < colsNumber; i++)
 		{
-			for (int j = 0; j < colLen; j++)
+			for (int j = 0; j < rowsNumber; j++)
 			{
-				mTiles[j][i] = new WallTile(j,i);
+				mTiles[i][j] = new WallTile(j,i);
 			}
 		}
 	}
@@ -163,26 +163,26 @@ public class IceCaveStage implements Serializable
 	 * Generating a possible to beat map
 	 * 
 	 * @param difficulty - Difficulty for the stage.
-	 * @param rowLen - Number of rows in board.
-	 * @param colLen - Number of columns in board.
+	 * @param rowsNumber - Number of rows in board.
+	 * @param colsNumber - Number of columns in board.
 	 * @param wallWidth - Width of the wall in tiles.
 	 * @param playerLoc - Starting location for the player.
 	 * @param boulderNum - Number of boulders in the board.
 	 * @param startingMove - First move of the player to do (while building the board).
 	 */
 	public void buildBoard(EDifficulty difficulty, 
-						   int 		   rowLen, 
-						   int 		   colLen, 
+						   int 		   rowsNumber, 
+						   int 		   colsNumber, 
 						   int 		   wallWidth, 
 						   Point 	   playerLoc, 
 						   int 	       boulderNum,
 						   EDirection  startingMove)
 	{
 		// Initialize members.
-		mTiles = new ITile[colLen][rowLen];
+		mTiles = new ITile[colsNumber][rowsNumber];
 		
 		// Place tiles in the board.
-		placeTiles(rowLen, colLen, wallWidth, playerLoc, boulderNum);			
+		placeTiles(colsNumber, rowsNumber, wallWidth, playerLoc, boulderNum);			
 	
 		//printBoard(mTiles);
 		
@@ -191,7 +191,7 @@ public class IceCaveStage implements Serializable
 		while (!validate(startingMove, playerLoc, difficulty)){
 
 			// Re-initializing map
-			placeTiles(rowLen, colLen, wallWidth, playerLoc, boulderNum);			
+			placeTiles(colsNumber, rowsNumber, wallWidth, playerLoc, boulderNum);			
 			
 //			printBoard(mTiles);
 		}
@@ -200,83 +200,83 @@ public class IceCaveStage implements Serializable
 	/**
 	 * 
 	 */
-//	private void printBoard(ITile[][] board)
-//	{
-//		String result = "";
-//		int nRowIndex = 0;
-//		for (ITile[] rowTiles : board)
-//		{
-//			result += nRowIndex;
-//			result += ")   ";
-//			nRowIndex++;
-//			for (ITile iTile : rowTiles)
-//			{
-//				if(iTile instanceof FlagTile)
-//				{
-//					result += "F";
-//				}
-//				else if(iTile instanceof BoulderTile)
-//				{
-//					result += "B";
-//				}
-//				else if(iTile instanceof WallTile)
-//				{
-//					result += "W";
-//				}
-//				else if(iTile instanceof EmptyTile)
-//				{
-//					result += ".";
-//				}
-//				else
-//				{
-//					result += "!";
-//				}
-//				result += "    ";
-//			}
-//			result += "\n";
-//		}
-//		System.out.println(result);
-//	}
+	private void printBoard(ITile[][] board)
+	{
+		String result = "";
+		int nRowIndex = 0;
+		for (ITile[] rowTiles : board)
+		{
+			result += nRowIndex;
+			result += ")   ";
+			nRowIndex++;
+			for (ITile iTile : rowTiles)
+			{
+				if(iTile instanceof FlagTile)
+				{
+					result += "F";
+				}
+				else if(iTile instanceof BoulderTile)
+				{
+					result += "B";
+				}
+				else if(iTile instanceof WallTile)
+				{
+					result += "W";
+				}
+				else if(iTile instanceof EmptyTile)
+				{
+					result += ".";
+				}
+				else
+				{
+					result += "!";
+				}
+				result += "    ";
+			}
+			result += "\n";
+		}
+		System.out.println(result);
+	}
 
 	
 	/**
 	 * Place all tiles on the board.
 	 * 
-	 * @param rowLen - Board row length in tiles. 
-	 * @param colLen - Board column length in tiles.
+	 * @param colsNumber - Board row length in tiles. 
+	 * @param rowsNumber - Board column length in tiles.
 	 * @param wallWidth - Width of the wall in tiles.
 	 * @param playerLoc - Player location.
 	 * @param boulderNum - Number of boulders to place.
 	 */
-	private void placeTiles(int rowLen, int colLen, int wallWidth,
+	private void placeTiles(int colsNumber, int rowsNumber, int wallWidth,
 			Point playerLoc, int boulderNum) {
 		// Creating the board
-		initializeBoard(rowLen, colLen, wallWidth);
+		initializeBoard(colsNumber, rowsNumber, wallWidth);
 
 		// Creating exit point
 		Point flagLocation = 
-				createExit(rowLen, colLen, playerLoc);
+				createExit(colsNumber, rowsNumber, playerLoc);
 		
 		mTiles[flagLocation.y][flagLocation.x] = new FlagTile(flagLocation);
 
 		// Place the boulders on the board.
-		placeBoulders(rowLen,
-					  colLen, 
+		placeBoulders(colsNumber,
+					  rowsNumber, 
 					  playerLoc,
 					  boulderNum);
 	}
 
 	/**
 	 * Place boulders on the board.
-	 * @param rowLen - Row length of the board in tiles.
-	 * @param colLen - Column length of the board in tiles.
+	 * @param colsNumber - Row length of the board in tiles.
+	 * @param rowsNumber - Column length of the board in tiles.
 	 * @param playerLoc - Player location.
 	 * @param boulderNum - Number of boulders to place on board.
 	 */
-	private void placeBoulders(int rowLen,
-							  int colLen,
-							  Point playerLoc,
-							  int boulderNum) {
+	private void placeBoulders(int colsNumber,
+							   int rowsNumber,
+							   Point playerLoc,
+							   int boulderNum) {
 		Random rand = 
 				GeneralServiceProvider.getInstance().getRandom();
 		
@@ -291,8 +291,8 @@ public class IceCaveStage implements Serializable
 		while (retryCounter < 10 && boulderCounter < boulderNum)
 		{
 			// Making random points
-			boulderRowRand = rand.nextInt(rowLen - 2) + 1;
-			boulderColRand = rand.nextInt(colLen - 2) + 1;
+			boulderRowRand = rand.nextInt(rowsNumber - 2) + 1;
+			boulderColRand = rand.nextInt(colsNumber - 2) + 1;
 
 			// Validate the position.
 			TileValidatorFactory tileValidatorFactory =
@@ -317,7 +317,6 @@ public class IceCaveStage implements Serializable
 		}
 	}
 
-	
 	/**
 	 * Validate that the map is solvable in a specific number of moves.
 	 * @param defaultMoveDirection - The first direction the player moves in.
@@ -392,7 +391,7 @@ public class IceCaveStage implements Serializable
 		}
 		
 		mMoves = flagNode.getLevel();
-		
+		printBoard(mTiles);
 		// Check if it's OK.
 		if (mMoves >= difficulty.getMinMoves() &&
 			mMoves <= difficulty.getMaxMoves())

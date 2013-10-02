@@ -196,7 +196,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			mIsFlagReached = false;
 
 			// Initialize the game board & shit
-			mGBM.startNewGame(Consts.DEFAULT_BOULDER_NUM,
+			mGBM.startNewGame(
 					(Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_X),
 					this,
 					EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)]);
