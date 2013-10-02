@@ -1,5 +1,7 @@
 package com.android.icecave.gui;
 
+import android.view.ViewPropertyAnimator;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -426,6 +428,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				animator.alpha(0).setDuration(HIDE_SHOW_TIME).withEndAction(endAction).start();
 			}
 		});
+
+		// Go!
+		animator.start();
 	}
 
 	@Override
