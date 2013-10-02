@@ -138,7 +138,7 @@ public class IceCaveStage implements Serializable
 			for (int j = wallWidth; j < colLen - wallWidth; j++)
 			{
 				// Initializing board.
-				mTiles[i][j] = new EmptyTile(j,i);
+				mTiles[j][i] = new EmptyTile(j,i);
 			}
 		}
 	}
@@ -154,7 +154,7 @@ public class IceCaveStage implements Serializable
 		{
 			for (int j = 0; j < colLen; j++)
 			{
-				mTiles[i][j] = new WallTile(j,i);
+				mTiles[j][i] = new WallTile(j,i);
 			}
 		}
 	}

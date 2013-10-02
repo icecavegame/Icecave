@@ -66,8 +66,13 @@ public class GUIBoardManager implements Serializable
 	 */
 	public void startNewGame( int 		 boulderNum, 
 						 	  int 		 boardSizeX,
-						 	  int 	     boardSizeY,
+						 	  GameActivity context,
 						 	  EDifficulty difficulty){
+		
+		int maxSize = Math.max(context.getWidth(), context.getHeight());
+		int minSize = Math.min(context.getWidth(), context.getHeight());
+		int boardSizeY = (int)((maxSize * 1.0 / minSize) * boardSizeX);
+		
 		mIceCaveGame = new IceCaveGame(boulderNum, boardSizeX, boardSizeY, difficulty);
 		
 		// Get the tiles
