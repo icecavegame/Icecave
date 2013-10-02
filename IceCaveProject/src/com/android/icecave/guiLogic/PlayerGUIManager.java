@@ -1,7 +1,7 @@
 package com.android.icecave.guiLogic;
 
 import android.graphics.Bitmap;
-import android.graphics.Point;
+import com.android.icecave.utils.Point;
 import com.android.icecave.general.Consts;
 import com.android.icecave.general.EDirection;
 import com.android.icecave.gui.GameTheme;

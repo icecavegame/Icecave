@@ -1,6 +1,6 @@
 package com.android.icecave.mapLogic;
 
-import android.graphics.Point;
+import com.android.icecave.utils.Point;
 
 /**
  * Interface for reporting on the current IceCaveGameStatus.

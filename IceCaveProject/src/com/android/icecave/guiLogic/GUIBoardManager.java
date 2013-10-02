@@ -1,7 +1,9 @@
 package com.android.icecave.guiLogic;
 
+import java.io.Serializable;
+
 import android.graphics.Bitmap;
-import android.graphics.Point;
+import com.android.icecave.utils.Point;
 
 import com.android.icecave.general.EDifficulty;
 import com.android.icecave.general.EDirection;
@@ -16,9 +18,10 @@ import com.android.icecave.mapLogic.tiles.ITile;
  * @author Tom
  *
  */
-public class GUIBoardManager
+@SuppressWarnings("serial")
+public class GUIBoardManager implements Serializable
 {
-	private Bitmap[][] mTiles;
+	private transient Bitmap[][] mTiles;
 	private IceCaveGame mIceCaveGame;
 	
 	/**

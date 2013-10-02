@@ -1,6 +1,9 @@
 package com.android.icecave.mapLogic;
 
-import android.graphics.Point;
+
+import java.io.Serializable;
+
+import com.android.icecave.utils.Point;
 
 import com.android.icecave.general.EDifficulty;
 import com.android.icecave.general.EDirection;
@@ -13,19 +16,68 @@ import com.android.icecave.mapLogic.tiles.FlagTile;
 import com.android.icecave.mapLogic.tiles.ITile;
 import com.android.icecave.mapLogic.tiles.WallTile;
 
-public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus
+/**
+ * Class to hold all the logic of the game.
+ * @author Tom
+ *
+ */
+@SuppressWarnings("serial")
+public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus, Serializable
 {
+	/**
+	 * The overall moves for the current game.
+	 */
 	private int mOverallMoves;
+	
+	/**
+	 * The number of moves for the current stage. 
+	 */
 	private int mCurrentStageMoves;
+	
+	/**
+	 * The last direction moved.
+	 */
 	private EDirection mLastDirectionMoved;
+	
+	/**
+	 * The current stage.
+	 */
 	private IceCaveStage mStage;
+	
+	/**
+	 * The current player location.
+	 */
 	private Point mPlayerLocation;
-	private boolean mPlayerMoving;
+	
+	/**
+	 * Is the player moving.
+	 */
+	private transient boolean mPlayerMoving;
+	
+	/**
+	 * Number of boulders for the current game.
+	 */
 	private int mBoulderNum;
+	
+	/**
+	 * The X Board size for the current game.
+	 */
 	private int mBoardSizeX;
+	
+	/**
+	 * The X Board size for the current game.
+	 */
 	private int mBoardSizeY;
+	
+	/**
+	 * The Difficulty for the current game.
+	 */
 	private EDifficulty mDifficulty;
-	private boolean mIsStageEnded;
+	
+	/**
+	 * Indicates weather or not the game has ended.
+	 */
+	private transient boolean mIsStageEnded;
 
 	/**
 	 * Create a new instance of the IceCaveGame object.

@@ -1,6 +1,6 @@
 package com.android.icecave.general;
 
-import android.graphics.Point;
+import com.android.icecave.utils.Point;
 
 public interface IFunction<return_type> {
 	/**

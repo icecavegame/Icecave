@@ -1,6 +1,6 @@
 package com.android.icecave.mapLogic.collision;
 
-import android.graphics.Point;
+import com.android.icecave.utils.Point;
 
 /**
  * Just for order.

@@ -1,5 +1,7 @@
 package com.android.icecave.mapLogic.tiles;
 
+import java.io.Serializable;
+
 import com.android.icecave.mapLogic.collision.ICollisionable;
 
 
@@ -8,7 +10,7 @@ import com.android.icecave.mapLogic.collision.ICollisionable;
  * @author Tom
  *
  */
-public interface ITile extends ICollisionable
+public interface ITile extends ICollisionable, Serializable
 {
 
 }
