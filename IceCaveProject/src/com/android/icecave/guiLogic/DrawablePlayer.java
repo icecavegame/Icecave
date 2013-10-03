@@ -1,5 +1,7 @@
 package com.android.icecave.guiLogic;
 
+import com.android.icecave.utils.UpdateDataBundle;
+
 import android.content.Context;
 import com.android.icecave.utils.Point;
 import android.view.ViewPropertyAnimator;
@@ -53,6 +55,9 @@ public class DrawablePlayer extends ImageView
 
 	public void initializePlayer()
 	{
+		// Stop animation in the middle
+		animate().cancel();
+		
 		// Initialize animation running as false
 		mIsAnimationRunning = false;
 
@@ -101,7 +106,7 @@ public class DrawablePlayer extends ImageView
 				setImageBitmap(mPGM.getPlayerImage(direction, false, mGameTheme, mScreenManager));
 
 				// Notify observers that action has ended
-				mFinishAnimation.notifyObservers(Consts.PLAYER_FINISH_MOVE_UPDATE);
+				mFinishAnimation.notifyObservers(new UpdateDataBundle(Consts.PLAYER_FINISH_MOVE_UPDATE, null));
 
 				// Set animation running back to false
 				mIsAnimationRunning = false;

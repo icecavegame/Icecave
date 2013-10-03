@@ -30,6 +30,7 @@ import com.android.icecave.guiLogic.GUIBoardManager;
 import com.android.icecave.guiLogic.LoadingThread;
 import com.android.icecave.guiLogic.TilesView;
 import com.android.icecave.mapLogic.IIceCaveGameStatus;
+import com.android.icecave.utils.UpdateDataBundle;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -92,7 +93,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		{
 			@Override
 			public void onClick(View v)
-			{
+			{				
 				// Reset player position on logic level
 				mGBM.resetPlayer(Consts.DEFAULT_START_POS);
 
@@ -238,8 +239,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		// Check update flag
 		if (data != null)
 		{
+			UpdateDataBundle updateBundle = (UpdateDataBundle) data;
+			
 			// Player movement animation complete
-			if (data.equals(Consts.PLAYER_FINISH_MOVE_UPDATE))
+			if (updateBundle.getNotificationId() == Consts.PLAYER_FINISH_MOVE_UPDATE)
 			{
 				// Update counter
 				setPlayerMoves();
@@ -262,10 +265,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 												mGameTheme);
 					load.start();
 				}
-			} else if (data.equals(Consts.LOADING_LEVEL_FINISHED_UPDATE)) // Level creation complete
-			{
+			} else if (updateBundle.getNotificationId() == Consts.LOADING_LEVEL_FINISHED_UPDATE) // Level creation complete
+			{				
 				// Hide loading screen
-				hideLoadingScreen();
+				hideLoadingScreen((Long) updateBundle.getData());
 
 				// Reset move texts
 				setMinimumMoves();
@@ -280,7 +283,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 						mPlayer.initializePlayer();
 					}
 				});
-
+				
 				// Refresh map
 				mTilesView.postInvalidate();
 			}
@@ -376,17 +379,11 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		// Update text
 		String text =
 				getString(R.string.end_stage_message_1) + " " +
-						Integer.toString(mGBM.getMovesCarriedOutThisStage()) + " " +
+						Integer.toString(mGBM.getMovesCarriedOutThisStage()) +
+						"/" +
+						Integer.toString(mGBM.getMinimalMovesForStage()) +
+						" " +
 						getString(R.string.end_stage_message_2);
-
-		// Show extra content if user made more moves than minimum
-		if (mGBM.getMovesCarriedOutThisStage() > mGBM.getMinimalMovesForStage())
-		{
-			text +=	" " +
-					Integer.toString(mGBM.getMovesCarriedOutThisStage() -
-								 	 mGBM.getMinimalMovesForStage()) + " " +
-					getString(R.string.end_stage_message_3);
-		}
 
 		stageMessage.setText(text);
 
@@ -400,22 +397,34 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		animator.start();
 	}
 
-	private void hideLoadingScreen()
+	private void hideLoadingScreen(final long loadingTime)
 	{
 		final ViewPropertyAnimator animator = mLoadingScreen.animate();
-
-		// Show view
-		animator.alpha(0);
-		animator.setDuration(HIDE_SHOW_TIME);
-
-		// Go!
+		final long MINIMUM_LOADING_TIME = 3500;
+		final Runnable endAction = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				// Show views on top of board once loading screen is done
+				drawForeground();
+			}
+		};
+		
+		// Run on UI to avoid issues
 		runOnUiThread(new Runnable()
 		{
 			@Override
 			public void run()
 			{
-				// Run on UI to avoid issues
-				animator.start();
+				// If loading time took less than minimum, add a delay to the animation
+				if (MINIMUM_LOADING_TIME - loadingTime > 0) {
+					animator.setStartDelay(MINIMUM_LOADING_TIME - loadingTime);
+					System.out.println("Delaying loading screen! Time to load: " + loadingTime);
+				}
+				
+				// Hide screen (alpha to 0), set the duration of animation and animate
+				animator.alpha(0).setDuration(HIDE_SHOW_TIME).withEndAction(endAction).start();
 			}
 		});
 	}

@@ -1,7 +1,5 @@
 package com.android.icecave.guiLogic;
 
-import com.android.icecave.gui.GameActivity;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -10,7 +8,6 @@ import android.view.View;
 public class TilesView extends View
 {
 	private Bitmap[][] mBoard;
-	private GameActivity mContext;
 	
 	public TilesView(Context context) {
 		super(context);
@@ -20,7 +17,6 @@ public class TilesView extends View
 	{
 		super(context);
 		mBoard = board;
-		mContext = (GameActivity) context;
 	}
 
 	@Override
@@ -32,9 +28,6 @@ public class TilesView extends View
 				canvas.drawBitmap(mBoard[yAxis][xAxis], mBoard[yAxis][xAxis].getWidth() * xAxis, mBoard[yAxis][xAxis].getHeight() * yAxis, null);
 			}
 		}
-		
-		// Keep views on top of this view
-		mContext.drawForeground();
 	}
 	
 	public int getBoardX() {
