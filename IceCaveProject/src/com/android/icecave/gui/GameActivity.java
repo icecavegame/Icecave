@@ -93,7 +93,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		{
 			@Override
 			public void onClick(View v)
-			{
+			{				
 				// Reset player position on logic level
 				mGBM.resetPlayer(Consts.DEFAULT_START_POS);
 
