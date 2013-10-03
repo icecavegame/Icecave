@@ -240,7 +240,11 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		if (data != null)
 		{
 			UpdateDataBundle updateBundle = (UpdateDataBundle) data;
+<<<<<<< HEAD
 			
+=======
+
+>>>>>>> origin/SagieBranch
 			// Player movement animation complete
 			if (updateBundle.getNotificationId() == Consts.PLAYER_FINISH_MOVE_UPDATE)
 			{
@@ -266,7 +270,11 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 					load.start();
 				}
 			} else if (updateBundle.getNotificationId() == Consts.LOADING_LEVEL_FINISHED_UPDATE) // Level creation complete
+<<<<<<< HEAD
 			{				
+=======
+			{
+>>>>>>> origin/SagieBranch
 				// Hide loading screen
 				hideLoadingScreen((Long) updateBundle.getData());
 
@@ -379,10 +387,15 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		// Update text
 		String text =
 				getString(R.string.end_stage_message_1) + " " +
+<<<<<<< HEAD
 						Integer.toString(mGBM.getMovesCarriedOutThisStage()) +
 						"/" +
 						Integer.toString(mGBM.getMinimalMovesForStage()) +
 						" " +
+=======
+						Integer.toString(mGBM.getMovesCarriedOutThisStage()) + "/" +
+						Integer.toString(mGBM.getMinimalMovesForStage()) + " " +
+>>>>>>> origin/SagieBranch
 						getString(R.string.end_stage_message_2);
 
 		stageMessage.setText(text);
@@ -410,7 +423,11 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				drawForeground();
 			}
 		};
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> origin/SagieBranch
 		// Run on UI to avoid issues
 		runOnUiThread(new Runnable()
 		{
@@ -418,11 +435,20 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			public void run()
 			{
 				// If loading time took less than minimum, add a delay to the animation
+<<<<<<< HEAD
 				if (MINIMUM_LOADING_TIME - loadingTime > 0) {
 					animator.setStartDelay(MINIMUM_LOADING_TIME - loadingTime);
 					System.out.println("Delaying loading screen! Time to load: " + loadingTime);
 				}
 				
+=======
+				if (MINIMUM_LOADING_TIME - loadingTime > 0)
+				{
+					animator.setStartDelay(MINIMUM_LOADING_TIME - loadingTime);
+					System.out.println("Delaying loading screen! Time to load: " + loadingTime);
+				}
+
+>>>>>>> origin/SagieBranch
 				// Hide screen (alpha to 0), set the duration of animation and animate
 				animator.alpha(0).setDuration(HIDE_SHOW_TIME).withEndAction(endAction).start();
 			}
