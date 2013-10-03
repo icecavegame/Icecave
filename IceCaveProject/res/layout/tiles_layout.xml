@@ -40,16 +40,22 @@
         android:alpha="0"
         android:background="@color/dark_gray" >
 
+        <Button
+            android:id="@+id/advertisment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
         <TextView
             android:id="@+id/player_stage_moves"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginBottom="12dp"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
             android:textColor="@color/white" />
-
-        <!-- Admob commerical at the top -->
 
         <ProgressBar
             android:id="@+id/loading_bar"
