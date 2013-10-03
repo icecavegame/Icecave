@@ -1,7 +1,5 @@
 package com.android.icecave.gui;
 
-import android.view.ViewPropertyAnimator;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -95,7 +93,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		{
 			@Override
 			public void onClick(View v)
-			{				
+			{
 				// Reset player position on logic level
 				mGBM.resetPlayer(Consts.DEFAULT_START_POS);
 
@@ -242,7 +240,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		if (data != null)
 		{
 			UpdateDataBundle updateBundle = (UpdateDataBundle) data;
-			
+
 			// Player movement animation complete
 			if (updateBundle.getNotificationId() == Consts.PLAYER_FINISH_MOVE_UPDATE)
 			{
@@ -268,7 +266,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 					load.start();
 				}
 			} else if (updateBundle.getNotificationId() == Consts.LOADING_LEVEL_FINISHED_UPDATE) // Level creation complete
-			{				
+			{
 				// Hide loading screen
 				hideLoadingScreen((Long) updateBundle.getData());
 
@@ -285,7 +283,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 						mPlayer.initializePlayer();
 					}
 				});
-				
+
 				// Refresh map
 				mTilesView.postInvalidate();
 			}
@@ -381,10 +379,8 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		// Update text
 		String text =
 				getString(R.string.end_stage_message_1) + " " +
-						Integer.toString(mGBM.getMovesCarriedOutThisStage()) +
-						"/" +
-						Integer.toString(mGBM.getMinimalMovesForStage()) +
-						" " +
+						Integer.toString(mGBM.getMovesCarriedOutThisStage()) + "/" +
+						Integer.toString(mGBM.getMinimalMovesForStage()) + " " +
 						getString(R.string.end_stage_message_2);
 
 		stageMessage.setText(text);
@@ -412,7 +408,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				drawForeground();
 			}
 		};
-		
+
 		// Run on UI to avoid issues
 		runOnUiThread(new Runnable()
 		{
@@ -420,18 +416,16 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			public void run()
 			{
 				// If loading time took less than minimum, add a delay to the animation
-				if (MINIMUM_LOADING_TIME - loadingTime > 0) {
+				if (MINIMUM_LOADING_TIME - loadingTime > 0)
+				{
 					animator.setStartDelay(MINIMUM_LOADING_TIME - loadingTime);
 					System.out.println("Delaying loading screen! Time to load: " + loadingTime);
 				}
-				
+
 				// Hide screen (alpha to 0), set the duration of animation and animate
 				animator.alpha(0).setDuration(HIDE_SHOW_TIME).withEndAction(endAction).start();
 			}
 		});
-
-		// Go!
-		animator.start();
 	}
 
 	@Override
