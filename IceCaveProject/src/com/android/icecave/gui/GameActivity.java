@@ -266,7 +266,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 					load.start();
 				}
 			} else if (updateBundle.getNotificationId() == Consts.LOADING_LEVEL_FINISHED_UPDATE) // Level creation complete
-			{
+			{				
 				// Hide loading screen
 				hideLoadingScreen((Long) updateBundle.getData());
 
@@ -379,8 +379,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		// Update text
 		String text =
 				getString(R.string.end_stage_message_1) + " " +
-						Integer.toString(mGBM.getMovesCarriedOutThisStage()) + "/" +
-						Integer.toString(mGBM.getMinimalMovesForStage()) + " " +
+						Integer.toString(mGBM.getMovesCarriedOutThisStage()) +
+						"/" +
+						Integer.toString(mGBM.getMinimalMovesForStage()) +
+						" " +
 						getString(R.string.end_stage_message_2);
 
 		stageMessage.setText(text);
@@ -408,7 +410,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				drawForeground();
 			}
 		};
-
+		
 		// Run on UI to avoid issues
 		runOnUiThread(new Runnable()
 		{
@@ -416,12 +418,11 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			public void run()
 			{
 				// If loading time took less than minimum, add a delay to the animation
-				if (MINIMUM_LOADING_TIME - loadingTime > 0)
-				{
+				if (MINIMUM_LOADING_TIME - loadingTime > 0) {
 					animator.setStartDelay(MINIMUM_LOADING_TIME - loadingTime);
 					System.out.println("Delaying loading screen! Time to load: " + loadingTime);
 				}
-
+				
 				// Hide screen (alpha to 0), set the duration of animation and animate
 				animator.alpha(0).setDuration(HIDE_SHOW_TIME).withEndAction(endAction).start();
 			}
