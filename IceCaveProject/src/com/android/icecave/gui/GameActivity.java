@@ -47,7 +47,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 	private final String GUI_BOARD_MANAGER_TAG = "guiBoardManager";
 	private final long HIDE_SHOW_TIME = 300;
-
+	
 	// Music data
 	private boolean mIsBound = false;
 	private MusicService mServ;
@@ -268,7 +268,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			} else if (updateBundle.getNotificationId() == Consts.LOADING_LEVEL_FINISHED_UPDATE) // Level creation complete
 			{				
 				// Hide loading screen
-				hideLoadingScreen((Long) updateBundle.getData());
+				hideLoadingScreen();
 
 				// Reset move texts
 				setMinimumMoves();
@@ -390,17 +390,13 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		// Set animation & Go!
 		final ViewPropertyAnimator animator = mLoadingScreen.animate();
 
-		// Show view
-		animator.alpha(1);
-		animator.setDuration(HIDE_SHOW_TIME);
-
-		animator.start();
+		// Show view with fade in animation
+		animator.alpha(1).setDuration(HIDE_SHOW_TIME).start();
 	}
 
-	private void hideLoadingScreen(final long loadingTime)
+	private void hideLoadingScreen()
 	{
 		final ViewPropertyAnimator animator = mLoadingScreen.animate();
-		final long MINIMUM_LOADING_TIME = 3500;
 		final Runnable endAction = new Runnable()
 		{
 			@Override
@@ -416,13 +412,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		{
 			@Override
 			public void run()
-			{
-				// If loading time took less than minimum, add a delay to the animation
-				if (MINIMUM_LOADING_TIME - loadingTime > 0) {
-					animator.setStartDelay(MINIMUM_LOADING_TIME - loadingTime);
-					System.out.println("Delaying loading screen! Time to load: " + loadingTime);
-				}
-				
+			{				
 				// Hide screen (alpha to 0), set the duration of animation and animate
 				animator.alpha(0).setDuration(HIDE_SHOW_TIME).withEndAction(endAction).start();
 			}
