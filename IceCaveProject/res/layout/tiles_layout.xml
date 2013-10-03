@@ -57,8 +57,6 @@
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
             android:textColor="@color/white" />
 
-        <!-- Admob commerical at the top -->
-
         <ProgressBar
             android:id="@+id/loading_bar"
             android:layout_width="wrap_content"
