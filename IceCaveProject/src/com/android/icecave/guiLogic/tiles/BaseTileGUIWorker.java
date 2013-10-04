@@ -15,13 +15,28 @@ public abstract class BaseTileGUIWorker implements IGUITileWorker
 	public abstract Point getTilePointInSprite();
 
 	@Override
-	public Bitmap makeTile(ITileScale scale, 
+	public Bitmap makeTile(ITileScale scaler, 
 	                       Bitmap theme, 
 	                       int themeRows,
-						   int themeCol,
+						   int themeCols,
 						   ITile[] tiles)
 	{
-		throw new UnsupportedOperationException(); 
+		int width = theme.getWidth() / themeCols;
+		int height = theme.getHeight() / themeRows;
+
+		// Crop theme bitmap to select the specific tile wanted
+		Bitmap croppedTile =
+				Bitmap.createBitmap(theme, width * getTilePointInSprite().x, height *
+						getTilePointInSprite().y, width, height);
+
+		// Create matrix to change the scale of the bitmap to fit the screen
+		Matrix matrix = new Matrix();
+		matrix.postScale((float) scaler.getTileWidth() / width, (float) scaler.getTileHeight() / height);
+
+		// Resize
+		croppedTile = Bitmap.createBitmap(croppedTile, 0, 0, width, height, matrix, true);
+
+		return croppedTile;
 	}
 	
 	@Override
