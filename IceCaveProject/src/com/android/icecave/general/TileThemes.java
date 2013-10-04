@@ -10,7 +10,7 @@ public class TileThemes implements ITheme
 	ThemeHolder[] mHolders;
 	
 	public TileThemes() {
-		mHolders = new ThemeHolder[] {new ThemeHolder(R.drawable.default_tiles, "Debug Theme")};
+		mHolders = new ThemeHolder[] {new ThemeHolder(R.drawable.tileset1, "Ice Cave")};
 	}
 
 	@Override

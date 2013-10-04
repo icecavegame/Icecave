@@ -1,0 +1,1 @@
+If you wish to add/change tilesets and/or characters, MAKE SURE TO RESET THE SHARED PREFERENCES SOMEHOW!!! These things save the Id of the changed tilsets and that's bad

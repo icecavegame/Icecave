@@ -15,7 +15,7 @@
 	<string name="select_background_theme">Select Background Theme</string>
 	<string name="player_moves_text">Moves:</string>
 	<string name="minimum_moves_text">Minimum Moves:</string>
-	<string name="visual_artist_credits">Visual Artist: Farheit (deviantArt)</string> <!-- Remove her? -->
+	<string name="visual_artist_credits">Visual Artist: RPGVX Ace Lite</string> 
 	<string name="end_stage_message_1">Stage complete! Took you</string>
 	<string name="end_stage_message_2">moves to get to the exit.</string>
 </resources>
