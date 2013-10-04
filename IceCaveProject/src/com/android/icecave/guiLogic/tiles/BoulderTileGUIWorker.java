@@ -11,5 +11,4 @@ public class BoulderTileGUIWorker extends BaseTileGUIWorker
 	{
 		return Consts.BOULDER_TILE_IN_SPRITE;
 	}
-
 }
