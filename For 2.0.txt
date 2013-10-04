@@ -1,0 +1,5 @@
+* Make one large boulder image when some boulders are adjacent to each other in a certain way.
+
+* Create levels and group them into bundles. Then like flow, players get mark A for completing a level perfect or mark B for regular completion. New bundles open once older ones finish. Should be different themes.
+
+* Add more music
