@@ -37,7 +37,25 @@ public class GUITileFactory
 	
 	/**
 	 * Get image view for a tile.
-	 * @param tile - To get image of.
+	 * @param tiles - To get image of.
+	 * @return Image for a tile.
+	 */
+	public Bitmap getTiles(ITile[] tiles, ITileScale scaler, Bitmap gameTheme) {
+		// Check if exists.
+		if(!mTileWorkers.containsKey(tiles[0].getClass())){
+			return null;
+		}
+		
+		return mTileWorkers.get(tiles[0].getClass()).makeTile(scaler,
+														  	  gameTheme,
+														  	  Consts.DEFAULT_TILES_BMP_ROWS,
+														  	  Consts.DEFAULT_TILES_BMP_COLUMNS,
+														  	  tiles);
+	}
+	
+	/**
+	 * Get image view for a tile.
+	 * @param tiles - To get image of.
 	 * @return Image for a tile.
 	 */
 	public Bitmap getTiles(ITile tile, ITileScale scaler, Bitmap gameTheme) {
@@ -46,9 +64,12 @@ public class GUITileFactory
 			return null;
 		}
 		
+		ITile[] tiles = {tile};
+		
 		return mTileWorkers.get(tile.getClass()).makeTile(scaler,
-														  gameTheme,
-														  Consts.DEFAULT_TILES_BMP_ROWS,
-														  Consts.DEFAULT_TILES_BMP_COLUMNS);
+				gameTheme,
+				Consts.DEFAULT_TILES_BMP_ROWS,
+				Consts.DEFAULT_TILES_BMP_COLUMNS,
+				tiles);
 	}
 }
