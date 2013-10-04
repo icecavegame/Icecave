@@ -22,7 +22,7 @@
         android:layout_alignParentLeft="true"
         android:alpha="0.7"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-        android:textColor="@color/red" />
+        android:textColor="@color/white" />
 
     <TextView
         android:id="@+id/minimum_moves"
@@ -32,7 +32,7 @@
         android:layout_alignParentRight="true"
         android:alpha="0.7"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-        android:textColor="@color/red" />
+        android:textColor="@color/white" />
 
     <RelativeLayout
         android:id="@+id/loading_screen"
