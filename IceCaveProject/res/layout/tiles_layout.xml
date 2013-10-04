@@ -42,13 +42,13 @@
         android:background="@color/dark_gray" >
 
         <com.google.ads.AdView
-            android:id="@+id/advertisment"
+            android:id="@+id/advertisment_loading_screen_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             ads:adSize="BANNER"
-            ads:adUnitId="0"
+            ads:adUnitId="ca-app-pub-5393804021684839/3274547109"
             ads:loadAdOnCreate="true"
             ads:testDevices="TEST_EMULATOR, 00703500144c11ee" />
 
