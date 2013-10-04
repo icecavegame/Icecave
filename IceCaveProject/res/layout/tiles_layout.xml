@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:alpha="0.5"
+        android:alpha="0.65"
         android:src="@drawable/reset_button" />
 
     <TextView
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:alpha="0.65"
+        android:alpha="0.7"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
         android:textColor="@color/white" />
 
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:alpha="0.65"
+        android:alpha="0.7"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
         android:textColor="@color/white" />
 
