@@ -2,4 +2,6 @@
 
 * Create levels and group them into bundles. Then like flow, players get mark A for completing a level perfect or mark B for regular completion. New bundles open once older ones finish. Should be different themes.
 
-* Add more music
+* Add more music (preferably for each level)
+
+* Add an XML file for each tileset that would define the tiles and their types
