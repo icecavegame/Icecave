@@ -160,6 +160,18 @@ public class IceCaveStage implements Serializable
 	}
 
 	/**
+	 * Generating a a stage from a fixed map.
+	 * 
+	 * @param board - The fixed board to initialize the stage with.
+	 */
+	public void buildBoard(IceCaveBoard board)
+	{
+		// Initialize members.
+		mTiles = board.getBoard().clone();
+		mMoves = board.getMinMoves();
+	}
+	
+	/**
 	 * Generating a possible to beat map
 	 * 
 	 * @param difficulty - Difficulty for the stage.
