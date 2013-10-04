@@ -9,9 +9,9 @@ public class TileThemes implements ITheme
 	ThemeHolder[] mHolders;
 	
 	public TileThemes() {
-		mHolders = new ThemeHolder[] {new ThemeHolder(R.drawable.tileset1, "Ice Cave: Entrance"),
-									  new ThemeHolder(R.drawable.tileset2, "Ice Cave: Hidden Tomb"),
-									  new ThemeHolder(R.drawable.tileset3, "Ice Cave: Ancient Rooms")};
+		mHolders = new ThemeHolder[] {new ThemeHolder(R.drawable.tileset1, "Entrance"),
+									  new ThemeHolder(R.drawable.tileset2, "Hidden Tomb"),
+									  new ThemeHolder(R.drawable.tileset3, "Ancient Rooms")};
 	}
 
 	@Override
