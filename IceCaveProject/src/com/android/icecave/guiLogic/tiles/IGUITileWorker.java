@@ -2,6 +2,7 @@ package com.android.icecave.guiLogic.tiles;
 
 import android.graphics.Bitmap;
 import com.android.icecave.guiLogic.ITileScale;
+import com.android.icecave.guiLogic.theme.ThemeMap;
 import com.android.icecave.mapLogic.tiles.ITile;
 
 public interface IGUITileWorker
@@ -18,7 +19,8 @@ public interface IGUITileWorker
 	                       Bitmap theme,
 	                       int themeRows,
 	                       int themeCols,
-	                       ITile[] tiles);
+	                       ITile[] tiles,
+	                       ThemeMap map);
 	
 	/**
 	 * Create a tiles.
@@ -30,5 +32,6 @@ public interface IGUITileWorker
 	public Bitmap makeTile(ITileScale scale,
 	                       Bitmap theme,
 	                       int themeRows,
-	                       int themeCols);
+	                       int themeCols,
+	                       ThemeMap map);
 }

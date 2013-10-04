@@ -1,13 +1,16 @@
 package com.android.icecave.guiLogic.tiles;
 
-import com.android.icecave.general.Consts;
+import com.android.icecave.general.GeneralServiceProvider;
+import com.android.icecave.guiLogic.theme.ThemeMap;
 import com.android.icecave.utils.Point;
 
 public class WallTileGUIWorker extends BaseTileGUIWorker
 {
 	@Override
-	public Point getTilePointInSprite()
+	public Point getTilePointInSprite(ThemeMap map)
 	{
-		return Consts.WALL_TILE_IN_SPRITE;
+		return map.getWallTheme().getTilesPositions()[GeneralServiceProvider.getInstance()
+				.getRandom()
+				.nextInt(map.getWallTheme().getTilesPositions().length)];
 	}
 }

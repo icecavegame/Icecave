@@ -3,6 +3,7 @@ package com.android.icecave.gui;
 import android.graphics.Bitmap;
 import com.android.icecave.general.Consts;
 import com.android.icecave.general.EDirection;
+import com.android.icecave.guiLogic.theme.ThemeMap;
 
 /**
  * Class to represent the over all game theme.
@@ -14,6 +15,7 @@ public class GameTheme
 {
 	private Bitmap mTilesTheme;
 	private Bitmap mPlayerTheme;
+	private ThemeMap mMap;
 
 	/**
 	 * Create a new instance of the GameTheme object.
@@ -27,6 +29,7 @@ public class GameTheme
 	{
 		mTilesTheme = tilesTheme;
 		mPlayerTheme = playerTheme;
+		mMap = new ThemeMap();
 	}
 
 	/**
@@ -47,6 +50,16 @@ public class GameTheme
 	public Bitmap getPlayerTheme()
 	{
 		return mPlayerTheme;
+	}
+	
+	/**
+	 * Get the map theme of the tiles.
+	 * 
+	 * @return
+	 */
+	public ThemeMap getThemeMap()
+	{
+		return mMap;
 	}
 
 	/***

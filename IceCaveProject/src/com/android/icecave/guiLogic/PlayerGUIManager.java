@@ -1,5 +1,7 @@
 package com.android.icecave.guiLogic;
 
+import com.android.icecave.guiLogic.theme.ThemeMap;
+
 import android.graphics.Bitmap;
 import com.android.icecave.utils.Point;
 import com.android.icecave.general.Consts;
@@ -46,11 +48,12 @@ public class PlayerGUIManager extends BaseTileGUIWorker
 		return makeTile(scaler, 
 						gameTheme.getPlayerTheme(), 
 						Consts.DEFAULT_PLAYER_BMP_ROWS, 
-						Consts.DEFAULT_PLAYER_BMP_COLUMNS);
+						Consts.DEFAULT_PLAYER_BMP_COLUMNS,
+						null);
 	}
 
 	@Override
-	public Point getTilePointInSprite()
+	public Point getTilePointInSprite(ThemeMap map)
 	{
 		return mCurrentSprite;
 	}

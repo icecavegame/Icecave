@@ -1,10 +1,6 @@
 package com.android.icecave.guiLogic;
 
-import java.io.Serializable;
-
 import android.graphics.Bitmap;
-import com.android.icecave.utils.Point;
-
 import com.android.icecave.general.Consts;
 import com.android.icecave.general.EDifficulty;
 import com.android.icecave.general.EDirection;
@@ -13,6 +9,8 @@ import com.android.icecave.gui.GameTheme;
 import com.android.icecave.mapLogic.IIceCaveGameStatus;
 import com.android.icecave.mapLogic.IceCaveGame;
 import com.android.icecave.mapLogic.tiles.ITile;
+import com.android.icecave.utils.Point;
+import java.io.Serializable;
 
 /**
  * This class manages all GUI logic.
@@ -114,7 +112,7 @@ public class GUIBoardManager implements Serializable
 									getTiles(board[yAxis]
 												  [xAxis],
 											 screenManager,
-											 gameTheme.getTilesTheme());
+											 gameTheme);
 			}
 		}
 	}

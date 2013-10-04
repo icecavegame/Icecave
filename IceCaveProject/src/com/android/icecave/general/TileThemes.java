@@ -2,19 +2,16 @@ package com.android.icecave.general;
 
 import com.android.icecave.R;
 import com.android.icecave.gui.ITheme;
-import com.android.icecave.guiLogic.theme.ThemeMap;
 import com.android.icecave.utils.ThemeHolder;
 
 public class TileThemes implements ITheme
 {
 	ThemeHolder[] mHolders;
-	ThemeMap mMap;
 	
 	public TileThemes() {
 		mHolders = new ThemeHolder[] {new ThemeHolder(R.drawable.tileset1, "Ice Cave: Entrance"),
 									  new ThemeHolder(R.drawable.tileset2, "Ice Cave: Hidden Tomb"),
 									  new ThemeHolder(R.drawable.tileset3, "Ice Cave: Ancient Rooms")};
-		mMap = new ThemeMap();
 	}
 
 	@Override

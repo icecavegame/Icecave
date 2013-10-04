@@ -1,8 +1,8 @@
 package com.android.icecave.guiLogic.tiles;
 
-import com.android.icecave.general.Consts;
-
 import android.graphics.Bitmap;
+import com.android.icecave.general.Consts;
+import com.android.icecave.gui.GameTheme;
 import com.android.icecave.guiLogic.ITileScale;
 import com.android.icecave.mapLogic.tiles.BoulderTile;
 import com.android.icecave.mapLogic.tiles.EmptyTile;
@@ -40,17 +40,18 @@ public class GUITileFactory
 	 * @param tiles - To get image of.
 	 * @return Image for a tile.
 	 */
-	public Bitmap getTiles(ITile[] tiles, ITileScale scaler, Bitmap gameTheme) {
+	public Bitmap getTiles(ITile[] tiles, ITileScale scaler, GameTheme gameTheme) {
 		// Check if exists.
 		if(!mTileWorkers.containsKey(tiles[0].getClass())){
 			return null;
 		}
 		
 		return mTileWorkers.get(tiles[0].getClass()).makeTile(scaler,
-														  	  gameTheme,
+														  	  gameTheme.getTilesTheme(),
 														  	  Consts.DEFAULT_TILES_BMP_ROWS,
 														  	  Consts.DEFAULT_TILES_BMP_COLUMNS,
-														  	  tiles);
+														  	  tiles,
+														  	  gameTheme.getThemeMap());
 	}
 	
 	/**
@@ -58,7 +59,7 @@ public class GUITileFactory
 	 * @param tiles - To get image of.
 	 * @return Image for a tile.
 	 */
-	public Bitmap getTiles(ITile tile, ITileScale scaler, Bitmap gameTheme) {
+	public Bitmap getTiles(ITile tile, ITileScale scaler, GameTheme gameTheme) {
 		// Check if exists.
 		if(!mTileWorkers.containsKey(tile.getClass())){
 			return null;
@@ -67,9 +68,10 @@ public class GUITileFactory
 		ITile[] tiles = {tile};
 		
 		return mTileWorkers.get(tile.getClass()).makeTile(scaler,
-				gameTheme,
+				gameTheme.getTilesTheme(),
 				Consts.DEFAULT_TILES_BMP_ROWS,
 				Consts.DEFAULT_TILES_BMP_COLUMNS,
-				tiles);
+				tiles,
+				gameTheme.getThemeMap());
 	}
 }
