@@ -1,7 +1,5 @@
 package com.android.icecave.guiLogic.theme;
 
-import com.android.icecave.general.GeneralServiceProvider;
-
 import com.android.icecave.utils.Point;
 
 /**
@@ -17,12 +15,9 @@ public abstract class BaseObjectTheme implements IObjectTheme
 	protected Point[] mTileLocations;
 	
 	@Override
-	public Point getRandomTilePosition()
+	public Point[] getTilesPositions()
 	{
 		// Return a random tile location
-		return mTileLocations[GeneralServiceProvider.
-		                      getInstance().
-		                      getRandom().
-		                      nextInt(mTileLocations.length - 1)];
+		return mTileLocations;
 	}
 }

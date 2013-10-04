@@ -4,5 +4,5 @@ import com.android.icecave.utils.Point;
 
 public interface IObjectTheme
 {
-	public Point getRandomTilePosition();
+	public Point[] getTilesPositions();
 }
