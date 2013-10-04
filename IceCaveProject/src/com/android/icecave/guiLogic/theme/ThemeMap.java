@@ -1,4 +1,4 @@
-package com.android.icecave.guiLogic.tiles;
+package com.android.icecave.guiLogic.theme;
 
 public class ThemeMap
 {
