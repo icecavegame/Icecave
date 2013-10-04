@@ -1,8 +1,8 @@
-package com.android.icecave.guiLogic.tiles;
+package com.android.icecave.guiLogic.theme;
 
 import com.android.icecave.utils.Point;
 
-public class EmptyTheme extends ObjectTheme
+public class EmptyTheme extends BaseObjectTheme
 {
 	public EmptyTheme() {
 		// Define empty tile positions

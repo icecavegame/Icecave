@@ -1,8 +1,8 @@
-package com.android.icecave.guiLogic.tiles;
+package com.android.icecave.guiLogic.theme;
 
 import com.android.icecave.utils.Point;
 
-public class FlagTheme extends ObjectTheme
+public class FlagTheme extends BaseObjectTheme
 {
 	public FlagTheme() {
 		// Define flag tile positions

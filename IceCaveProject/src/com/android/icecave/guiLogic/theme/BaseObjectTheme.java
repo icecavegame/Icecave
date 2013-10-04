@@ -1,11 +1,14 @@
-package com.android.icecave.guiLogic.tiles;
+package com.android.icecave.guiLogic.theme;
 
 import com.android.icecave.general.GeneralServiceProvider;
 
 import com.android.icecave.utils.Point;
 
-public abstract class ObjectTheme implements IObjectTheme
+public abstract class BaseObjectTheme implements IObjectTheme
 {
+	/**
+	 * The tile locations.
+	 */
 	protected Point[] mTileLocations;
 	
 	@Override

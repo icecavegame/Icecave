@@ -1,8 +1,8 @@
-package com.android.icecave.guiLogic.tiles;
+package com.android.icecave.guiLogic.theme;
 
 import com.android.icecave.utils.Point;
 
-public class WallTheme extends ObjectTheme
+public class WallTheme extends BaseObjectTheme
 {
 	public WallTheme() {
 		// Define wall tile positions

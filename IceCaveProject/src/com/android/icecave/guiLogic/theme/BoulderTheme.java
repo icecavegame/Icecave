@@ -1,8 +1,8 @@
-package com.android.icecave.guiLogic.tiles;
+package com.android.icecave.guiLogic.theme;
 
 import com.android.icecave.utils.Point;
 
-public class BoulderTheme extends ObjectTheme
+public class BoulderTheme extends BaseObjectTheme
 {
 	public BoulderTheme() {
 		// Define boulder tile positions

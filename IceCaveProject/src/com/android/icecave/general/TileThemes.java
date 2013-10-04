@@ -2,7 +2,7 @@ package com.android.icecave.general;
 
 import com.android.icecave.R;
 import com.android.icecave.gui.ITheme;
-import com.android.icecave.guiLogic.tiles.ThemeMap;
+import com.android.icecave.guiLogic.theme.ThemeMap;
 import com.android.icecave.utils.ThemeHolder;
 
 public class TileThemes implements ITheme
