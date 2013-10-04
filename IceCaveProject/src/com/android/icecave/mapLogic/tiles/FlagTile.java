@@ -29,4 +29,10 @@ public class FlagTile extends BaseTile
 	{
 		super(location);
 	}
+
+	@Override
+	public ITile clone()
+	{
+		return new FlagTile(mLocation);
+	}
 }

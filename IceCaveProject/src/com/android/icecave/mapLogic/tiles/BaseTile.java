@@ -19,6 +19,9 @@ public abstract class BaseTile implements ITile
 	public Point getLocation(){
 		return mLocation;
 	}
+
+	@Override
+	public abstract ITile clone();
 	
 	/**
 	 * Create a new instance of the BaseTile object.
