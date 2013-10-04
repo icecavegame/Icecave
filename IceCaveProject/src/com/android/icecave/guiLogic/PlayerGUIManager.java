@@ -33,13 +33,20 @@ public class PlayerGUIManager extends BaseTileGUIWorker
 		// Select the current sprite of the player
 		// First, if not moving, select the middle (standing) sprite of the appropriate direction
 		if (!isMoving) {
-			mCurrentSprite = new Point(Consts.PLAYER_STANDING, gameTheme.getPlayerDirectionRow(direction));
+			mCurrentSprite = 
+					new Point(Consts.PLAYER_STANDING, 
+							  gameTheme.getPlayerDirectionRow(direction));
 		} else {
 			// Select the next movement sprite in a cycle, and keep the same direction
-			mCurrentSprite = new Point(((mCurrentSprite.x + 1) % Consts.PLAYER_MOVEMENTS_SUM), gameTheme.getPlayerDirectionRow(direction));
+			mCurrentSprite = 
+					new Point(((mCurrentSprite.x + 1) % Consts.PLAYER_MOVEMENTS_SUM), 
+							   gameTheme.getPlayerDirectionRow(direction));
 		}
 		
-		return makeTile(scaler, gameTheme.getPlayerTheme(), Consts.DEFAULT_PLAYER_BMP_ROWS, Consts.DEFAULT_PLAYER_BMP_COLUMNS);
+		return makeTile(scaler, 
+						gameTheme.getPlayerTheme(), 
+						Consts.DEFAULT_PLAYER_BMP_ROWS, 
+						Consts.DEFAULT_PLAYER_BMP_COLUMNS);
 	}
 
 	@Override

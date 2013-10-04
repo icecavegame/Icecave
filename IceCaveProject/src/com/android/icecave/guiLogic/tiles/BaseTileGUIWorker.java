@@ -4,14 +4,31 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import com.android.icecave.utils.Point;
 import com.android.icecave.guiLogic.ITileScale;
+import com.android.icecave.mapLogic.tiles.ITile;
 
 public abstract class BaseTileGUIWorker implements IGUITileWorker
 {
-
+	/**
+	 * Get the tile point in the sprite.
+	 * @return
+	 */
 	public abstract Point getTilePointInSprite();
 
 	@Override
-	public Bitmap makeTile(ITileScale scaler, Bitmap theme, int themeRows, int themeCols)
+	public Bitmap makeTile(ITileScale scale, 
+	                       Bitmap theme, 
+	                       int themeRows,
+						   int themeCols)
+	{
+		throw new UnsupportedOperationException(); 
+	}
+	
+	@Override
+	public Bitmap makeTile(ITileScale scaler, 
+	                       Bitmap theme, 
+	                       int themeRows, 
+	                       int themeCols,
+	                       ITile[] tiles)
 	{
 		// Get the width and height of each tile
 		int width = theme.getWidth() / themeCols;
@@ -31,5 +48,4 @@ public abstract class BaseTileGUIWorker implements IGUITileWorker
 
 		return croppedTile;
 	}
-
 }
