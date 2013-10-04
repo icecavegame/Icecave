@@ -18,7 +18,8 @@ public abstract class BaseTileGUIWorker implements IGUITileWorker
 	public Bitmap makeTile(ITileScale scale, 
 	                       Bitmap theme, 
 	                       int themeRows,
-						   int themeCols)
+						   int themeCol,
+						   ITile[] tiles)
 	{
 		throw new UnsupportedOperationException(); 
 	}
@@ -27,8 +28,7 @@ public abstract class BaseTileGUIWorker implements IGUITileWorker
 	public Bitmap makeTile(ITileScale scaler, 
 	                       Bitmap theme, 
 	                       int themeRows, 
-	                       int themeCols,
-	                       ITile[] tiles)
+	                       int themeCols)
 	{
 		// Get the width and height of each tile
 		int width = theme.getWidth() / themeCols;
