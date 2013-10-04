@@ -1,5 +1,7 @@
 package com.android.icecave.guiLogic.theme;
 
+import java.util.ArrayList;
+
 import com.android.icecave.utils.Point;
 
 /**
@@ -12,10 +14,10 @@ public abstract class BaseObjectTheme implements IObjectTheme
 	/**
 	 * The tile locations.
 	 */
-	protected Point[] mTileLocations;
+	protected ArrayList<Point> mTileLocations;
 	
 	@Override
-	public Point[] getTilesPositions()
+	public ArrayList<Point> getTilesPositions()
 	{
 		// Return a random tile location
 		return mTileLocations;

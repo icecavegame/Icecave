@@ -38,6 +38,9 @@ public class LoadingThread extends Thread
 	{
 		final long MINIMUM_LOADING_TIME = 3500;
 		
+		// Shuffle the theme.
+		mTheme.getThemeMap().shuffle();
+		
 		// Create new stage
 		mBoardManager.newStage(mPlayerPosition, mWallWidth, mActivity, mTheme);
 		

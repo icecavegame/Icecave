@@ -1,7 +1,10 @@
 package com.android.icecave.guiLogic.tiles;
 
-import com.android.icecave.general.GeneralServiceProvider;
+import java.util.ArrayList;
+
 import com.android.icecave.guiLogic.theme.ThemeMap;
+import com.android.icecave.guiLogic.theme.WallTheme;
+import com.android.icecave.mapLogic.tiles.WallTile;
 import com.android.icecave.utils.Point;
 
 public class WallTileGUIWorker extends BaseTileGUIWorker
@@ -9,8 +12,14 @@ public class WallTileGUIWorker extends BaseTileGUIWorker
 	@Override
 	public Point getTilePointInSprite(ThemeMap map)
 	{
-		return map.getWallTheme().getTilesPositions()[GeneralServiceProvider.getInstance()
-				.getRandom()
-				.nextInt(map.getWallTheme().getTilesPositions().length)];
+		// Get the boulder theme.
+		WallTheme theme = 
+				(WallTheme) map.getTheme(WallTile.class);
+		
+		// Get the tiles positions.
+		ArrayList<Point> tilePositions = theme.getTilesPositions();
+		
+		// Peek the first.
+		return tilePositions.get(0);
 	}
 }

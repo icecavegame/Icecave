@@ -1,5 +1,8 @@
 package com.android.icecave.guiLogic.theme;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import com.android.icecave.utils.Point;
 
 /**
@@ -7,16 +10,34 @@ import com.android.icecave.utils.Point;
  * @author Tom
  *
  */
-public class EmptyTheme extends BaseObjectTheme
+public class EmptyTheme extends BaseObjectTheme implements IShuffelableTheme
 {
 	/**
 	 * Create a new instance of the EmptyTheme object.
 	 */
 	public EmptyTheme() {
-		// Define empty tile positions
+		/**
+		 * Empty tile position.
+		 */
 		final Point EMPTY_1 = new Point(0, 0);
+		
+		/**
+		 * Empty tile position.
+		 */
 		final Point EMPTY_2 = new Point(0, 1);
 		
-		mTileLocations = new Point[] {EMPTY_1, EMPTY_2};
+		// Define empty tile positions
+				
+		mTileLocations = new ArrayList<Point>();
+		mTileLocations.add(EMPTY_1);
+		mTileLocations.add(EMPTY_2);
+		
+		shuffle();
+	}
+
+	@Override
+	public void shuffle()
+	{
+		Collections.shuffle(mTileLocations);
 	}
 }
