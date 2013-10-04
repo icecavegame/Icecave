@@ -75,8 +75,8 @@ public class GUIBoardManager implements Serializable
 		
 		mIceCaveGame = 
 				new IceCaveGame(boardSizeHeight * 
-								    boardSizeWidth / 
-									Consts.DEFAULT_BOULDER_RELATION, 
+								boardSizeWidth / 
+								Consts.DEFAULT_BOULDER_RELATION, 
 								boardSizeHeight, 
 								boardSizeWidth,
 								difficulty);
