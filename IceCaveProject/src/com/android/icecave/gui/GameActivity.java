@@ -254,16 +254,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 					mIsFlagReached = false;
 
 					// Show loading screen in the meantime
-					showLoadingScreen();
-
-					// Start creating a new stage
-					LoadingThread load =
-							new LoadingThread(	mGBM,
-												Consts.DEFAULT_START_POS,
-												Consts.DEFAULT_WALL_WIDTH,
-												this,
-												mGameTheme);
-					load.start();
+					showActivateLoadingScreen();
 				}
 			} else if (updateBundle.getNotificationId() == Consts.LOADING_LEVEL_FINISHED_UPDATE) // Level creation complete
 			{				
@@ -370,7 +361,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		}
 	}
 
-	private void showLoadingScreen()
+	private void showActivateLoadingScreen()
 	{
 		mLoadingScreen.bringToFront();
 
@@ -392,6 +383,15 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 		// Show view with fade in animation
 		animator.alpha(1).setDuration(HIDE_SHOW_TIME).start();
+		
+		// Start creating a new stage
+		LoadingThread load =
+				new LoadingThread(	mGBM,
+									Consts.DEFAULT_START_POS,
+									Consts.DEFAULT_WALL_WIDTH,
+									this,
+									mGameTheme);
+		load.start();
 	}
 
 	private void hideLoadingScreen()
