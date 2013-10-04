@@ -56,8 +56,7 @@
             android:id="@+id/player_stage_moves"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:layout_marginBottom="12dp"
             android:textAppearance="@style/medium_bold"
             android:textColor="@color/white" />
@@ -66,7 +65,8 @@
             android:id="@+id/loading_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
 </RelativeLayout>
