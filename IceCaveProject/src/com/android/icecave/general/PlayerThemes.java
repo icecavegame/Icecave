@@ -1,8 +1,7 @@
 package com.android.icecave.general;
 
-import com.android.icecave.gui.ITheme;
-
 import com.android.icecave.R;
+import com.android.icecave.gui.ITheme;
 import com.android.icecave.utils.ThemeHolder;
 
 public class PlayerThemes implements ITheme
