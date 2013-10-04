@@ -403,15 +403,15 @@ public class IceCaveStage implements Serializable
 		}
 		
 		mMoves = flagNode.getLevel();
-		printBoard(mTiles);
+		//printBoard(mTiles);
 		// Check if it's OK.
 		if (mMoves >= difficulty.getMinMoves() &&
 			mMoves <= difficulty.getMaxMoves())
 		{
-			System.out.println("Flag level : " + flagNode.getLevel());
+			//System.out.println("Flag level : " + flagNode.getLevel());
 			MapNode flagParent = flagNode.getParent();
 			while(flagParent != null){
-				System.out.println(flagParent.getValue().getLocation());
+		//		System.out.println(flagParent.getValue().getLocation());
 				flagParent = flagParent.getParent();
 			}
 			return true;
