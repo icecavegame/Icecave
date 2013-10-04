@@ -9,8 +9,8 @@ public class PlayerThemes implements ITheme
 	ThemeHolder[] mHolders;
 	
 	public PlayerThemes() {
-		mHolders = new ThemeHolder[] {new ThemeHolder(R.drawable.default_player, "Debug Theme"), 
-									  new ThemeHolder(R.drawable.xenosaga_kos_mos_sprite_by_farheit, "Xenosaga Theme")};
+		mHolders = new ThemeHolder[] {new ThemeHolder(R.drawable.default_player, "Warrior"), 
+									  new ThemeHolder(R.drawable.penguin_player, "Penguini!")};
 	}
 	
 	@Override

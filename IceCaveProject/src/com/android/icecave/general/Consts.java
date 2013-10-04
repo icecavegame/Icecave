@@ -51,8 +51,8 @@ public class Consts
 	public final static Point WALL_TILE_IN_SPRITE = new Point(3, 0);
 	
 	// Columns and rows
-	public final static int DEFAULT_TILES_BMP_COLUMNS = 4;
-	public final static int DEFAULT_TILES_BMP_ROWS = 1;
+	public final static int DEFAULT_TILES_BMP_COLUMNS = 8;
+	public final static int DEFAULT_TILES_BMP_ROWS = 2;
 	public static final int DEFAULT_PLAYER_BMP_ROWS = 4;
 	public static final int DEFAULT_PLAYER_BMP_COLUMNS = 3;
 }
