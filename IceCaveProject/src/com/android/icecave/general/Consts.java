@@ -15,7 +15,7 @@ public class Consts
 	public final static String MUSIC_MUTE_FLAG = "musicMuteFlag";
 	
 	public final static int DEFAULT_PLAYER = R.drawable.default_player;
-	public final static int DEFAULT_TILES = R.drawable.default_tiles;
+	public final static int DEFAULT_TILES = R.drawable.tileset1;
 	public final static Point DEFAULT_START_POS = new Point(1, 1);
 	
 	// Updates
@@ -45,14 +45,14 @@ public class Consts
 	public final static int PLAYER_MOVEMENTS_SUM = 3; // TODO Might want to change these into an enum
 	
 	// Board tiles
-	public final static Point EMPTY_TILE_IN_SPRITE = new Point(4, 0);
-	public final static Point FLAG_TILE_IN_SPRITE = new Point(3, 0);
-	public final static Point WALL_TILE_IN_SPRITE = new Point(4, 2);
-	public final static Point BOULDER_TILE_IN_SPRITE = new Point(3, 1);
+	public final static Point EMPTY_TILE_IN_SPRITE = new Point(0, 0);
+	public final static Point FLAG_TILE_IN_SPRITE = new Point(1, 0);
+	public final static Point BOULDER_TILE_IN_SPRITE = new Point(2, 0);
+	public final static Point WALL_TILE_IN_SPRITE = new Point(3, 0);
 	
 	// Columns and rows
-	public final static int DEFAULT_TILES_BMP_COLUMNS = 6;
-	public final static int DEFAULT_TILES_BMP_ROWS = 3;
+	public final static int DEFAULT_TILES_BMP_COLUMNS = 4;
+	public final static int DEFAULT_TILES_BMP_ROWS = 1;
 	public static final int DEFAULT_PLAYER_BMP_ROWS = 4;
 	public static final int DEFAULT_PLAYER_BMP_COLUMNS = 3;
 }

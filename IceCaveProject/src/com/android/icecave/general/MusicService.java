@@ -67,8 +67,8 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 			{
 				try
 				{
-					// Sleep for 3 seconds
-					mp.wait(3000);
+					// Sleep for 6 seconds
+					mp.wait(6000);
 				} catch (InterruptedException e)
 				{
 					e.printStackTrace();
