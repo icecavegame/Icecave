@@ -5,14 +5,18 @@ import com.android.icecave.gui.ITheme;
 import com.android.icecave.utils.ThemeHolder;
 
 public class PlayerThemes implements ITheme
-{	
+{
 	ThemeHolder[] mHolders;
-	
-	public PlayerThemes() {
-		mHolders = new ThemeHolder[] {new ThemeHolder(R.drawable.default_player, "Warrior"), 
-									  new ThemeHolder(R.drawable.penguin_player, "Penguini!")};
+
+	public PlayerThemes()
+	{
+		mHolders =
+				new ThemeHolder[]
+					{ new ThemeHolder(R.drawable.default_player, "Warrior"),
+				  	  new ThemeHolder(R.drawable.girl_1, "Magician"),
+					  new ThemeHolder(R.drawable.penguin_player, "Penguini!") };
 	}
-	
+
 	@Override
 	public int getThemeId(int index)
 	{
@@ -29,26 +33,29 @@ public class PlayerThemes implements ITheme
 	public String[] getThemeNames()
 	{
 		String[] result = new String[mHolders.length];
-		
+
 		// Get all names
-		for (int i = 0; i < mHolders.length; i++) {
+		for (int i = 0; i < mHolders.length; i++)
+		{
 			result[i] = mHolders[i].getThemeName();
 		}
-		
+
 		return result;
 	}
-	
+
 	@Override
 	public int getTilePositionById(int id)
 	{
 		int result = -1;
-		
-		for (int i = 0; i < mHolders.length; i++) {
-			if (id == mHolders[i].getThemeId()) {
+
+		for (int i = 0; i < mHolders.length; i++)
+		{
+			if (id == mHolders[i].getThemeId())
+			{
 				result = i;
 			}
 		}
-		
+
 		return result;
 	}
 }
