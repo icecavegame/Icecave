@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".gui.MainActivity"
+            android:name="com.tas.icecave.gui.MainActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name" >
             <intent-filter>
@@ -28,16 +28,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".gui.GameActivity"
+            android:name="com.tas.icecave.gui.GameActivity"
             android:configChanges="orientation|screenSize" >
         </activity>
         <activity
-            android:name=".gui.OptionsActivity"
+            android:name="com.tas.icecave.gui.OptionsActivity"
             android:configChanges="orientation|screenSize" >
         </activity>
 
         <service
-            android:name=".general.MusicService"
+            android:name="com.tas.icecave.general.MusicService"
             android:enabled="true" >
         </service>
 
