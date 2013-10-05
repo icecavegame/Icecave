@@ -1,20 +1,30 @@
 package com.tas.icecave.gui;
 
+import android.content.Context;
 import android.util.AttributeSet;
-
+import android.view.View;
 import android.view.ViewPropertyAnimator;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.android.icecave.R;
+<<<<<<< HEAD:IceCaveProject/src/com/tas/icecave/gui/LoadingScreen.java
 import com.tas.icecave.general.Consts;
 import com.tas.icecave.guiLogic.LoadingThread;
 
 import android.content.Context;
 
 import android.widget.RelativeLayout;
+=======
+import com.android.icecave.general.Consts;
+import com.android.icecave.guiLogic.LoadingThread;
+import com.google.ads.AdView;
+>>>>>>> origin/SagieBranch:IceCaveProject/src/com/android/icecave/gui/LoadingScreen.java
 
 public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 {
 	private GameActivity mContext;
+	private TextView mStageMessage;
+	private AdView mAd;
 
 	public LoadingScreen(Context context)
 	{
@@ -30,12 +40,19 @@ public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 		mContext = (GameActivity) context;
 	}
 
+	public void setViews()
+	{
+		mStageMessage = (TextView) findViewById(R.id.player_stage_moves);
+		mAd = (AdView) findViewById(R.id.advertisment_loading_screen_top);
+	}
+
 	@Override
 	public void preLoad(ILoadable loadableData)
 	{
 		bringToFront();
 
-		TextView stageMessage = (TextView) findViewById(R.id.player_stage_moves);
+		// Enable the ad
+		enableAd();
 
 		// Show summary text if not initial loading screen
 		if (!loadableData.isInitialLoading())
@@ -49,10 +66,10 @@ public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 							Integer.toString(loadableData.getGuiBoardManager().getMinimalMovesForStage()) +
 							" " + mContext.getString(R.string.end_stage_message_2);
 
-			stageMessage.setText(text);
+			mStageMessage.setText(text);
 		} else
 		{
-			stageMessage.setText(R.string.initial_stage_message);
+			mStageMessage.setText(R.string.initial_stage_message);
 		}
 
 		// Set animation & Go!
@@ -75,20 +92,32 @@ public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 	public void postLoad(final ILoadable loadableData)
 	{
 		final ViewPropertyAnimator animator = animate();
-//		final Runnable endAction = new Runnable()
-//		{
-//			@Override
-//			public void run()
-//			{
-//				// Show views on top of board once loading screen is done
-//				mContext.drawForeground();
-//			}
-//		};
-		
+		final Runnable endAction = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				// Disable the ad while loading screen is not active
+				disableAd();
+			}
+		};
+
 		// Hide screen (alpha to 0), set the duration of animation and animate
 		animator.alpha(0).setDuration(loadableData.getAnimationDuration());
-//		animator.withEndAction(endAction);
+		animator.withEndAction(endAction);
 		animator.start();
+	}
+
+	private void enableAd()
+	{
+		mAd.setVisibility(View.VISIBLE);
+		mAd.setClickable(true);
+	}
+
+	private void disableAd()
+	{
+		mAd.setVisibility(View.GONE);
+		mAd.setClickable(false);
 	}
 
 }

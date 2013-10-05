@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
-        android:alpha="0.65" />
+        android:alpha="0.8" />
 
     <TextView
         android:id="@+id/player_moves"
@@ -20,7 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:alpha="0.7"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
         android:textColor="@color/white" />
 
@@ -30,7 +29,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:alpha="0.7"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
         android:textColor="@color/white" />
 
@@ -56,7 +54,7 @@
             android:id="@+id/player_stage_moves"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
             android:layout_marginBottom="12dp"
             android:textAppearance="@style/medium_bold"
             android:textColor="@color/white" />

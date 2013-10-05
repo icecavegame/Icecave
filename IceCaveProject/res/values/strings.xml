@@ -19,7 +19,7 @@
 	<string name="music_artist_credits">Music: Tom Feigin</string>
 	<string name="special_thanks">Special Thanks: Jonathan Shamir, Shmuel Agranat</string>
 	<string name="contact">ToiletGamesInc\nContact us at: icecavegame@gmail.com</string> 
-	<string name="initial_stage_message">Welcome to the Cave, explorer. Good luck!</string>
+	<string name="initial_stage_message">It's chilly in here..</string>
 	<string name="end_stage_message_1">Stage complete! Took you</string>
 	<string name="end_stage_message_2">moves to get to the exit.</string>
 </resources>
