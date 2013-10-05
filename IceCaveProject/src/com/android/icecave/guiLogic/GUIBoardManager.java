@@ -10,7 +10,10 @@ import com.android.icecave.mapLogic.IIceCaveGameStatus;
 import com.android.icecave.mapLogic.IceCaveGame;
 import com.android.icecave.mapLogic.tiles.ITile;
 import com.android.icecave.utils.Point;
+
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.StreamCorruptedException;
 
 /**
  * This class manages all GUI logic.
@@ -82,18 +85,20 @@ public class GUIBoardManager implements Serializable
 		// Get the tiles
 		mTiles = new Bitmap[boardSizeHeight][boardSizeWidth];
 	}
-	
+
 	/**
 	 * Start a new stage.
-	 * @param playerStart - Starting location of the player.
-	 * @param wallWidth - Width of the wall in tiles.
-	 * @param context - Current activity context.
+	 * @param mapFileName - Map file name.
+	 * @param context
+	 * @param gameTheme
+	 * @throws ClassNotFoundException 
+	 * @throws IOException 
+	 * @throws StreamCorruptedException 
 	 */
-	public void newStage(Point playerStart, 
-	                     int wallWidth,
+	public void newStage(String mapFileName, 
 	                     GameActivity context,
-	                     GameTheme gameTheme){
-		mIceCaveGame.newStage(playerStart, wallWidth);
+	                     GameTheme gameTheme) throws StreamCorruptedException, IOException, ClassNotFoundException{
+		mIceCaveGame.newStage(mapFileName);
 		
 		ITile[][] board = mIceCaveGame.getBoard();
 		GUIScreenManager screenManager = 
@@ -133,8 +138,8 @@ public class GUIBoardManager implements Serializable
 		GUIScreenManager screenManager = 
 				new GUIScreenManager(board[0].length, 
 						board.length, 
-						context.getWidth(), 
-						context.getHeight());
+						context.getFixedWidth(), 
+						context.getFixedHeight());
 		
 		// Go through the game board.
 		for (int yAxis = 0; yAxis < board.length; yAxis++) {
