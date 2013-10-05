@@ -67,8 +67,8 @@ public class GUIBoardManager implements Serializable
 						 	  GameActivity context,
 						 	  EDifficulty difficulty){
 		
-		int maxSize = Math.max(context.getWidth(), context.getHeight());
-		int minSize = Math.min(context.getWidth(), context.getHeight());
+		int maxSize = Math.max(context.getFixedWidth(), context.getFixedHeight());
+		int minSize = Math.min(context.getFixedWidth(), context.getFixedHeight());
 		int boardSizeWidth = (int)((maxSize * 1.0 / minSize) * boardSizeHeight);
 		
 		mIceCaveGame = 
@@ -99,8 +99,8 @@ public class GUIBoardManager implements Serializable
 		GUIScreenManager screenManager = 
 				new GUIScreenManager(board[0].length, 
 									 board.length, 
-									 context.getWidth(), 
-									 context.getHeight());
+									 context.getFixedWidth(), 
+									 context.getFixedHeight());
 		
 		// Go through the game board.
 		for (int yAxis = 0; yAxis < board.length; yAxis++) {
