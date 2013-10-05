@@ -8,6 +8,7 @@ import android.media.MediaPlayer.OnErrorListener;
 import android.os.Binder;
 import android.os.IBinder;
 import android.widget.Toast;
+
 import com.android.icecave.R;
 
 public class MusicService extends Service implements MediaPlayer.OnErrorListener

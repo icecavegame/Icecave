@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.android.icecave.R;
 import com.tas.icecave.general.Consts;
 import com.tas.icecave.general.EDifficulty;

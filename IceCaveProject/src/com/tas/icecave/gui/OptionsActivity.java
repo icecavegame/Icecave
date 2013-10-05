@@ -22,6 +22,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Spinner;
+
 import com.android.icecave.R;
 import com.tas.icecave.general.Consts;
 import com.tas.icecave.general.MusicService;
