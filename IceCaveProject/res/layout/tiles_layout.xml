@@ -3,7 +3,8 @@
     xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
     android:id="@+id/game_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray" >
 
     <ImageView
         android:id="@+id/reset_button"
@@ -11,8 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:alpha="0.65"
-        android:src="@drawable/reset_button" />
+        android:alpha="0.65" />
 
     <TextView
         android:id="@+id/player_moves"
@@ -34,7 +34,7 @@
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
         android:textColor="@color/white" />
 
-    <RelativeLayout
+    <com.android.icecave.gui.LoadingScreen
         android:id="@+id/loading_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -67,6 +67,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
-    </RelativeLayout>
+    </com.android.icecave.gui.LoadingScreen>
 
 </RelativeLayout>

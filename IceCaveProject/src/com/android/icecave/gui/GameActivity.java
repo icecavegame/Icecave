@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewPropertyAnimator;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -27,27 +26,27 @@ import com.android.icecave.general.EDirection;
 import com.android.icecave.general.MusicService;
 import com.android.icecave.guiLogic.DrawablePlayer;
 import com.android.icecave.guiLogic.GUIBoardManager;
-import com.android.icecave.guiLogic.LoadingThread;
 import com.android.icecave.guiLogic.TilesView;
 import com.android.icecave.mapLogic.IIceCaveGameStatus;
 import com.android.icecave.utils.UpdateDataBundle;
 import java.util.Observable;
 import java.util.Observer;
 
-public class GameActivity extends Activity implements ISwipeDetector, Observer
+public class GameActivity extends Activity implements ISwipeDetector, Observer, ILoadable
 {
 	private GUIBoardManager mGBM;
 	private DrawablePlayer mPlayer;
 	private GameTheme mGameTheme;
 	private TilesView mTilesView;
-	private RelativeLayout mActivityLayout, mLoadingScreen;
-	private boolean mIsFlagReached;
+	private RelativeLayout mActivityLayout;
+	private LoadingScreen mLoadingScreen;
+	private boolean mIsFlagReached, mIsInitialized;
 	private TextView mPlayerMoves, mMinimumMoves;
 	private ImageView mResetButton;
 
 	private final String GUI_BOARD_MANAGER_TAG = "guiBoardManager";
 	private final long HIDE_SHOW_TIME = 300;
-	
+
 	// Music data
 	private boolean mIsBound = false;
 	private MusicService mServ;
@@ -65,10 +64,13 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		setContentView(R.layout.tiles_layout);
 
 		mActivityLayout = ((RelativeLayout) findViewById(R.id.game_layout));
-		mLoadingScreen = (RelativeLayout) findViewById(R.id.loading_screen);
+		mLoadingScreen = (LoadingScreen) findViewById(R.id.loading_screen);
 		mPlayerMoves = (TextView) findViewById(R.id.player_moves);
 		mMinimumMoves = (TextView) findViewById(R.id.minimum_moves);
 		mResetButton = (ImageView) findViewById(R.id.reset_button);
+
+		// Set initialized to false, as the activity is just now being created
+		mIsInitialized = false;
 
 		// Hide the Status Bar
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -93,7 +95,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		{
 			@Override
 			public void onClick(View v)
-			{				
+			{
 				// Reset player position on logic level
 				mGBM.resetPlayer(Consts.DEFAULT_START_POS);
 
@@ -202,35 +204,32 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 					this,
 					EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)]);
 
-			// Create first stage
-			mGBM.newStage(Consts.DEFAULT_START_POS, Consts.DEFAULT_WALL_WIDTH, this, mGameTheme);
-
-			setMinimumMoves();
-			setPlayerMoves();
-
-			// Create the tiles view and add it to the layout
-			mTilesView = new TilesView(this, mGBM.getTiles());
-			mTilesView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-																	FrameLayout.LayoutParams.MATCH_PARENT));
-			mActivityLayout.addView(mTilesView);
-
-			// Create new player view
-			mPlayer = new DrawablePlayer(this, mGameTheme);
-			mPlayer.setLayoutParams(new FrameLayout.LayoutParams(	FrameLayout.LayoutParams.WRAP_CONTENT,
-																	FrameLayout.LayoutParams.WRAP_CONTENT));
-			mActivityLayout.addView(mPlayer);
-
-			// Register swipe events to the layout
-			mTilesView.setOnTouchListener(new ActivitySwipeDetector(this));
-
-			// Create player image and bring it to front
-			mPlayer.initializePlayer();
-
-			// Show views
-			drawForeground();
+			// Create the first stage
+			mLoadingScreen.preLoad(this);
 
 			super.onWindowFocusChanged(hasFocus);
 		}
+	}
+
+	// Create the tiles view and add it to the layout
+	private void createLayouts()
+	{
+		// Set up reset button image
+		mResetButton.setImageResource(R.drawable.reset_button);
+		
+		mTilesView = new TilesView(this, mGBM.getTiles());
+		mTilesView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+																FrameLayout.LayoutParams.MATCH_PARENT));
+		mActivityLayout.addView(mTilesView);
+
+		// Create new player view
+		mPlayer = new DrawablePlayer(this, mGameTheme);
+		mPlayer.setLayoutParams(new FrameLayout.LayoutParams(	FrameLayout.LayoutParams.WRAP_CONTENT,
+																FrameLayout.LayoutParams.WRAP_CONTENT));
+		mActivityLayout.addView(mPlayer);
+
+		// Register swipe events to the layout
+		mTilesView.setOnTouchListener(new ActivitySwipeDetector(this));
 	}
 
 	@Override
@@ -254,29 +253,50 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 					mIsFlagReached = false;
 
 					// Show loading screen in the meantime
-					showActivateLoadingScreen();
+					mLoadingScreen.preLoad(this);
 				}
 			} else if (updateBundle.getNotificationId() == Consts.LOADING_LEVEL_FINISHED_UPDATE) // Level creation complete
-			{				
-				// Hide loading screen
-				hideLoadingScreen();
-
-				// Reset move texts
-				setMinimumMoves();
-				setPlayerMoves();
-
-				// Re-initialize player (must do this on the UI thread)
+			{
+				// If game is not yet initialized
+				if (!mIsInitialized)
+				{
+					// Must run on UI thread
+					runOnUiThread(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							// Create board and character
+							createLayouts();
+							
+							// Set initialized to true, as the activity has finished initializing
+							mIsInitialized = true;
+						}
+					});
+				}
+				
 				runOnUiThread(new Runnable()
 				{
 					@Override
 					public void run()
 					{
+						// Hide loading screen
+						mLoadingScreen.postLoad(GameActivity.this);
+
+						// Reset move texts
+						setMinimumMoves();
+						setPlayerMoves();
+						
+						// Re-initialize player (must do this on the UI thread)
 						mPlayer.initializePlayer();
+						
+						// Refresh map (must be on UI thread because the view itself is created there)
+						mTilesView.invalidate();
+						
+						// Show views
+						drawForeground();
 					}
 				});
-
-				// Refresh map
-				mTilesView.postInvalidate();
 			}
 		}
 	}
@@ -361,64 +381,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		}
 	}
 
-	private void showActivateLoadingScreen()
-	{
-		mLoadingScreen.bringToFront();
-
-		TextView stageMessage = (TextView) mLoadingScreen.findViewById(R.id.player_stage_moves);
-
-		// Update text
-		String text =
-				getString(R.string.end_stage_message_1) + " " +
-						Integer.toString(mGBM.getMovesCarriedOutThisStage()) +
-						"/" +
-						Integer.toString(mGBM.getMinimalMovesForStage()) +
-						" " +
-						getString(R.string.end_stage_message_2);
-
-		stageMessage.setText(text);
-
-		// Set animation & Go!
-		final ViewPropertyAnimator animator = mLoadingScreen.animate();
-
-		// Show view with fade in animation
-		animator.alpha(1).setDuration(HIDE_SHOW_TIME).start();
-		
-		// Start creating a new stage
-		LoadingThread load =
-				new LoadingThread(	mGBM,
-									Consts.DEFAULT_START_POS,
-									Consts.DEFAULT_WALL_WIDTH,
-									this,
-									mGameTheme);
-		load.start();
-	}
-
-	private void hideLoadingScreen()
-	{
-		final ViewPropertyAnimator animator = mLoadingScreen.animate();
-		final Runnable endAction = new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				// Show views on top of board once loading screen is done
-				drawForeground();
-			}
-		};
-		
-		// Run on UI to avoid issues
-		runOnUiThread(new Runnable()
-		{
-			@Override
-			public void run()
-			{				
-				// Hide screen (alpha to 0), set the duration of animation and animate
-				animator.alpha(0).setDuration(HIDE_SHOW_TIME).withEndAction(endAction).start();
-			}
-		});
-	}
-
 	@Override
 	protected void onDestroy()
 	{
@@ -457,5 +419,30 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		}
 
 		super.onPause();
+	}
+
+	@Override
+	public long getAnimationDuration()
+	{
+		return HIDE_SHOW_TIME;
+	}
+
+	@Override
+	public GUIBoardManager getGuiBoardManager()
+	{
+		return mGBM;
+	}
+
+	@Override
+	public GameTheme getGameTheme()
+	{
+		return mGameTheme;
+	}
+
+	@Override
+	public boolean isInitialLoading()
+	{
+		// If initialized, not initial loading.
+		return !mIsInitialized;
 	}
 }
