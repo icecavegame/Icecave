@@ -10,7 +10,7 @@
         android:id="@+id/reset_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
         android:alpha="0.65" />
 
@@ -18,7 +18,7 @@
         android:id="@+id/player_moves"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:alpha="0.7"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
@@ -28,7 +28,7 @@
         android:id="@+id/minimum_moves"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:alpha="0.7"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
