@@ -294,14 +294,14 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 						Integer.toString(mGBM.getMovesCarriedOutThisStage()));
 
 				// Color text differently if player exceeded the minimum moves
-//				if (mGBM.getMovesCarriedOutThisStage() > mGBM.getMinimalMovesForStage())
-//				{
-//					mPlayerMoves.setTextColor(getResources().getColor(R.color.orange));
-//				} else if (mGBM.getMovesCarriedOutThisStage() == 0)
-//				{
-//					// Color text white if player moves reset
-//					mPlayerMoves.setTextColor(getResources().getColor(R.color.white));
-//				}
+				if (mGBM.getMovesCarriedOutThisStage() > mGBM.getMinimalMovesForStage())
+				{
+					mPlayerMoves.setTextColor(getResources().getColor(R.color.orange));
+				} else if (mGBM.getMovesCarriedOutThisStage() == 0)
+				{
+					// Color text white if player moves reset
+					mPlayerMoves.setTextColor(getResources().getColor(R.color.white));
+				}
 			}
 		});
 	}
