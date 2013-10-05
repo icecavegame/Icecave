@@ -22,8 +22,6 @@ public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 		super(context);
 
 		mContext = (GameActivity) context;
-		mStageMessage = (TextView) findViewById(R.id.player_stage_moves);
-		mAd = (AdView) findViewById(R.id.advertisment_loading_screen_top);
 	}
 
 	public LoadingScreen(Context context, AttributeSet attrs)
@@ -31,6 +29,10 @@ public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 		super(context, attrs);
 
 		mContext = (GameActivity) context;
+	}
+
+	public void setViews()
+	{
 		mStageMessage = (TextView) findViewById(R.id.player_stage_moves);
 		mAd = (AdView) findViewById(R.id.advertisment_loading_screen_top);
 	}

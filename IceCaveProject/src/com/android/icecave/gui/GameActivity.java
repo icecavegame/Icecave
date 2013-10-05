@@ -204,6 +204,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer, 
 					this,
 					EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)]);
 
+			// Set views references for the loading screen
+			mLoadingScreen.setViews();
+
 			// Create the first stage
 			mLoadingScreen.preLoad(this);
 
@@ -216,7 +219,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer, 
 	{
 		// Set up reset button image
 		mResetButton.setImageResource(R.drawable.reset_button);
-		
+
 		mTilesView = new TilesView(this, mGBM.getTiles());
 		mTilesView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
 																FrameLayout.LayoutParams.WRAP_CONTENT));
@@ -259,42 +262,36 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer, 
 				}
 			} else if (updateBundle.getNotificationId() == Consts.LOADING_LEVEL_FINISHED_UPDATE) // Level creation complete
 			{
-				// If game is not yet initialized
-				if (!mIsInitialized)
-				{
-					// Must run on UI thread
-					runOnUiThread(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							// Create board and character
-							createLayouts();
-							
-							// Set initialized to true, as the activity has finished initializing
-							mIsInitialized = true;
-						}
-					});
-				}
-				
+				// Must run on UI thread
 				runOnUiThread(new Runnable()
 				{
 					@Override
 					public void run()
 					{
+						// If game is not yet initialized
+						if (!mIsInitialized)
+						{
+
+							// Create board and character
+							createLayouts();
+
+							// Set initialized to true, as the activity has finished initializing
+							mIsInitialized = true;
+						}
+
 						// Hide loading screen
 						mLoadingScreen.postLoad(GameActivity.this);
 
 						// Reset move texts
 						setMinimumMoves();
 						setPlayerMoves();
-						
+
 						// Re-initialize player (must do this on the UI thread)
 						mPlayer.initializePlayer();
-						
+
 						// Refresh map (must be on UI thread because the view itself is created there)
 						mTilesView.invalidate();
-						
+
 						// Show views
 						drawForeground();
 					}
