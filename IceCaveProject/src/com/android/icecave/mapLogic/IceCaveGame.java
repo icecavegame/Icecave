@@ -1,7 +1,13 @@
 package com.android.icecave.mapLogic;
 
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.OptionalDataException;
 import java.io.Serializable;
+import java.io.StreamCorruptedException;
 
 import com.android.icecave.utils.Point;
 
@@ -147,6 +153,63 @@ public class IceCaveGame extends CollisionManager implements IIceCaveGameStatus,
 		MapLogicServiceProvider.getInstance().registerCollisionManager(this);
 	}
 
+	/**
+	 * Start a new stage.
+	 * @throws IOException 
+	 * @throws StreamCorruptedException 
+	 * @throws ClassNotFoundException 
+	 */
+	public void newStage(String mapFilePath) throws StreamCorruptedException, IOException, ClassNotFoundException
+	{
+		mIsStageEnded = false;
+		mLastDirectionMoved = null;
+		
+		// Read the map board.
+		IceCaveBoard mapBoard = readMapBoard(mapFilePath);
+		
+		mPlayerLocation = new Point(mapBoard.getStartPoint());
+		mCurrentStageMoves = 0;
+		
+		// Start the new stage.
+		mStage.buildBoard(mapBoard);
+	}
+
+	/**
+	 * Read the map board from a file.
+	 * 
+	 * @param mapFilePath - File to read the map board from.
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws StreamCorruptedException
+	 * @throws IOException
+	 * @throws OptionalDataException
+	 * @throws ClassNotFoundException
+	 */
+	private IceCaveBoard readMapBoard(String mapFilePath)
+			throws FileNotFoundException, StreamCorruptedException,
+			IOException, OptionalDataException, ClassNotFoundException
+	{
+		IceCaveBoard mapBoard;
+		ObjectInputStream objectInputStream = null;
+		
+		try
+		{
+			FileInputStream fileInputStream = new FileInputStream(mapFilePath);
+			objectInputStream = new ObjectInputStream(fileInputStream);
+			mapBoard = (IceCaveBoard) objectInputStream.readObject();
+		}
+		finally
+		{
+			// Close the stream.
+			if(objectInputStream != null)
+			{
+				objectInputStream.close();
+			}
+		}
+		
+		return mapBoard;
+	}
+	
 	/**
 	 * Start a new stage.
 	 * 
