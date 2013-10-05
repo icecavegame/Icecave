@@ -128,14 +128,14 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer, 
 		startService(music);
 	}
 
-	public int getHeight()
+	public int getFixedHeight()
 	{
-		return mActivityLayout.getBottom();
+		return mActivityLayout.getBottom() - mPlayerMoves.getBottom();
 	}
 
-	public int getWidth()
+	public int getFixedWidth()
 	{
-		return mActivityLayout.getWidth();
+		return mActivityLayout.getWidth() - mPlayerMoves.getLeft();
 	}
 
 	public TilesView getTilesView()

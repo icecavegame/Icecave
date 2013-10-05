@@ -46,8 +46,8 @@ public class DrawablePlayer extends ImageView
 		mScreenManager =
 				new GUIScreenManager(	mContext.getTilesView().getBoardX(),
 										mContext.getTilesView().getBoardY(),
-										mContext.getWidth(),
-										mContext.getHeight());
+										mContext.getFixedWidth(),
+										mContext.getFixedHeight());
 
 		// Get height and width of player image
 		setImageBitmap(mPGM.getPlayerImage(EDirection.DOWN, false, mGameTheme, mScreenManager));
@@ -57,7 +57,7 @@ public class DrawablePlayer extends ImageView
 	{
 		// Stop animation in the middle
 		animate().cancel();
-		
+
 		// Initialize animation running as false
 		mIsAnimationRunning = false;
 
@@ -89,7 +89,8 @@ public class DrawablePlayer extends ImageView
 
 	private Point getPositionOnScreen(Point logicPosition)
 	{
-		return new Point(logicPosition.x * getWidth(), logicPosition.y * getHeight());
+		// Get the position of the character on screen. Take the translation of the tiles view into consideration
+		return new Point((logicPosition.x * getWidth()) + (int)mContext.getTilesView().getTranslationX(), (logicPosition.y * getHeight()) + (int)mContext.getTilesView().getTranslationY());
 	}
 
 	public void update(Point playerNewPositionOnScreen, final EDirection direction, int distance)
@@ -131,9 +132,9 @@ public class DrawablePlayer extends ImageView
 
 	public void initPlayerPosition()
 	{
-		// Set initial position
-		setTranslationX(mPlayerPosition.x * getWidth());
-		setTranslationY(mPlayerPosition.y * getHeight());
+		// Set initial position. Take the translation of the tiles view into consideration
+		setTranslationX((mPlayerPosition.x * getWidth()) + mContext.getTilesView().getTranslationX());
+		setTranslationY((mPlayerPosition.y * getHeight()) + mContext.getTilesView().getTranslationY());
 	}
 
 	public boolean isAnimationRunning()
