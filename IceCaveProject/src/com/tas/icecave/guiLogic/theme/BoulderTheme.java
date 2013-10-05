@@ -2,7 +2,7 @@ package com.tas.icecave.guiLogic.theme;
 
 import java.util.ArrayList;
 
-import com.tas.icecaveGeneral.utils.Point;
+import com.tas.icecaveLibrary.utils.Point;
 
 /**
  * Theme for the boulder tile.

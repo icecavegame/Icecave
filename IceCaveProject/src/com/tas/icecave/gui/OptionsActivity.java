@@ -1,10 +1,7 @@
 package com.tas.icecave.gui;
 
-import android.os.IBinder;
-
-import android.content.ComponentName;
-
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -12,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -24,10 +22,10 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Spinner;
 
 import com.android.icecave.R;
-import com.tas.icecave.general.Consts;
 import com.tas.icecave.general.MusicService;
 import com.tas.icecave.general.PlayerThemes;
 import com.tas.icecave.general.TileThemes;
+import com.tas.icecaveLibrary.general.Consts;
 
 public class OptionsActivity extends Activity
 {

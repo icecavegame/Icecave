@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import com.tas.icecave.guiLogic.theme.EmptyTheme;
 import com.tas.icecave.guiLogic.theme.ThemeMap;
-import com.tas.icecaveGeneral.mapLogic.tiles.EmptyTile;
-import com.tas.icecaveGeneral.utils.Point;
+import com.tas.icecaveLibrary.mapLogic.tiles.EmptyTile;
+import com.tas.icecaveLibrary.utils.Point;
 
 public class EmptyTileGUIWorker extends BaseTileGUIWorker
 {

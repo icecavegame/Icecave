@@ -1,5 +1,8 @@
 package com.tas.icecave.gui;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -21,18 +24,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.icecave.R;
-import com.tas.icecave.general.Consts;
-import com.tas.icecave.general.EDifficulty;
-import com.tas.icecave.general.EDirection;
 import com.tas.icecave.general.MusicService;
 import com.tas.icecave.guiLogic.DrawablePlayer;
 import com.tas.icecave.guiLogic.GUIBoardManager;
 import com.tas.icecave.guiLogic.TilesView;
-import com.tas.icecaveGeneral.mapLogic.IIceCaveGameStatus;
-import com.tas.icecaveGeneral.utils.UpdateDataBundle;
-
-import java.util.Observable;
-import java.util.Observer;
+import com.tas.icecaveLibrary.general.Consts;
+import com.tas.icecaveLibrary.general.EDifficulty;
+import com.tas.icecaveLibrary.general.EDirection;
+import com.tas.icecaveLibrary.mapLogic.IIceCaveGameStatus;
+import com.tas.icecaveLibrary.utils.UpdateDataBundle;
 
 public class GameActivity extends Activity implements ISwipeDetector, Observer, ILoadable
 {
@@ -49,6 +49,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer, 
 	private final String GUI_BOARD_MANAGER_TAG = "guiBoardManager";
 	private final long HIDE_SHOW_TIME = 300;
 
+	private final static int DEFAULT_PLAYER = R.drawable.default_player;
+	private final static int DEFAULT_TILES = R.drawable.tileset1;
+
+	
 	// Music data
 	private boolean mIsBound = false;
 	private MusicService mServ;
@@ -88,9 +92,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer, 
 
 		mGameTheme =
 				new GameTheme(	BitmapFactory.decodeResource(getResources(),
-										(mShared.getInt(Consts.THEME_SELECT_TAG, Consts.DEFAULT_TILES))),
+										(mShared.getInt(Consts.THEME_SELECT_TAG, DEFAULT_TILES))),
 								BitmapFactory.decodeResource(getResources(),
-										(mShared.getInt(Consts.PLAYER_SELECT_TAG, Consts.DEFAULT_PLAYER))));
+										(mShared.getInt(Consts.PLAYER_SELECT_TAG, DEFAULT_PLAYER))));
 
 		// Set reset button effect
 		mResetButton.setOnClickListener(new OnClickListener()

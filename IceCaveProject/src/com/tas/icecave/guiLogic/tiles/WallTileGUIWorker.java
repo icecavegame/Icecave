@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import com.tas.icecave.guiLogic.theme.ThemeMap;
 import com.tas.icecave.guiLogic.theme.WallTheme;
-import com.tas.icecaveGeneral.mapLogic.tiles.WallTile;
-import com.tas.icecaveGeneral.utils.Point;
+import com.tas.icecaveLibrary.mapLogic.tiles.WallTile;
+import com.tas.icecaveLibrary.utils.Point;
 
 public class WallTileGUIWorker extends BaseTileGUIWorker
 {

@@ -3,7 +3,7 @@ package com.tas.icecave.guiLogic.theme;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import com.tas.icecaveGeneral.utils.Point;
+import com.tas.icecaveLibrary.utils.Point;
 
 /**
  * Theme for and empty tile.

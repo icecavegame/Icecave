@@ -1,4 +1,4 @@
-package com.tas.icecaveGeneral.utils;
+package com.tas.icecave.guiLogic.theme;
 
 public class ThemeHolder
 {

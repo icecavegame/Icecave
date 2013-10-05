@@ -7,12 +7,12 @@ import java.io.StreamCorruptedException;
 import android.content.res.AssetManager;
 import android.os.SystemClock;
 
-import com.tas.icecave.general.Consts;
 import com.tas.icecave.gui.GameActivity;
 import com.tas.icecave.gui.GameTheme;
-import com.tas.icecaveGeneral.utils.AutoObservable;
-import com.tas.icecaveGeneral.utils.Point;
-import com.tas.icecaveGeneral.utils.UpdateDataBundle;
+import com.tas.icecaveLibrary.general.Consts;
+import com.tas.icecaveLibrary.utils.AutoObservable;
+import com.tas.icecaveLibrary.utils.Point;
+import com.tas.icecaveLibrary.utils.UpdateDataBundle;
 
 public class LoadingThread extends Thread
 {

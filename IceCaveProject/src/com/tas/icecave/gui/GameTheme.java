@@ -1,9 +1,10 @@
 package com.tas.icecave.gui;
 
 import android.graphics.Bitmap;
-import com.tas.icecave.general.Consts;
-import com.tas.icecave.general.EDirection;
+
 import com.tas.icecave.guiLogic.theme.ThemeMap;
+import com.tas.icecaveLibrary.general.Consts;
+import com.tas.icecaveLibrary.general.EDirection;
 
 /**
  * Class to represent the over all game theme.

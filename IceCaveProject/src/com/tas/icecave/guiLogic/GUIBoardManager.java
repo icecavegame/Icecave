@@ -7,15 +7,15 @@ import java.io.StreamCorruptedException;
 
 import android.graphics.Bitmap;
 
-import com.tas.icecave.general.Consts;
-import com.tas.icecave.general.EDifficulty;
-import com.tas.icecave.general.EDirection;
 import com.tas.icecave.gui.GameActivity;
 import com.tas.icecave.gui.GameTheme;
-import com.tas.icecaveGeneral.mapLogic.IIceCaveGameStatus;
-import com.tas.icecaveGeneral.mapLogic.IceCaveGame;
-import com.tas.icecaveGeneral.mapLogic.tiles.ITile;
-import com.tas.icecaveGeneral.utils.Point;
+import com.tas.icecaveLibrary.general.Consts;
+import com.tas.icecaveLibrary.general.EDifficulty;
+import com.tas.icecaveLibrary.general.EDirection;
+import com.tas.icecaveLibrary.mapLogic.IIceCaveGameStatus;
+import com.tas.icecaveLibrary.mapLogic.IceCaveGame;
+import com.tas.icecaveLibrary.mapLogic.tiles.ITile;
+import com.tas.icecaveLibrary.utils.Point;
 
 /**
  * This class manages all GUI logic.

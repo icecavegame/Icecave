@@ -20,9 +20,9 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.android.icecave.R;
-import com.tas.icecave.general.Consts;
-import com.tas.icecave.general.EDifficulty;
 import com.tas.icecave.general.MusicService;
+import com.tas.icecaveLibrary.general.Consts;
+import com.tas.icecaveLibrary.general.EDifficulty;
 
 public class MainActivity extends Activity
 {

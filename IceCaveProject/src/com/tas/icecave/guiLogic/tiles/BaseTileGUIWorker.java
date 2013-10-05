@@ -5,8 +5,8 @@ import android.graphics.Matrix;
 
 import com.tas.icecave.guiLogic.ITileScale;
 import com.tas.icecave.guiLogic.theme.ThemeMap;
-import com.tas.icecaveGeneral.mapLogic.tiles.ITile;
-import com.tas.icecaveGeneral.utils.Point;
+import com.tas.icecaveLibrary.mapLogic.tiles.ITile;
+import com.tas.icecaveLibrary.utils.Point;
 
 public abstract class BaseTileGUIWorker implements IGUITileWorker
 {

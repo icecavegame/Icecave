@@ -37,7 +37,7 @@
         </activity>
 
         <service
-            android:name="com.tas.icecave.general.MusicService"
+            android:name="com.tas.icecaveGeneral.general.MusicService"
             android:enabled="true" >
         </service>
 

@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 
 import com.tas.icecave.guiLogic.ITileScale;
 import com.tas.icecave.guiLogic.theme.ThemeMap;
-import com.tas.icecaveGeneral.mapLogic.tiles.ITile;
+import com.tas.icecaveLibrary.mapLogic.tiles.ITile;
 
 public interface IGUITileWorker
 {

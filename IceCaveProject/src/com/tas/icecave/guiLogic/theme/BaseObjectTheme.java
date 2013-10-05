@@ -2,7 +2,7 @@ package com.tas.icecave.guiLogic.theme;
 
 import java.util.ArrayList;
 
-import com.tas.icecaveGeneral.utils.Point;
+import com.tas.icecaveLibrary.utils.Point;
 
 /**
  * A basic implementation of the IObjectTheme.

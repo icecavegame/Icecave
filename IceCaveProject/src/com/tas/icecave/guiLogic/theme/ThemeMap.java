@@ -2,10 +2,10 @@ package com.tas.icecave.guiLogic.theme;
 
 import java.util.HashMap;
 
-import com.tas.icecaveGeneral.mapLogic.tiles.BoulderTile;
-import com.tas.icecaveGeneral.mapLogic.tiles.EmptyTile;
-import com.tas.icecaveGeneral.mapLogic.tiles.FlagTile;
-import com.tas.icecaveGeneral.mapLogic.tiles.WallTile;
+import com.tas.icecaveLibrary.mapLogic.tiles.BoulderTile;
+import com.tas.icecaveLibrary.mapLogic.tiles.EmptyTile;
+import com.tas.icecaveLibrary.mapLogic.tiles.FlagTile;
+import com.tas.icecaveLibrary.mapLogic.tiles.WallTile;
 
 /**
  * Holder for object themes.

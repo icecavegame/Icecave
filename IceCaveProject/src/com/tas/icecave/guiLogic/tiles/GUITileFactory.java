@@ -1,16 +1,17 @@
 package com.tas.icecave.guiLogic.tiles;
 
+import java.util.HashMap;
+
 import android.graphics.Bitmap;
-import com.tas.icecave.general.Consts;
+
 import com.tas.icecave.gui.GameTheme;
 import com.tas.icecave.guiLogic.ITileScale;
-import com.tas.icecaveGeneral.mapLogic.tiles.BoulderTile;
-import com.tas.icecaveGeneral.mapLogic.tiles.EmptyTile;
-import com.tas.icecaveGeneral.mapLogic.tiles.FlagTile;
-import com.tas.icecaveGeneral.mapLogic.tiles.ITile;
-import com.tas.icecaveGeneral.mapLogic.tiles.WallTile;
-
-import java.util.HashMap;
+import com.tas.icecaveLibrary.general.Consts;
+import com.tas.icecaveLibrary.mapLogic.tiles.BoulderTile;
+import com.tas.icecaveLibrary.mapLogic.tiles.EmptyTile;
+import com.tas.icecaveLibrary.mapLogic.tiles.FlagTile;
+import com.tas.icecaveLibrary.mapLogic.tiles.ITile;
+import com.tas.icecaveLibrary.mapLogic.tiles.WallTile;
 
 /**
  * Class holding all the GUITile workers.

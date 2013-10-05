@@ -4,13 +4,14 @@ package com.tas.icecave.guiLogic;
 import android.content.Context;
 import android.view.ViewPropertyAnimator;
 import android.widget.ImageView;
-import com.tas.icecave.general.Consts;
-import com.tas.icecave.general.EDirection;
+
 import com.tas.icecave.gui.GameActivity;
 import com.tas.icecave.gui.GameTheme;
-import com.tas.icecaveGeneral.utils.AutoObservable;
-import com.tas.icecaveGeneral.utils.Point;
-import com.tas.icecaveGeneral.utils.UpdateDataBundle;
+import com.tas.icecaveLibrary.general.Consts;
+import com.tas.icecaveLibrary.general.EDirection;
+import com.tas.icecaveLibrary.utils.AutoObservable;
+import com.tas.icecaveLibrary.utils.Point;
+import com.tas.icecaveLibrary.utils.UpdateDataBundle;
 
 public class DrawablePlayer extends ImageView
 {
