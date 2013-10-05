@@ -8,13 +8,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.android.icecave.R;
 import com.android.icecave.general.Consts;
+import com.android.icecave.general.GeneralServiceProvider;
 import com.android.icecave.guiLogic.LoadingThread;
 import com.google.ads.AdView;
 
 public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 {
 	private GameActivity mContext;
-	private TextView mStageMessage;
+	private TextView mLoadingMessage;
 	private AdView mAd;
 
 	public LoadingScreen(Context context)
@@ -33,7 +34,7 @@ public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 
 	public void setViews()
 	{
-		mStageMessage = (TextView) findViewById(R.id.player_stage_moves);
+		mLoadingMessage = (TextView) findViewById(R.id.loading_screen_text);
 		mAd = (AdView) findViewById(R.id.advertisment_loading_screen_top);
 	}
 
@@ -57,10 +58,15 @@ public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 							Integer.toString(loadableData.getGuiBoardManager().getMinimalMovesForStage()) +
 							" " + mContext.getString(R.string.end_stage_message_2);
 
-			mStageMessage.setText(text);
+			mLoadingMessage.setText(text);
 		} else
 		{
-			mStageMessage.setText(R.string.initial_stage_message);
+			String[] messages = mContext.getResources().getStringArray(R.array.initial_stage_messages);
+
+			// Set a random initial text from the array
+			mLoadingMessage.setText(messages[GeneralServiceProvider.getInstance()
+					.getRandom()
+					.nextInt(messages.length)]);
 		}
 
 		// Set animation & Go!
