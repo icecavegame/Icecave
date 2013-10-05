@@ -9,9 +9,8 @@ import android.widget.TextView;
 
 import com.android.icecave.R;
 import com.google.ads.AdView;
-import com.tas.icecave.general.Consts;
 import com.tas.icecave.guiLogic.LoadingThread;
-import com.google.ads.AdView;
+import com.tas.icecaveGeneral.general.Consts;
 
 public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 {
