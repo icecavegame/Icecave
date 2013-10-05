@@ -13,22 +13,22 @@ public class IceCaveBoard implements IBoard<ITile>, Serializable
 	/**
 	 * The map board.
 	 */
-	ITile[][] mBoard;
+	private ITile[][] mBoard;
 	
 	/**
 	 * The player starting location.
 	 */
-	Point mPlayerStart;
+	private Point mPlayerStart;
 	
 	/**
 	 * The starting move for the player.
 	 */
-	EDirection mStartingMove;
+	private EDirection mStartingMove;
 
 	/**
 	 * Min moves to solve the stage.
 	 */
-	int mMoves;
+	private int mMoves;
 	
 	/**
 	 * Get the starting direction to move the player in.

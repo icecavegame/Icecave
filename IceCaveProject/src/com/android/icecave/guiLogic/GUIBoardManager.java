@@ -118,6 +118,40 @@ public class GUIBoardManager implements Serializable
 	}
 	
 	/**
+	 * Start a new stage.
+	 * @param playerStart - Starting location of the player.
+	 * @param wallWidth - Width of the wall in tiles.
+	 * @param context - Current activity context.
+	 */
+	public void newStage(Point playerStart, 
+	                     int wallWidth,
+	                     GameActivity context,
+	                     GameTheme gameTheme){
+		mIceCaveGame.newStage(playerStart, wallWidth);
+		
+		ITile[][] board = mIceCaveGame.getBoard();
+		GUIScreenManager screenManager = 
+				new GUIScreenManager(board[0].length, 
+						board.length, 
+						context.getWidth(), 
+						context.getHeight());
+		
+		// Go through the game board.
+		for (int yAxis = 0; yAxis < board.length; yAxis++) {
+			for (int xAxis = 0; xAxis < board[0].length; xAxis++) {
+				mTiles[yAxis][xAxis] =
+						GUILogicServiceProvider.
+						getInstance().
+						getTileFactory().
+						getTiles(board[yAxis]
+								[xAxis],
+								screenManager,
+								gameTheme);
+			}
+		}
+	}
+	
+	/**
 	 * Get the tiles of the current board.
 	 * @return Map of the current board tiles.
 	 */
