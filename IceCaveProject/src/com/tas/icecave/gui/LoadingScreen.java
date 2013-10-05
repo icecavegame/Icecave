@@ -6,25 +6,11 @@ import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.android.icecave.R;
-<<<<<<< HEAD:IceCaveProject/src/com/tas/icecave/gui/LoadingScreen.java
-<<<<<<< HEAD:IceCaveProject/src/com/tas/icecave/gui/LoadingScreen.java
+import com.google.ads.AdView;
 import com.tas.icecave.general.Consts;
 import com.tas.icecave.guiLogic.LoadingThread;
-
-import android.content.Context;
-
-import android.widget.RelativeLayout;
-=======
-import com.android.icecave.general.Consts;
-import com.android.icecave.guiLogic.LoadingThread;
-import com.google.ads.AdView;
->>>>>>> origin/SagieBranch:IceCaveProject/src/com/android/icecave/gui/LoadingScreen.java
-=======
-import com.android.icecave.general.Consts;
-import com.android.icecave.guiLogic.LoadingThread;
-import com.google.ads.AdView;
->>>>>>> 3e367c9d4c5dfbfe3bd25d633a5e713dda32ff19:IceCaveProject/src/com/android/icecave/gui/LoadingScreen.java
 
 public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 {
