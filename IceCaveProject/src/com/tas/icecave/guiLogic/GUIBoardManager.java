@@ -35,11 +35,11 @@ public class GUIBoardManager implements Serializable, ILoadable
 	private GameActivity mContext;
 	private int mBundleIndex;
 	private String[] mBundleFiles;
+	private String mBundleNameKey;
 
 	public GUIBoardManager(GameActivity context)
 	{
 		mContext = context;
-		mBundleIndex = 0;
 	}
 
 	/**
@@ -95,10 +95,10 @@ public class GUIBoardManager implements Serializable, ILoadable
 	 * @param Context
 	 *            - activity creating the game
 	 */
-	public void startNewGame(int boardSizeHeight, GameActivity context, EDifficulty difficulty)
+	public void startNewGame(int boardSizeHeight, EDifficulty difficulty)
 	{
-		int maxSize = Math.max(context.getFixedWidth(), context.getFixedHeight());
-		int minSize = Math.min(context.getFixedWidth(), context.getFixedHeight());
+		int maxSize = Math.max(mContext.getFixedWidth(), mContext.getFixedHeight());
+		int minSize = Math.min(mContext.getFixedWidth(), mContext.getFixedHeight());
 		int boardSizeWidth = (int) ((maxSize * 1.0 / minSize) * boardSizeHeight);
 
 		mIceCaveGame =
@@ -112,7 +112,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 
 		// Get the map bundle for the selected configurations
 		BaseBundleMetaData mData =
-				new BaseBundleMetaData(	mIceCaveGame.getPlayerPoint(),
+				new BaseBundleMetaData(	Consts.DEFAULT_START_POS,
 										difficulty,
 										EDirection.RIGHT,
 										boardSizeHeight,
@@ -129,6 +129,12 @@ public class GUIBoardManager implements Serializable, ILoadable
 			mBundleFiles = mContext.getResources()
 					.getAssets()
 					.list(BundleHasher.hashToString(hasher.createMapBundleHash(mData)));
+			
+			// Get the name of the hash and use it as the key for the index
+			mBundleNameKey = BundleHasher.hashToString(hasher.createMapBundleHash(mData));
+			
+			// Attempt to get index of user progress in current difficulty
+			mBundleIndex = mContext.getSharedPreferences(Consts.PREFS_FILE_TAG, 0).getInt(mBundleNameKey, 0);
 		} catch (NoSuchAlgorithmException e)
 		{
 			// TODO Auto-generated catch block
@@ -152,7 +158,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 	 * @throws StreamCorruptedException
 	 */
 	public void
-			newStage(InputStream mapFileStream, GameActivity context, GameTheme gameTheme) throws StreamCorruptedException,
+			newStage(InputStream mapFileStream, GameTheme gameTheme) throws StreamCorruptedException,
 					IOException,
 					ClassNotFoundException
 	{
@@ -165,8 +171,8 @@ public class GUIBoardManager implements Serializable, ILoadable
 		GUIScreenManager screenManager =
 				new GUIScreenManager(	board[0].length,
 										board.length,
-										context.getFixedWidth(),
-										context.getFixedHeight());
+										mContext.getFixedWidth(),
+										mContext.getFixedHeight());
 
 		// Go through the game board.
 		for (int yAxis = 0; yAxis < board.length; yAxis++)
@@ -176,7 +182,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 				mTiles[yAxis][xAxis] =
 						GUILogicServiceProvider.getInstance()
 								.getTileFactory()
-								.getTiles(board[yAxis][xAxis], screenManager, gameTheme);
+								.getTiles(board[yAxis][xAxis], screenManager, gameTheme); // FIXME Files don't get displayed right
 			}
 		}
 	}
@@ -191,7 +197,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 	 * @param context
 	 *            - Current activity context.
 	 */
-	public void newStage(Point playerStart, int wallWidth, GameActivity context, GameTheme gameTheme)
+	public void newStage(Point playerStart, int wallWidth, GameTheme gameTheme)
 	{
 		mIceCaveGame.newStage(playerStart, wallWidth);
 
@@ -199,8 +205,8 @@ public class GUIBoardManager implements Serializable, ILoadable
 		GUIScreenManager screenManager =
 				new GUIScreenManager(	board[0].length,
 										board.length,
-										context.getFixedWidth(),
-										context.getFixedHeight());
+										mContext.getFixedWidth(),
+										mContext.getFixedHeight());
 
 		// Go through the game board.
 		for (int yAxis = 0; yAxis < board.length; yAxis++)
@@ -271,10 +277,13 @@ public class GUIBoardManager implements Serializable, ILoadable
 		
 		// Check if file exists for loading
 		if (mBundleFiles != null && mBundleFiles.length > mBundleIndex) {
-			load.loadStageFromFile(mBundleFiles[mBundleIndex]);
+			load.loadStageFromFile(mBundleNameKey + "/" + mBundleFiles[mBundleIndex]);
 			
 			// Increase index
 			mBundleIndex++;
+			
+			// Set index of user progress in current difficulty
+			mContext.getSharedPreferences(Consts.PREFS_FILE_TAG, 0).edit().putInt(mBundleNameKey, mBundleIndex).commit();
 		}
 		
 		load.start();

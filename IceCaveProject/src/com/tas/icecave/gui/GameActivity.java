@@ -215,7 +215,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			// Initialize the game board & shit
 			mGBM.startNewGame(
 					(Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_SIZE),
-					this,
 					EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)]);
 
 			// Set views references for the loading screen
@@ -304,7 +303,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 						mPlayer.initializePlayer();
 
 						// Refresh map (must be on UI thread because the view itself is created there)
-						mTilesView.invalidate();
+						mTilesView.invalidate(); // FIXME Doesn't refresh if map is file loaded.
 
 						// Show views
 						drawForeground();

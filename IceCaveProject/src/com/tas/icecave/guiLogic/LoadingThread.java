@@ -38,12 +38,12 @@ public class LoadingThread extends Thread
 		mInputStream = null;
 	}
 
-	public void loadStageFromFile(String filePath)
+	public void loadStageFromFile(String stageName)
 	{
 		try
 		{	
 			AssetManager assetManager = mActivity.getResources().getAssets();
-	        mInputStream = assetManager.open(filePath);
+	        mInputStream = assetManager.open(stageName);
 		}
 		catch (StreamCorruptedException e1)
 		{
@@ -72,26 +72,23 @@ public class LoadingThread extends Thread
 		{
 			try
 			{
-				mBoardManager.newStage(mInputStream, mActivity, mTheme);
+				mBoardManager.newStage(mInputStream, mTheme);
 				mInputStream.close();
 				mInputStream = null;
 			} catch (StreamCorruptedException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ClassNotFoundException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else
 		{
 			// Create new stage
-			mBoardManager.newStage(mPlayerPosition, mWallWidth, mActivity, mTheme);
+			mBoardManager.newStage(mPlayerPosition, mWallWidth, mTheme);
 		}
 
 		// Get loading time
