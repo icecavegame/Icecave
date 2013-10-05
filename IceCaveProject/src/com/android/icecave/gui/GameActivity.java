@@ -219,7 +219,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer, 
 		
 		mTilesView = new TilesView(this, mGBM.getTiles());
 		mTilesView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-																FrameLayout.LayoutParams.MATCH_PARENT));
+																FrameLayout.LayoutParams.WRAP_CONTENT));
+		// Position the board just below the text fields
+		mTilesView.setTranslationY(mPlayerMoves.getBottom());
 		mActivityLayout.addView(mTilesView);
 
 		// Create new player view
