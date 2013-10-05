@@ -34,7 +34,7 @@ import com.tas.icecaveLibrary.general.EDirection;
 import com.tas.icecaveLibrary.mapLogic.IIceCaveGameStatus;
 import com.tas.icecaveLibrary.utils.UpdateDataBundle;
 
-public class GameActivity extends Activity implements ISwipeDetector, Observer, ILoadable
+public class GameActivity extends Activity implements ISwipeDetector, Observer
 {
 	private GUIBoardManager mGBM;
 	private DrawablePlayer mPlayer;
@@ -47,7 +47,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer, 
 	private ImageView mResetButton;
 
 	private final String GUI_BOARD_MANAGER_TAG = "guiBoardManager";
-	private final long HIDE_SHOW_TIME = 300;
 
 	private final static int DEFAULT_PLAYER = R.drawable.default_player;
 	private final static int DEFAULT_TILES = R.drawable.tileset1;
@@ -133,6 +132,14 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer, 
 		music.setClass(this, MusicService.class);
 		startService(music);
 	}
+	
+	public boolean isInitialized() {
+		return mIsInitialized;
+	}
+	
+	public GameTheme getGameTheme() {
+		return mGameTheme;
+	}
 
 	public int getFixedHeight()
 	{
@@ -200,13 +207,14 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer, 
 		if (mGBM == null && !isFinishing())
 		{
 			// Create once
-			mGBM = new GUIBoardManager();
+			mGBM = new GUIBoardManager(this);
 
 			// Initialize flags (only the first time the activity is created)
 			mIsFlagReached = false;
 
 			// Initialize the game board & shit
-			mGBM.startNewGame((Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_SIZE),
+			mGBM.startNewGame(
+					(Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_SIZE),
 					this,
 					EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)]);
 
@@ -214,7 +222,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer, 
 			mLoadingScreen.setViews();
 
 			// Create the first stage
-			mLoadingScreen.preLoad(this);
+			mLoadingScreen.preLoad(mGBM);
 
 			super.onWindowFocusChanged(hasFocus);
 		}
@@ -264,7 +272,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer, 
 					mIsFlagReached = false;
 
 					// Show loading screen in the meantime
-					mLoadingScreen.preLoad(this);
+					mLoadingScreen.preLoad(mGBM);
 				}
 			} else if (updateBundle.getNotificationId() == Consts.LOADING_LEVEL_FINISHED_UPDATE) // Level creation complete
 			{
@@ -286,7 +294,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer, 
 						}
 
 						// Hide loading screen
-						mLoadingScreen.postLoad(GameActivity.this);
+						mLoadingScreen.postLoad(mGBM);
 
 						// Reset move texts
 						setMinimumMoves();
@@ -424,30 +432,5 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer, 
 		}
 
 		super.onPause();
-	}
-
-	@Override
-	public long getAnimationDuration()
-	{
-		return HIDE_SHOW_TIME;
-	}
-
-	@Override
-	public GUIBoardManager getGuiBoardManager()
-	{
-		return mGBM;
-	}
-
-	@Override
-	public GameTheme getGameTheme()
-	{
-		return mGameTheme;
-	}
-
-	@Override
-	public boolean isInitialLoading()
-	{
-		// If initialized, not initial loading.
-		return !mIsInitialized;
 	}
 }

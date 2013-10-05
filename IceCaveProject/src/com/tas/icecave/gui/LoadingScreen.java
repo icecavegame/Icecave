@@ -6,11 +6,8 @@ import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.android.icecave.R;
 import com.google.ads.AdView;
-import com.tas.icecave.guiLogic.LoadingThread;
-import com.tas.icecaveLibrary.general.Consts;
 import com.tas.icecaveLibrary.general.GeneralServiceProvider;
 
 public class LoadingScreen extends RelativeLayout implements ILoadingScreen
@@ -54,9 +51,9 @@ public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 			String text =
 					mContext.getString(R.string.end_stage_message_1) +
 							" " +
-							Integer.toString(loadableData.getGuiBoardManager().getMovesCarriedOutThisStage()) +
+							Integer.toString(loadableData.getMovesCarriedOutThisStage()) +
 							"/" +
-							Integer.toString(loadableData.getGuiBoardManager().getMinimalMovesForStage()) +
+							Integer.toString(loadableData.getMinimalMovesForStage()) +
 							" " + mContext.getString(R.string.end_stage_message_2);
 
 			mLoadingMessage.setText(text);
@@ -76,14 +73,7 @@ public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 		// Show view with fade in animation
 		animator.alpha(1).setDuration(loadableData.getAnimationDuration()).start();
 
-		// Start creating a new stage
-		LoadingThread load =
-				new LoadingThread(	loadableData.getGuiBoardManager(),
-									Consts.DEFAULT_START_POS,
-									Consts.DEFAULT_WALL_WIDTH,
-									mContext,
-									loadableData.getGameTheme());
-		load.start();
+		loadableData.onLoad();
 	}
 
 	@Override

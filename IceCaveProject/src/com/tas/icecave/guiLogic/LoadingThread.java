@@ -1,18 +1,16 @@
 package com.tas.icecave.guiLogic;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StreamCorruptedException;
-
 import android.content.res.AssetManager;
 import android.os.SystemClock;
-
 import com.tas.icecave.gui.GameActivity;
 import com.tas.icecave.gui.GameTheme;
 import com.tas.icecaveLibrary.general.Consts;
 import com.tas.icecaveLibrary.utils.AutoObservable;
 import com.tas.icecaveLibrary.utils.Point;
 import com.tas.icecaveLibrary.utils.UpdateDataBundle;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StreamCorruptedException;
 
 public class LoadingThread extends Thread
 {
@@ -22,6 +20,7 @@ public class LoadingThread extends Thread
 	private GameActivity mActivity;
 	private GameTheme mTheme;
 	private AutoObservable mObservable;
+	private InputStream mInputStream;
 
 	public LoadingThread(GUIBoardManager boardManager,
 			Point playerPosition,
@@ -36,40 +35,18 @@ public class LoadingThread extends Thread
 		mTheme = theme;
 		mObservable = new AutoObservable();
 		mObservable.addObserver(mActivity);
+		mInputStream = null;
 	}
 
-	@Override
-	public void run()
+	public void loadStageFromFile(String filePath)
 	{
-		final long MINIMUM_LOADING_TIME = 3500;
-		
-		// Shuffle the theme.
-		mTheme.getThemeMap().shuffle();
-		
-		// Create new stage
-		//mBoardManager.newStage(mPlayerPosition, mWallWidth, mActivity, mTheme);
 		try
-		{
-			// TODO: Map name should be calculated by hash of meta data
-			// and index (0 - number of maps).
-			
+		{	
 			AssetManager assetManager = mActivity.getResources().getAssets();
-			InputStream inputStream = null;
-
-	        inputStream = assetManager.open("0");
-            if ( inputStream != null){
-    			mBoardManager.newStage(inputStream,
-						   mActivity,
-						   mTheme);
-            }
-            else
-            {
-            	return;
-            }
+	        mInputStream = assetManager.open(filePath);
 		}
 		catch (StreamCorruptedException e1)
 		{
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 
 			// TODO HANDLE ERROR
@@ -77,19 +54,46 @@ public class LoadingThread extends Thread
 		}
 		catch (IOException e1)
 		{
-			// TODO Auto-generated catch block
 			// TODO HANDLE ERROR
 			e1.printStackTrace();
 			return;
 		}
-		catch (ClassNotFoundException e1)
+	}
+
+	@Override
+	public void run()
+	{
+		final long MINIMUM_LOADING_TIME = 3500;
+
+		// Shuffle the theme.
+		mTheme.getThemeMap().shuffle();
+
+		if (mInputStream != null)
 		{
-			// TODO Auto-generated catch block
-			// TODO HANDLE ERROR
-			e1.printStackTrace();
-			return;
+			try
+			{
+				mBoardManager.newStage(mInputStream, mActivity, mTheme);
+				mInputStream.close();
+				mInputStream = null;
+			} catch (StreamCorruptedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else
+		{
+			// Create new stage
+			mBoardManager.newStage(mPlayerPosition, mWallWidth, mActivity, mTheme);
 		}
-		
+
 		// Get loading time
 		long loadingTime = SystemClock.currentThreadTimeMillis();
 
@@ -97,14 +101,15 @@ public class LoadingThread extends Thread
 		try
 		{
 			// If loading time took less than minimum, add a delay to the animation
-			if (MINIMUM_LOADING_TIME - loadingTime > 0) {
+			if (MINIMUM_LOADING_TIME - loadingTime > 0)
+			{
 				Thread.sleep(MINIMUM_LOADING_TIME - loadingTime);
 			}
 		} catch (InterruptedException e)
 		{
 			e.printStackTrace();
 		}
-		
+
 		// Notify on completion
 		mObservable.notifyObservers(new UpdateDataBundle(Consts.LOADING_LEVEL_FINISHED_UPDATE, null));
 	}
