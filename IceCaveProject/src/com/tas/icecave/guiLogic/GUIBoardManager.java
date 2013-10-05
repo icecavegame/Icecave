@@ -103,6 +103,9 @@ public class GUIBoardManager implements Serializable
 		mIceCaveGame.newStage(mapFileStream);
 		
 		ITile[][] board = mIceCaveGame.getBoard();
+		// Get the tiles
+		mTiles = new Bitmap[board.length][board[0].length];
+		
 		GUIScreenManager screenManager = 
 				new GUIScreenManager(board[0].length, 
 									 board.length, 
