@@ -3,16 +3,17 @@
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blueish" >
+    android:background="@drawable/penguin" >
 
+    <!-- Add all credit strings & copyright. put all of them in a colored layout or something so they'd be readable -->
     <TextView
         android:id="@+id/credits"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="@string/credits" />
-    
-        <TextView
+
+    <TextView
         android:id="@+id/visualArtCredits"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,14 +37,14 @@
         android:layout_alignParentLeft="true"
         android:text="@string/mute_music" />
 
-    <TextView 
+    <TextView
         android:id="@+id/selectPlayerThemeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/selectPlayerTheme"
         android:layout_alignParentRight="true"
         android:text="@string/select_player_theme" />
-    
+
     <Spinner
         android:id="@+id/selectPlayerTheme"
         android:layout_width="wrap_content"
@@ -51,8 +52,8 @@
         android:layout_above="@+id/credits"
         android:layout_alignParentRight="true"
         android:text="@string/select_player_theme" />
-    
-        <TextView 
+
+    <TextView
         android:id="@+id/selectBackgroundThemeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
