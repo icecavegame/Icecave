@@ -1,5 +1,7 @@
 package com.tas.icecave.gui;
 
+import com.android.icecave.error.ExceptionHandler;
+
 import java.util.Observable;
 import java.util.Observer;
 
@@ -61,6 +63,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		
+		// Set an exception handler for this activity first of all
+		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
+		
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -231,7 +237,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private void createLayouts()
 	{
 		// Set up reset button image
-		mResetButton.setImageResource(R.drawable.reset_button);
+		mResetButton.setImageResource(R.drawable.reset_button_states);
 
 		mTilesView = new TilesView(this, mGBM.getTiles());
 		mTilesView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,

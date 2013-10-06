@@ -5,4 +5,8 @@
     <color name="orange">#FF7F00</color>
     <color name="dark_gray">#1C1B1A</color>
     <color name="red">#F90000</color>
+    <color name="android_blue_dark">#0099CC</color>
+    <color name="android_blue_light">#33B5E5</color>
+    <color name="android_purple_dark">#9933CC</color>
+    <color name="android_purple_light">#AA66CC</color>
 </resources>

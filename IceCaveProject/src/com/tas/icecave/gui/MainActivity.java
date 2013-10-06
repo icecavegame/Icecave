@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -14,12 +15,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-
+import android.widget.TextView;
 import com.android.icecave.R;
+import com.android.icecave.error.ExceptionHandler;
 import com.tas.icecave.general.MusicService;
 import com.tas.icecaveLibrary.general.Consts;
 import com.tas.icecaveLibrary.general.EDifficulty;
@@ -51,6 +52,10 @@ public class MainActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		
+		// Set an exception handler for this activity first of all
+		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
+		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -65,9 +70,13 @@ public class MainActivity extends Activity
 
 		mShared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
 
-		Button optionsActivity = (Button) findViewById(R.id.options_button);
-		Button gameActivity = (Button) findViewById(R.id.game_button);
+		TextView optionsActivity = (TextView) findViewById(R.id.options_button);
+		TextView gameActivity = (TextView) findViewById(R.id.game_starter);
 		RadioGroup levelSelect = (RadioGroup) findViewById(R.id.levelSelect);
+		
+		// Set styles
+		Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_ROBOTO_BLACK);
+		gameActivity.setTypeface(tf);
 
 		// Load levels dynamically from EDifficulty class
 		loadLevelsToRadioGroup(levelSelect);

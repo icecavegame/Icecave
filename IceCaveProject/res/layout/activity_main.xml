@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_vertical|center_horizontal"
-    android:background="@drawable/penguin"
+    android:background="@drawable/background"
     android:gravity="center"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -12,21 +12,25 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <Button
-        android:id="@+id/game_button"
+    <TextView
+        android:id="@+id/game_starter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/start_game" />
+        android:text="@string/start_game"
+        style="@style/main_activity_texts"
+        android:textColor="@drawable/start_game_state" />
 
-    <Button
+    <TextView
         android:id="@+id/options_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/settings" />
+        android:text="@string/settings"
+        style="@style/main_activity_texts"
+        android:textColor="@drawable/settings_state" />
 
     <RadioGroup
         android:id="@+id/levelSelect"

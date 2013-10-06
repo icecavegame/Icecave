@@ -3,31 +3,26 @@
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/penguin" >
+    android:background="@drawable/background" >
 
     <!-- Add all credit strings & copyright. put all of them in a colored layout or something so they'd be readable -->
     <TextView
         android:id="@+id/credits"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAlignment="center"
         android:layout_centerInParent="true"
-        android:text="@string/credits" />
-
-    <TextView
-        android:id="@+id/visualArtCredits"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/credits"
-        android:layout_centerInParent="true"
-        android:text="@string/visual_artist_credits" />
+        android:text="@string/credits"
+        style="@style/credits_style" />
 
     <TextView
         android:id="@+id/version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/visualArtCredits"
+        android:layout_below="@+id/credits"
         android:layout_centerInParent="true"
-        android:text="@string/version_number" />
+        android:text="@string/version_number"
+        style="@style/medium_bold" />
 
     <CheckBox
         android:id="@+id/muteMusic"
@@ -49,7 +44,7 @@
         android:id="@+id/selectPlayerTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/credits"
+        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:text="@string/select_player_theme" />
 

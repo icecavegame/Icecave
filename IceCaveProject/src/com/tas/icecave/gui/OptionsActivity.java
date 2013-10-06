@@ -1,5 +1,11 @@
 package com.tas.icecave.gui;
 
+import android.graphics.Typeface;
+
+import android.widget.TextView;
+
+import com.android.icecave.error.ExceptionHandler;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -37,6 +43,10 @@ public class OptionsActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		
+		// Set an exception handler for this activity first of all
+		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
+		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_options);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -49,11 +59,16 @@ public class OptionsActivity extends Activity
 
 		Spinner backgroundThemeSelect = (Spinner) findViewById(R.id.selectBackgroundTheme);
 		Spinner playerThemeSelect = (Spinner) findViewById(R.id.selectPlayerTheme);
+		TextView credits = (TextView) findViewById(R.id.credits);
 		final CheckBox muteMusic = (CheckBox) findViewById(R.id.muteMusic);
 
 		final PlayerThemes playerThemes = new PlayerThemes();
 		final TileThemes tileThemes = new TileThemes();
 		final SharedPreferences shared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
+		
+		// Set styles
+		Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_ROBOTO_CONDENSED_LIGHT);
+		credits.setTypeface(tf);
 
 		ArrayAdapter<String> tileAdapter =
 				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
