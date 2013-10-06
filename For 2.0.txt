@@ -5,3 +5,5 @@
 * Add more music (preferably for each level)
 
 * Add an XML file for each tileset that would define the tiles and their types
+
+* Add hint functionality, and sell users more hints for a price.

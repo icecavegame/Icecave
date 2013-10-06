@@ -37,4 +37,8 @@ public class TilesView extends View
 	public int getBoardY() {
 		return mBoard.length;
 	}
+	
+	public void setNewBoard(Bitmap[][] board) {
+		mBoard = board;
+	}
 }

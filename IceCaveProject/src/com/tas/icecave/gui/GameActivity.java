@@ -269,6 +269,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				{
 					// Reset reached flag
 					mIsFlagReached = false;
+					
+					// Save the new stage index if stage was loaded from file
+					mGBM.saveStageIndex();
 
 					// Show loading screen in the meantime
 					mLoadingScreen.preLoad(mGBM);
@@ -294,6 +297,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 						// Hide loading screen
 						mLoadingScreen.postLoad(mGBM);
+						
+						// Set new GUI level board in case it was restarted (if loaded from file)
+						mTilesView.setNewBoard(mGBM.getTiles());
 
 						// Reset move texts
 						setMinimumMoves();
@@ -303,7 +309,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 						mPlayer.initializePlayer();
 
 						// Refresh map (must be on UI thread because the view itself is created there)
-						mTilesView.invalidate(); // FIXME Doesn't refresh if map is file loaded.
+						mTilesView.invalidate();
 
 						// Show views
 						drawForeground();

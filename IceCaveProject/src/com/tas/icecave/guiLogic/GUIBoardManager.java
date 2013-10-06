@@ -106,7 +106,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 								boardSizeHeight,
 								boardSizeWidth,
 								difficulty);
-		
+
 		// Get the tiles
 		mTiles = new Bitmap[boardSizeHeight][boardSizeWidth];
 
@@ -120,19 +120,20 @@ public class GUIBoardManager implements Serializable, ILoadable
 										boardSizeHeight * boardSizeWidth / Consts.DEFAULT_BOULDER_RELATION,
 										mContext.getString(R.string.version_number),
 										Consts.DEFAULT_WALL_WIDTH);
-		
+
 		try
 		{
 			BundleHasher hasher = new BundleHasher("md5");
-			
+
 			// Get the list of files for the bundle
-			mBundleFiles = mContext.getResources()
-					.getAssets()
-					.list(BundleHasher.hashToString(hasher.createMapBundleHash(mData)));
-			
+			mBundleFiles =
+					mContext.getResources()
+							.getAssets()
+							.list(BundleHasher.hashToString(hasher.createMapBundleHash(mData)));
+
 			// Get the name of the hash and use it as the key for the index
 			mBundleNameKey = BundleHasher.hashToString(hasher.createMapBundleHash(mData));
-			
+
 			// Attempt to get index of user progress in current difficulty
 			mBundleIndex = mContext.getSharedPreferences(Consts.PREFS_FILE_TAG, 0).getInt(mBundleNameKey, 0);
 		} catch (NoSuchAlgorithmException e)
@@ -157,14 +158,14 @@ public class GUIBoardManager implements Serializable, ILoadable
 	 * @throws IOException
 	 * @throws StreamCorruptedException
 	 */
-	public void
-			newStage(InputStream mapFileStream, GameTheme gameTheme) throws StreamCorruptedException,
-					IOException,
-					ClassNotFoundException
+	public void newStage(InputStream mapFileStream, GameTheme gameTheme) throws StreamCorruptedException,
+			IOException,
+			ClassNotFoundException
 	{
 		mIceCaveGame.newStage(mapFileStream);
 
 		ITile[][] board = mIceCaveGame.getBoard();
+		
 		// Get the tiles
 		mTiles = new Bitmap[board.length][board[0].length];
 
@@ -182,7 +183,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 				mTiles[yAxis][xAxis] =
 						GUILogicServiceProvider.getInstance()
 								.getTileFactory()
-								.getTiles(board[yAxis][xAxis], screenManager, gameTheme); // FIXME Files don't get displayed right
+								.getTiles(board[yAxis][xAxis], screenManager, gameTheme);
 			}
 		}
 	}
@@ -270,22 +271,33 @@ public class GUIBoardManager implements Serializable, ILoadable
 		// Start creating a new stage
 		LoadingThread load =
 				new LoadingThread(	this,
-						Consts.DEFAULT_START_POS,
-						Consts.DEFAULT_WALL_WIDTH,
-						mContext,
-						getGameTheme());
-		
+									Consts.DEFAULT_START_POS,
+									Consts.DEFAULT_WALL_WIDTH,
+									mContext,
+									getGameTheme());
+
 		// Check if file exists for loading
-		if (mBundleFiles != null && mBundleFiles.length > mBundleIndex) {
+		if (mBundleFiles != null && mBundleFiles.length > mBundleIndex)
+		{
 			load.loadStageFromFile(mBundleNameKey + "/" + mBundleFiles[mBundleIndex]);
-			
+		}
+
+		load.start();
+	}
+
+	public void saveStageIndex()
+	{
+		// Check if file exists and if index is still within file range
+		if (mBundleFiles != null && mBundleFiles.length > mBundleIndex)
+		{
 			// Increase index
 			mBundleIndex++;
-			
+
 			// Set index of user progress in current difficulty
-			mContext.getSharedPreferences(Consts.PREFS_FILE_TAG, 0).edit().putInt(mBundleNameKey, mBundleIndex).commit();
+			mContext.getSharedPreferences(Consts.PREFS_FILE_TAG, 0)
+					.edit()
+					.putInt(mBundleNameKey, mBundleIndex)
+					.commit();
 		}
-		
-		load.start();
 	}
 }
