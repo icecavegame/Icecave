@@ -52,10 +52,10 @@ public class MainActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		
+
 		// Set an exception handler for this activity first of all
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
-		
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -73,7 +73,7 @@ public class MainActivity extends Activity
 		TextView optionsActivity = (TextView) findViewById(R.id.options_button);
 		TextView gameActivity = (TextView) findViewById(R.id.game_starter);
 		RadioGroup levelSelect = (RadioGroup) findViewById(R.id.levelSelect);
-		
+
 		// Set styles
 		Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_ROBOTO_BLACK);
 		gameActivity.setTypeface(tf);
@@ -89,9 +89,13 @@ public class MainActivity extends Activity
 		{
 			@Override
 			public void onClick(View v)
-			{
-				mIntent =new Intent(v.getContext(), OptionsActivity.class);
-				startActivity(mIntent);
+			{				
+				mIntent = new Intent(v.getContext(), OptionsActivity.class);
+				
+				// No animation between activities
+				mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+				startActivityForResult(mIntent, 0);
+				
 			}
 		});
 
@@ -102,11 +106,15 @@ public class MainActivity extends Activity
 			{
 				mIntent = new Intent(v.getContext(), GameActivity.class);
 
+				// No animation between activities
+				mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
 				// Load selection from prefs if exists
-				mIntent.putExtra(Consts.LEVEL_SELECT_TAG, mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL));
+				mIntent.putExtra(Consts.LEVEL_SELECT_TAG,
+						mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL));
 				mIntent.putExtra(Consts.SELECT_BOARD_SIZE_SIZE,
 						mShared.getInt(Consts.SELECT_BOARD_SIZE_SIZE, Consts.DEFAULT_BOARD_SIZE));
-				startActivity(mIntent);
+				startActivityForResult(mIntent, 0);
 			}
 		});
 
@@ -193,7 +201,7 @@ public class MainActivity extends Activity
 		{
 			initMusic();
 		}
-		
+
 		// Reset intent
 		mIntent = null;
 
@@ -210,5 +218,14 @@ public class MainActivity extends Activity
 		}
 
 		super.onPause();
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		// No fucking animation!
+		overridePendingTransition(0, 0); // 0 for no animation
+		
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 }
