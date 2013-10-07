@@ -100,6 +100,8 @@ public class GUIBoardManager implements Serializable, ILoadable
 		int maxSize = Math.max(mContext.getFixedWidth(), mContext.getFixedHeight());
 		int minSize = Math.min(mContext.getFixedWidth(), mContext.getFixedHeight());
 		int boardSizeWidth = (int) ((maxSize * 1.0 / minSize) * boardSizeHeight);
+		
+		System.out.println("Board width in tiles: " + boardSizeWidth + ", height in tiles: " + boardSizeHeight);
 
 		mIceCaveGame =
 				new IceCaveGame(boardSizeHeight * boardSizeWidth / Consts.DEFAULT_BOULDER_RELATION,
@@ -138,11 +140,9 @@ public class GUIBoardManager implements Serializable, ILoadable
 			mBundleIndex = mContext.getSharedPreferences(Consts.PREFS_FILE_TAG, 0).getInt(mBundleNameKey, 0);
 		} catch (NoSuchAlgorithmException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
