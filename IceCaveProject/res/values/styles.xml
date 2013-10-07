@@ -27,9 +27,12 @@
         <item name="android:textSize">@dimen/large_font_size</item>
     </style>
 
-    <style name="credits_style">
-        <item name="android:textSize">@dimen/dimen_credits</item>
-        <item name="android:textColor">@color/android_blue_dark</item>
+    <style name="credits_style_main">
+        <item name="android:textSize">@dimen/dimen_credits_main</item>
+    </style>
+    
+    <style name="credits_style_secondary">
+        <item name="android:textSize">@dimen/dimen_credits_secondary</item>
     </style>
 
 </resources>

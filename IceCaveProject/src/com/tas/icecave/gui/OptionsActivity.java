@@ -57,9 +57,11 @@ public class OptionsActivity extends Activity
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		Spinner backgroundThemeSelect = (Spinner) findViewById(R.id.selectBackgroundTheme);
+	//	Spinner backgroundThemeSelect = (Spinner) findViewById(R.id.selectBackgroundTheme);
 		Spinner playerThemeSelect = (Spinner) findViewById(R.id.selectPlayerTheme);
-		TextView credits = (TextView) findViewById(R.id.credits);
+		TextView creditsMain = (TextView) findViewById(R.id.credits_main);
+		TextView creditsSecondary = (TextView) findViewById(R.id.credits_secondary);
+		TextView gameAndVersion = (TextView) findViewById(R.id.game_and_version);
 		final CheckBox muteMusic = (CheckBox) findViewById(R.id.muteMusic);
 
 		final PlayerThemes playerThemes = new PlayerThemes();
@@ -68,13 +70,18 @@ public class OptionsActivity extends Activity
 		
 		// Set styles
 		Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_ROBOTO_CONDENSED_LIGHT);
-		credits.setTypeface(tf);
+		creditsMain.setTypeface(tf);
+		creditsSecondary.setTypeface(tf);
+		gameAndVersion.setTypeface(tf);
+		
+		// Set game and version and make a space after
+		gameAndVersion.setText(getString(R.string.game_name) + " " + getString(R.string.version_number) + "\n");
 
 		ArrayAdapter<String> tileAdapter =
 				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
 		tileAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tileAdapter.addAll(tileThemes.getThemeNames());
-		backgroundThemeSelect.setAdapter(tileAdapter);
+	//	backgroundThemeSelect.setAdapter(tileAdapter);
 
 		ArrayAdapter<String> playerAdapter =
 				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
@@ -83,33 +90,33 @@ public class OptionsActivity extends Activity
 		playerThemeSelect.setAdapter(playerAdapter);
 
 		// Set initial values in spinners
-		backgroundThemeSelect.setSelection(tileThemes.getTilePositionById(shared.getInt(Consts.THEME_SELECT_TAG,
-				tileThemes.getThemeId(0))));
+	//	backgroundThemeSelect.setSelection(tileThemes.getTilePositionById(shared.getInt(Consts.THEME_SELECT_TAG,
+			//	tileThemes.getThemeId(0))));
 		playerThemeSelect.setSelection(playerThemes.getTilePositionById(shared.getInt(Consts.PLAYER_SELECT_TAG,
 				playerThemes.getThemeId(0))));
 
-		backgroundThemeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
-		{
-			boolean isInitialized = false;
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
-			{
-				// Avoid automatic selected of first item at creation
-				if (isInitialized)
-				{
-					// Save selected tile theme
-					shared.edit().putInt(Consts.THEME_SELECT_TAG, tileThemes.getThemeId(pos)).commit();
-				}
-
-				isInitialized = true;
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0)
-			{
-			}
-		});
+//		backgroundThemeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
+//		{
+//			boolean isInitialized = false;
+//
+//			@Override
+//			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
+//			{
+//				// Avoid automatic selected of first item at creation
+//				if (isInitialized)
+//				{
+//					// Save selected tile theme
+//					shared.edit().putInt(Consts.THEME_SELECT_TAG, tileThemes.getThemeId(pos)).commit();
+//				}
+//
+//				isInitialized = true;
+//			}
+//
+//			@Override
+//			public void onNothingSelected(AdapterView<?> arg0)
+//			{
+//			}
+//		});
 
 		playerThemeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
 		{

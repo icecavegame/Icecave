@@ -6,12 +6,14 @@
     <string name="start_game">Start Game</string>
     <string name="settings">Settings</string>
     <string name="version_number">1.0</string>
+    <string name="game_name">Into the Cave</string>
     <string name="mute_music">Mute Music</string>
     <string name="select_player_theme">Select Player Theme</string>
     <string name="select_background_theme">Select Background Theme</string>
     <string name="player_moves_text">Moves:</string>
     <string name="minimum_moves_text">Minimum Moves:</string>
-    <string name="credits">Created by Sagie Levy and Tom Feigin.\nVisual Artists: Lior Raz, RPGVX Ace Lite\nMusic: Tom Feigin\nSpecial Thanks: Jonathan Shamir, Shmuel Agranat\nThis game has been brought to you by ToiletGamesInc.\nContact us at: icecavegame@gmail.com</string>
+    <string name="credits_main">Created by Sagie Levy and Tom Feigin.\n\nVisual Artists: Lior Raz, RPGVX Ace Lite\nMusic: Tom Feigin\n</string>
+    <string name="credits_secondary">Special Thanks: Jonathan Shamir, Shmuel Agranat\nThis game has been brought to you by <b>ToiletGamesInc.</b>\nContact us at: icecavegame@gmail.com</string>
     <string name="end_stage_message_1">Stage complete! Took you</string>
     <string name="end_stage_message_2">moves to get to the exit.</string>
 
