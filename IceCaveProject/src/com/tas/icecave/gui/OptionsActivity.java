@@ -57,8 +57,7 @@ public class OptionsActivity extends Activity
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-	//	Spinner backgroundThemeSelect = (Spinner) findViewById(R.id.selectBackgroundTheme);
-		Spinner playerThemeSelect = (Spinner) findViewById(R.id.selectPlayerTheme);
+		Spinner themeSelect = (Spinner) findViewById(R.id.selectTheme);
 		TextView creditsMain = (TextView) findViewById(R.id.credits_main);
 		TextView creditsSecondary = (TextView) findViewById(R.id.credits_secondary);
 		TextView gameAndVersion = (TextView) findViewById(R.id.game_and_version);
@@ -81,44 +80,21 @@ public class OptionsActivity extends Activity
 				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
 		tileAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		tileAdapter.addAll(tileThemes.getThemeNames());
-	//	backgroundThemeSelect.setAdapter(tileAdapter);
+		themeSelect.setAdapter(tileAdapter);
 
-		ArrayAdapter<String> playerAdapter =
-				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-		playerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		playerAdapter.addAll(playerThemes.getThemeNames());
-		playerThemeSelect.setAdapter(playerAdapter);
+//		ArrayAdapter<String> playerAdapter =
+//				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+//		playerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//		playerAdapter.addAll(playerThemes.getThemeNames());
+//		playerThemeSelect.setAdapter(playerAdapter);
 
 		// Set initial values in spinners
-	//	backgroundThemeSelect.setSelection(tileThemes.getTilePositionById(shared.getInt(Consts.THEME_SELECT_TAG,
-			//	tileThemes.getThemeId(0))));
-		playerThemeSelect.setSelection(playerThemes.getTilePositionById(shared.getInt(Consts.PLAYER_SELECT_TAG,
-				playerThemes.getThemeId(0))));
+	themeSelect.setSelection(tileThemes.getTilePositionById(shared.getInt(Consts.THEME_SELECT_TAG,
+			tileThemes.getThemeId(0))));
+//		playerThemeSelect.setSelection(playerThemes.getTilePositionById(shared.getInt(Consts.PLAYER_SELECT_TAG,
+//				playerThemes.getThemeId(0))));
 
-//		backgroundThemeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
-//		{
-//			boolean isInitialized = false;
-//
-//			@Override
-//			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
-//			{
-//				// Avoid automatic selected of first item at creation
-//				if (isInitialized)
-//				{
-//					// Save selected tile theme
-//					shared.edit().putInt(Consts.THEME_SELECT_TAG, tileThemes.getThemeId(pos)).commit();
-//				}
-//
-//				isInitialized = true;
-//			}
-//
-//			@Override
-//			public void onNothingSelected(AdapterView<?> arg0)
-//			{
-//			}
-//		});
-
-		playerThemeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
+		themeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
 		{
 			boolean isInitialized = false;
 
@@ -128,8 +104,8 @@ public class OptionsActivity extends Activity
 				// Avoid automatic selected of first item at creation
 				if (isInitialized)
 				{
-					// Save selected player theme
-					shared.edit().putInt(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(pos)).commit();
+					// Save selected tile theme
+					shared.edit().putInt(Consts.THEME_SELECT_TAG, tileThemes.getThemeId(pos)).commit();
 				}
 
 				isInitialized = true;
@@ -140,6 +116,33 @@ public class OptionsActivity extends Activity
 			{
 			}
 		});
+		
+		// Since we are limiting to one player tileset (at least for now) this is preset initially
+		// Save selected player theme
+		shared.edit().putInt(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(0)).commit();
+
+//		playerThemeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
+//		{
+//			boolean isInitialized = false;
+//
+//			@Override
+//			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
+//			{
+//				// Avoid automatic selected of first item at creation
+//				if (isInitialized)
+//				{
+//					// Save selected player theme
+//					shared.edit().putInt(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(pos)).commit();
+//				}
+//
+//				isInitialized = true;
+//			}
+//
+//			@Override
+//			public void onNothingSelected(AdapterView<?> arg0)
+//			{
+//			}
+//		});
 
 		mScon = new ServiceConnection()
 		{

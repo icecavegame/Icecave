@@ -32,7 +32,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 	private transient Bitmap[][] mTiles;
 	private IceCaveGame mIceCaveGame;
 	private final long HIDE_SHOW_TIME = 300;
-	private GameActivity mContext;
+	private transient GameActivity mContext;
 	private int mBundleIndex;
 	private String[] mBundleFiles;
 	private String mBundleNameKey;

@@ -51,20 +51,19 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/selectPlayerThemeText"
+        android:id="@+id/selectThemeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/selectPlayerTheme"
+        android:layout_above="@+id/selectTheme"
         android:layout_alignParentLeft="true"
-        android:text="@string/select_player_theme" />
+        android:text="@string/select_theme" />
 
     <Spinner
-        android:id="@+id/selectPlayerTheme"
+        android:id="@+id/selectTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:text="@string/select_player_theme" />
+        android:layout_centerVertical="true" />
 
     <CheckBox
         android:id="@+id/muteMusic"

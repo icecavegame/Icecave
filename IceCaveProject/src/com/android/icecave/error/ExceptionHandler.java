@@ -10,7 +10,7 @@ public class ExceptionHandler implements UncaughtExceptionHandler
 	public ExceptionHandler (Object toHandle) {
 		mToHandle = toHandle;
 	}
-	
+
 	@Override
 	public void uncaughtException(Thread arg0, Throwable arg1)
 	{

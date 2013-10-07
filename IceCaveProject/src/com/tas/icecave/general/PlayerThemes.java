@@ -12,9 +12,9 @@ public class PlayerThemes implements ITheme
 	{
 		mHolders =
 				new ThemeHolder[]
-					{ new ThemeHolder(R.drawable.default_player, "Warrior"),
+					{ new ThemeHolder(R.drawable.penguin_player, "Penguin"),
 				  	  new ThemeHolder(R.drawable.girl_1, "Magician"),
-					  new ThemeHolder(R.drawable.penguin_player, "Penguin") };
+				  	new ThemeHolder(R.drawable.default_player, "Warrior") };
 	}
 
 	@Override

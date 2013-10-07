@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:alpha="0.8" />
+        android:alpha="0.8"
+        android:contentDescription="@string/reset_button" />
 
     <TextView
         android:id="@+id/player_moves"
@@ -49,6 +50,15 @@
             ads:adUnitId="ca-app-pub-5393804021684839/3274547109"
             ads:loadAdOnCreate="true"
             ads:testDevices="TEST_EMULATOR, 00703500144c11ee" />
+        
+        <TextView android:id="@+id/loading_screen_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_above="@+id/loading_screen_text"
+            android:textAlignment="center"
+            android:textAppearance="@style/medium_bold"
+            android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/loading_screen_text"
@@ -56,6 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginBottom="12dp"
+            android:layout_marginTop="12dp"
             android:textAlignment="center"
             android:textAppearance="@style/medium_bold"
             android:textColor="@color/white" />

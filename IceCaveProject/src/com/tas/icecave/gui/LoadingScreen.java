@@ -13,7 +13,7 @@ import com.tas.icecaveLibrary.general.GeneralServiceProvider;
 public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 {
 	private GameActivity mContext;
-	private TextView mLoadingMessage;
+	private TextView mLoadingMessage, mLoadingResult;
 	private AdView mAd;
 
 	public LoadingScreen(Context context)
@@ -33,6 +33,7 @@ public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 	public void setViews()
 	{
 		mLoadingMessage = (TextView) findViewById(R.id.loading_screen_text);
+		mLoadingResult = (TextView) findViewById(R.id.loading_screen_result);
 		mAd = (AdView) findViewById(R.id.advertisment_loading_screen_top);
 	}
 
@@ -47,25 +48,15 @@ public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 		// Show summary text if not initial loading screen
 		if (!loadableData.isInitialLoading())
 		{
-			// Update text
-			String text =
-					mContext.getString(R.string.end_stage_message_1) +
-							" " +
-							Integer.toString(loadableData.getMovesCarriedOutThisStage()) +
-							"/" +
-							Integer.toString(loadableData.getMinimalMovesForStage()) +
-							" " + mContext.getString(R.string.end_stage_message_2);
-
-			mLoadingMessage.setText(text);
-		} else
-		{
-			String[] messages = mContext.getResources().getStringArray(R.array.initial_stage_messages);
-
-			// Set a random initial text from the array
-			mLoadingMessage.setText(messages[GeneralServiceProvider.getInstance()
-					.getRandom()
-					.nextInt(messages.length)]);
+			// Show how much moves player made / minimum moves required, then a random phrase
+			mLoadingResult.setText(Integer.toString(loadableData.getMovesCarriedOutThisStage()) + "/" +
+					Integer.toString(loadableData.getMinimalMovesForStage()));
+		} else {
+			mLoadingResult.setText(R.string.empty);
 		}
+
+		// Set a random initial text from the array
+		mLoadingMessage.setText(getRandomPhrase());
 
 		// Set animation & Go!
 		final ViewPropertyAnimator animator = animate();
@@ -106,6 +97,13 @@ public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 	{
 		mAd.setVisibility(View.GONE);
 		mAd.setClickable(false);
+	}
+
+	private String getRandomPhrase()
+	{
+		String[] messages = mContext.getResources().getStringArray(R.array.initial_stage_messages);
+
+		return messages[GeneralServiceProvider.getInstance().getRandom().nextInt(messages.length)];
 	}
 
 }
