@@ -248,7 +248,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		// Position the board below the player moves text and add the view
 		mTilesView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
 				RelativeLayout.LayoutParams.WRAP_CONTENT));
-		mTilesView.setTranslationY(mPlayerMoves.getBottom());
+		
+		// Set the board a little below the texts at the top
+		mTilesView.setTranslationY(mPlayerMoves.getBottom() * 2);
 		mActivityLayout.addView(mTilesView);
 
 		// Set reset button position below board
@@ -260,7 +262,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		mResetButton.setLayoutParams(resetParams);
 		
 		// Place reset button 3 tile worth of size below board
-		mResetButton.setTranslationY((Consts.DEFAULT_BOARD_SIZE * mTilesView.getBoardY() * 2) + mTilesView.getBoardY() * 3);
+		mResetButton.setTranslationY((Consts.DEFAULT_BOARD_SIZE * mTilesView.getBoardY() * 2) + mTilesView.getTranslationY());
 
 		// Create new player view
 		mPlayer = new DrawablePlayer(this, mGameTheme);

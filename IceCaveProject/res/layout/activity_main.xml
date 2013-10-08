@@ -14,30 +14,38 @@
 
     <TextView
         android:id="@+id/game_starter"
+        style="@style/main_activity_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
         android:text="@string/start_game"
-        style="@style/main_activity_text"
         android:textColor="@drawable/start_game_state" />
 
     <TextView
         android:id="@+id/options_button"
+        style="@style/main_activity_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="@string/settings"
-        style="@style/main_activity_text"
         android:textColor="@drawable/settings_state" />
 
-    <RadioGroup
-        android:id="@+id/levelSelect"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" >
-    </RadioGroup>
+        android:layout_centerInParent="true"
+        android:alpha="0.4"
+        android:background="@color/white" >
+
+        <RadioGroup
+            android:id="@+id/levelSelect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="1" >
+        </RadioGroup>
+    </RelativeLayout>
 
 </RelativeLayout>

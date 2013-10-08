@@ -74,7 +74,7 @@ public class OptionsActivity extends Activity
 		gameAndVersion.setTypeface(tf);
 		
 		// Set game and version and make a space after
-		gameAndVersion.setText(getString(R.string.game_name) + " " + getString(R.string.version_number) + "\n");
+		gameAndVersion.setText(getString(R.string.app_name) + " " + getString(R.string.version_number) + "\n");
 
 		ArrayAdapter<String> tileAdapter =
 				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);

@@ -2,6 +2,7 @@
 <resources>
     <color name="blueish">#447993</color>
     <color name="white">#FFFFFF</color>
+    <color name="light_gray">#dbdbdb</color>
     <color name="orange">#FF7F00</color>
     <color name="dark_gray">#1C1B1A</color>
     <color name="red">#F90000</color>
