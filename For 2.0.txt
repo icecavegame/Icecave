@@ -1,6 +1,8 @@
-* Make one large boulder image when some boulders are adjacent to each other in a certain way.
+*** A MUST! Remove all dynamic width calculation and set the board to square sizes at all times. Then make the height and width of the board equal on screen (!! Consider switching to portrait display), and finally change the layout of the display so that nothing would shorten the shorter side (height for landscape, width for portrait) of the already small board.
 
-* Create levels and group them into bundles. Then like flow, players get mark A for completing a level perfect or mark B for regular completion. New bundles open once older ones finish. Should be different themes.
+*** Create levels and group them into bundles. Then like flow, players get mark A for completing a level perfect or mark B for regular completion. New bundles open once older ones finish. Should be different themes.
+
+* Make one large boulder image when some boulders are adjacent to each other in a certain way.
 
 * Add more music (preferably for each level)
 

@@ -14,6 +14,7 @@
     <string name="credits_main">Created by Sagie Levy and Tom Feigin.\n\nVisual Artists: Lior Raz, RPGVX Ace Lite\nMusic: Tom Feigin\n</string>
     <string name="credits_secondary">Special Thanks: Jonathan Shamir, Shmuel Agranat\nThis game has been brought to you by <b>ToiletGamesInc.</b>\nContact us at: icecavegame@gmail.com</string>
     <string name="reset_button">Reset Button</string>
+    <string name="finish_level_message">Moves to complete stage:</string>
     <string name="empty"></string>
 
     <string-array name="initial_stage_messages">
@@ -21,6 +22,7 @@
         <item>It\'s really dark.. Can\'t see a thing </item>
         <item>What is this place? </item>
         <item>Woah, an ancient cave!</item>
+        <item>Did I forget to lock my house?</item>
     </string-array>
 
 </resources>

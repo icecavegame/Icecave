@@ -2,13 +2,13 @@
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
+            backward-compatibility can go here.
         -->
     </style>
 
@@ -23,16 +23,22 @@
         <item name="android:fontFamily">sans-serif</item>
     </style>
 
-    <style name="main_activity_texts">
-        <item name="android:textSize">@dimen/large_font_size</item>
-    </style>
-
     <style name="credits_style_main">
         <item name="android:textSize">@dimen/dimen_credits_main</item>
     </style>
-    
+
     <style name="credits_style_secondary">
         <item name="android:textSize">@dimen/dimen_credits_secondary</item>
+    </style>
+
+    <style name="main_activity_text">
+        <item name="android:textSize">@dimen/large_font_size</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">1</item>
     </style>
 
 </resources>

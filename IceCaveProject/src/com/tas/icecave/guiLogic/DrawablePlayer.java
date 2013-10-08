@@ -47,8 +47,8 @@ public class DrawablePlayer extends ImageView
 		mScreenManager =
 				new GUIScreenManager(	mContext.getTilesView().getBoardX(),
 										mContext.getTilesView().getBoardY(),
-										mContext.getFixedWidth(),
-										mContext.getFixedHeight());
+										mContext.getWidth(),
+										mContext.getWidth());
 
 		// Get height and width of player image
 		setImageBitmap(mPGM.getPlayerImage(EDirection.DOWN, false, mGameTheme, mScreenManager));

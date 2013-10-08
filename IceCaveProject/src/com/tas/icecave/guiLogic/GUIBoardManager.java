@@ -97,12 +97,9 @@ public class GUIBoardManager implements Serializable, ILoadable
 	 */
 	public void startNewGame(int boardSizeHeight, EDifficulty difficulty)
 	{
-		int maxSize = Math.max(mContext.getFixedWidth(), mContext.getFixedHeight());
-		int minSize = Math.min(mContext.getFixedWidth(), mContext.getFixedHeight());
-		int boardSizeWidth = (int) ((maxSize * 1.0 / minSize) * boardSizeHeight);
+		// Make a square, always
+		int boardSizeWidth = boardSizeHeight;
 		
-		System.out.println("Board width in tiles: " + boardSizeWidth + ", height in tiles: " + boardSizeHeight);
-
 		mIceCaveGame =
 				new IceCaveGame(boardSizeHeight * boardSizeWidth / Consts.DEFAULT_BOULDER_RELATION,
 								boardSizeHeight,
@@ -165,15 +162,16 @@ public class GUIBoardManager implements Serializable, ILoadable
 		mIceCaveGame.newStage(mapFileStream);
 
 		ITile[][] board = mIceCaveGame.getBoard();
-		
+
 		// Get the tiles
 		mTiles = new Bitmap[board.length][board[0].length];
 
+		// Fill a square (by the smaller size of the screen in current orientation)
 		GUIScreenManager screenManager =
 				new GUIScreenManager(	board[0].length,
 										board.length,
-										mContext.getFixedWidth(),
-										mContext.getFixedHeight());
+										mContext.getWidth(),
+										mContext.getWidth());
 
 		// Go through the game board.
 		for (int yAxis = 0; yAxis < board.length; yAxis++)
@@ -203,11 +201,13 @@ public class GUIBoardManager implements Serializable, ILoadable
 		mIceCaveGame.newStage(playerStart, wallWidth);
 
 		ITile[][] board = mIceCaveGame.getBoard();
+		
+		// Fill a square (by the smaller size of the screen in current orientation)
 		GUIScreenManager screenManager =
 				new GUIScreenManager(	board[0].length,
 										board.length,
-										mContext.getFixedWidth(),
-										mContext.getFixedHeight());
+										mContext.getWidth(),
+										mContext.getWidth());
 
 		// Go through the game board.
 		for (int yAxis = 0; yAxis < board.length; yAxis++)

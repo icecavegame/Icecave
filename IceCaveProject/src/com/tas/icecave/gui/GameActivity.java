@@ -1,9 +1,6 @@
 package com.tas.icecave.gui;
 
-import com.android.icecave.error.ExceptionHandler;
-
-import java.util.Observable;
-import java.util.Observer;
+import com.google.ads.AdView;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -18,14 +15,15 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.android.icecave.R;
+import com.android.icecave.error.ExceptionHandler;
 import com.tas.icecave.general.MusicService;
 import com.tas.icecave.guiLogic.DrawablePlayer;
 import com.tas.icecave.guiLogic.GUIBoardManager;
@@ -35,6 +33,8 @@ import com.tas.icecaveLibrary.general.EDifficulty;
 import com.tas.icecaveLibrary.general.EDirection;
 import com.tas.icecaveLibrary.mapLogic.IIceCaveGameStatus;
 import com.tas.icecaveLibrary.utils.UpdateDataBundle;
+import java.util.Observable;
+import java.util.Observer;
 
 public class GameActivity extends Activity implements ISwipeDetector, Observer
 {
@@ -47,13 +47,13 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private boolean mIsFlagReached, mIsInitialized;
 	private TextView mPlayerMoves, mMinimumMoves;
 	private ImageView mResetButton;
+	private AdView mAd;
 
 	private final String GUI_BOARD_MANAGER_TAG = "guiBoardManager";
 
 	private final static int DEFAULT_PLAYER = R.drawable.default_player;
 	private final static int DEFAULT_TILES = R.drawable.tileset1;
 
-	
 	// Music data
 	private boolean mIsBound = false;
 	private MusicService mServ;
@@ -63,11 +63,11 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		
+
 		// Set an exception handler for this activity first of all
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
-		
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -79,6 +79,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		mPlayerMoves = (TextView) findViewById(R.id.player_moves);
 		mMinimumMoves = (TextView) findViewById(R.id.minimum_moves);
 		mResetButton = (ImageView) findViewById(R.id.reset_button);
+		mAd = (AdView) findViewById(R.id.advertisment_game_activity_bottom);
+
+		// Position reset button below the game board
 
 		// Set initialized to false, as the activity is just now being created
 		mIsInitialized = false;
@@ -138,23 +141,25 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		music.setClass(this, MusicService.class);
 		startService(music);
 	}
-	
-	public boolean isInitialized() {
+
+	public boolean isInitialized()
+	{
 		return mIsInitialized;
 	}
-	
-	public GameTheme getGameTheme() {
+
+	public GameTheme getGameTheme()
+	{
 		return mGameTheme;
 	}
 
-	public int getFixedHeight()
+	public int getHeight()
 	{
-		return mActivityLayout.getBottom() - mPlayerMoves.getBottom();
+		return mActivityLayout.getBottom();
 	}
 
-	public int getFixedWidth()
+	public int getWidth()
 	{
-		return mActivityLayout.getWidth() - mPlayerMoves.getLeft();
+		return mActivityLayout.getWidth();
 	}
 
 	public TilesView getTilesView()
@@ -219,8 +224,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			mIsFlagReached = false;
 
 			// Initialize the game board & shit
-			mGBM.startNewGame(
-					(Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_SIZE),
+			mGBM.startNewGame((Integer) getIntent().getExtras().get(Consts.SELECT_BOARD_SIZE_SIZE),
 					EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)]);
 
 			// Set views references for the loading screen
@@ -240,11 +244,23 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		mResetButton.setImageResource(R.drawable.reset_button_states);
 
 		mTilesView = new TilesView(this, mGBM.getTiles());
-		mTilesView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-																FrameLayout.LayoutParams.WRAP_CONTENT));
-		// Position the board just below the text fields
+
+		// Position the board below the player moves text and add the view
+		mTilesView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT));
 		mTilesView.setTranslationY(mPlayerMoves.getBottom());
 		mActivityLayout.addView(mTilesView);
+
+		// Set reset button position below board
+		RelativeLayout.LayoutParams resetParams =
+				new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+												ViewGroup.LayoutParams.WRAP_CONTENT);
+		resetParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+		resetParams.topMargin = 12;
+		mResetButton.setLayoutParams(resetParams);
+		
+		// Place reset button 3 tile worth of size below board
+		mResetButton.setTranslationY((Consts.DEFAULT_BOARD_SIZE * mTilesView.getBoardY() * 2) + mTilesView.getBoardY() * 3);
 
 		// Create new player view
 		mPlayer = new DrawablePlayer(this, mGameTheme);
@@ -275,9 +291,12 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				{
 					// Reset reached flag
 					mIsFlagReached = false;
-					
+
 					// Save the new stage index if stage was loaded from file
 					mGBM.saveStageIndex();
+					
+					// Disable the ad while loading screen is active
+					disableButtons();
 
 					// Show loading screen in the meantime
 					mLoadingScreen.preLoad(mGBM);
@@ -304,6 +323,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 						// Hide loading screen
 						mLoadingScreen.postLoad(mGBM);
 						
+						// Enable the ad
+						enableButtons();
+
 						// Set new GUI level board in case it was restarted (if loaded from file)
 						mTilesView.setNewBoard(mGBM.getTiles());
 
@@ -403,6 +425,18 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			unbindService(mScon);
 			mIsBound = false;
 		}
+	}
+	
+	private void enableButtons()
+	{
+		mAd.setClickable(true);
+		mResetButton.setEnabled(true);
+	}
+
+	private void disableButtons()
+	{
+		mAd.setClickable(false);
+		mResetButton.setEnabled(false);
 	}
 
 	@Override

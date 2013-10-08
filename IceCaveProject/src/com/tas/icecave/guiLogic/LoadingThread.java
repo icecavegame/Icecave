@@ -1,7 +1,6 @@
 package com.tas.icecave.guiLogic;
 
 import android.content.res.AssetManager;
-import android.os.SystemClock;
 import com.tas.icecave.gui.GameActivity;
 import com.tas.icecave.gui.GameTheme;
 import com.tas.icecaveLibrary.general.Consts;
@@ -63,7 +62,7 @@ public class LoadingThread extends Thread
 	@Override
 	public void run()
 	{
-		final long MINIMUM_LOADING_TIME = 3500;
+		//final long MINIMUM_LOADING_TIME = 3500; No need for this anymore
 
 		// Shuffle the theme.
 		mTheme.getThemeMap().shuffle();
@@ -91,21 +90,21 @@ public class LoadingThread extends Thread
 			mBoardManager.newStage(mPlayerPosition, mWallWidth, mTheme);
 		}
 
-		// Get loading time
-		long loadingTime = SystemClock.currentThreadTimeMillis();
-
-		// Sleep
-		try
-		{
-			// If loading time took less than minimum, add a delay to the animation
-			if (MINIMUM_LOADING_TIME - loadingTime > 0)
-			{
-				Thread.sleep(MINIMUM_LOADING_TIME - loadingTime);
-			}
-		} catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
+//		// Get loading time
+//		long loadingTime = SystemClock.currentThreadTimeMillis();
+//
+//		// Sleep
+//		try
+//		{
+//			// If loading time took less than minimum, add a delay to the animation
+//			if (MINIMUM_LOADING_TIME - loadingTime > 0)
+//			{
+//				Thread.sleep(MINIMUM_LOADING_TIME - loadingTime);
+//			}
+//		} catch (InterruptedException e)
+//		{
+//			e.printStackTrace();
+//		}
 
 		// Notify on completion
 		mObservable.notifyObservers(new UpdateDataBundle(Consts.LOADING_LEVEL_FINISHED_UPDATE, null));
