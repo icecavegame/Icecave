@@ -75,8 +75,9 @@ public class MainActivity extends Activity
 		RadioGroup levelSelect = (RadioGroup) findViewById(R.id.levelSelect);
 
 		// Set styles
-		Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_ROBOTO_BLACK);
+		Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_ICE_AGE);
 		gameActivity.setTypeface(tf);
+		optionsActivity.setTypeface(tf);
 
 		// Load levels dynamically from EDifficulty class
 		loadLevelsToRadioGroup(levelSelect);

@@ -11,7 +11,7 @@
     <string name="player_moves_text">Moves:</string>
     <string name="minimum_moves_text">Minimum Moves:</string>
     <string name="credits_main">Created by Sagie Levy and Tom Feigin.\n\nVisual Artists: Lior Raz, RPGVX Ace Lite\nMusic: Tom Feigin\n</string>
-    <string name="credits_secondary">Special Thanks: Jonathan Shamir, Shmuel Agranat\nThis game has been brought to you by <b>ToiletGamesInc.</b>\nContact us at: icecavegame@gmail.com</string>
+    <string name="credits_secondary">Special Thanks: Netanel Keidar Levi\nThis game has been brought to you by <b>ToiletGamesInc.</b>\nContact us at: icecavegame@gmail.com</string>
     <string name="reset_button">Reset Button</string>
     <string name="finish_level_message">Moves to complete stage:</string>
     <string name="empty"></string>
@@ -20,12 +20,9 @@
         <item>It\'s chilly in here.. </item>
         <item>It\'s really dark.. Can\'t see a thing </item>
         <item>What is this place? </item>
-<<<<<<< HEAD
         <item>Woah, an ancient cave!</item>
         <item>Did I forget to lock my house?</item>
-=======
-        <item>I think i stepped in something.</item>
->>>>>>> origin/Tom
+        <item>I think I stepped in something.</item>
     </string-array>
 
 </resources>

@@ -33,19 +33,11 @@
         android:text="@string/settings"
         android:textColor="@drawable/settings_state" />
 
-    <RelativeLayout
+    <RadioGroup
+        android:id="@+id/levelSelect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:alpha="0.4"
-        android:background="@color/white" >
-
-        <RadioGroup
-            android:id="@+id/levelSelect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="1" >
-        </RadioGroup>
-    </RelativeLayout>
+        android:layout_centerInParent="true" >
+    </RadioGroup>
 
 </RelativeLayout>

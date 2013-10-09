@@ -57,10 +57,11 @@ public class OptionsActivity extends Activity
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		Spinner themeSelect = (Spinner) findViewById(R.id.selectTheme);
+		Spinner themeSelect = (Spinner) findViewById(R.id.select_theme);
 		TextView creditsMain = (TextView) findViewById(R.id.credits_main);
 		TextView creditsSecondary = (TextView) findViewById(R.id.credits_secondary);
 		TextView gameAndVersion = (TextView) findViewById(R.id.game_and_version);
+		TextView selectThemeText = (TextView) findViewById(R.id.select_theme_text);
 		final CheckBox muteMusic = (CheckBox) findViewById(R.id.muteMusic);
 
 		final PlayerThemes playerThemes = new PlayerThemes();
@@ -68,10 +69,13 @@ public class OptionsActivity extends Activity
 		final SharedPreferences shared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
 		
 		// Set styles
-		Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_ROBOTO_CONDENSED_LIGHT);
-		creditsMain.setTypeface(tf);
-		creditsSecondary.setTypeface(tf);
-		gameAndVersion.setTypeface(tf);
+		Typeface iceAge = Typeface.createFromAsset(getAssets(), Consts.STYLE_ICE_AGE);
+		Typeface robotoThin = Typeface.createFromAsset(getAssets(), Consts.STYLE_ROBOTO_THIN);
+		creditsMain.setTypeface(iceAge);
+		muteMusic.setTypeface(iceAge);
+		selectThemeText.setTypeface(iceAge);
+		gameAndVersion.setTypeface(iceAge);
+		creditsSecondary.setTypeface(robotoThin);
 		
 		// Set game and version and make a space after
 		gameAndVersion.setText(getString(R.string.app_name) + " " + getString(R.string.version_number) + "\n");

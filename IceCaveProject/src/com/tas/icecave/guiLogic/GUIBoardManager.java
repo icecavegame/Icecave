@@ -300,4 +300,9 @@ public class GUIBoardManager implements Serializable, ILoadable
 					.commit();
 		}
 	}
+
+	public void resetMoves()
+	{
+		mIceCaveGame.resetMoves();
+	}
 }

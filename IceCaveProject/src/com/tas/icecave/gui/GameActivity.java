@@ -115,6 +115,12 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 				// Re-initialize player on UI level
 				mPlayer.initializePlayer();
+				
+				// Reset move count
+				mGBM.resetMoves();
+				
+				// Update move counter text
+				setPlayerMoves();
 			}
 		});
 

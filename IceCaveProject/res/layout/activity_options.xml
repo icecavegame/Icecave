@@ -39,27 +39,19 @@
             android:layout_below="@+id/credits_main"
             android:layout_centerHorizontal="true"
             android:text="@string/credits_secondary" />
-
-        <TextView
-            android:id="@+id/version"
-            style="@style/credits_style_main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/credits_secondary"
-            android:layout_centerInParent="true"
-            android:text="@string/version_number" />
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/selectThemeText"
+        android:id="@+id/select_theme_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/selectTheme"
+        android:layout_above="@+id/select_theme"
         android:layout_alignParentLeft="true"
-        android:text="@string/select_theme" />
+        android:text="@string/select_theme"
+        style="@style/medium_bold" />
 
     <Spinner
-        android:id="@+id/selectTheme"
+        android:id="@+id/select_theme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
