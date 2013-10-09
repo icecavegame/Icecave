@@ -20,8 +20,12 @@
         <item>It\'s chilly in here.. </item>
         <item>It\'s really dark.. Can\'t see a thing </item>
         <item>What is this place? </item>
+<<<<<<< HEAD
         <item>Woah, an ancient cave!</item>
         <item>Did I forget to lock my house?</item>
+=======
+        <item>I think i stepped in something.</item>
+>>>>>>> origin/Tom
     </string-array>
 
 </resources>
