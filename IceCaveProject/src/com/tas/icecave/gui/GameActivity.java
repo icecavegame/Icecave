@@ -1,5 +1,7 @@
 package com.tas.icecave.gui;
 
+import android.view.ViewGroup;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -283,16 +285,12 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		mActivityLayout.addView(mTilesView);
 
 		// Set reset button position below board
-//		RelativeLayout.LayoutParams resetParams =
-//				new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-//												ViewGroup.LayoutParams.WRAP_CONTENT);
-//		resetParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-//		resetParams.topMargin = 12;
-//		mResetButon.setLayoutParams(resetParams);
-
-		// Place reset button 3 tile worth of size below board
-		mExtras.setTranslationY((Consts.DEFAULT_BOARD_SIZE * mTilesView.getBoardY() * 2) +
-				mTilesView.getTranslationY());
+		RelativeLayout.LayoutParams resetParams =
+				new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+												ViewGroup.LayoutParams.WRAP_CONTENT);
+		resetParams.addRule(RelativeLayout.ABOVE, mAd.getId());
+		resetParams.bottomMargin = 12;
+		mExtras.setLayoutParams(resetParams);
 
 		// Create new player view
 		mPlayer = new DrawablePlayer(this, mGameTheme);

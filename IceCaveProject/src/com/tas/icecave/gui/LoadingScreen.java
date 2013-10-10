@@ -87,5 +87,4 @@ public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 
 		return messages[GeneralServiceProvider.getInstance().getRandom().nextInt(messages.length)];
 	}
-
 }

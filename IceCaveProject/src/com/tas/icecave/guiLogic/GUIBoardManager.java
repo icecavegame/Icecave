@@ -36,6 +36,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 	private int mBundleIndex;
 	private String[] mBundleFiles;
 	private String mBundleNameKey;
+	private transient LoadingThread mLoad;
 
 	public GUIBoardManager(GameActivity context)
 	{
@@ -99,7 +100,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 	{
 		// Make a square, always
 		int boardSizeWidth = boardSizeHeight;
-		
+
 		mIceCaveGame =
 				new IceCaveGame(boardSizeHeight * boardSizeWidth / Consts.DEFAULT_BOULDER_RELATION,
 								boardSizeHeight,
@@ -168,10 +169,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 
 		// Fill a square (by the smaller size of the screen in current orientation)
 		GUIScreenManager screenManager =
-				new GUIScreenManager(	board[0].length,
-										board.length,
-										mContext.getWidth(),
-										mContext.getWidth());
+				new GUIScreenManager(board[0].length, board.length, mContext.getWidth(), mContext.getWidth());
 
 		// Go through the game board.
 		for (int yAxis = 0; yAxis < board.length; yAxis++)
@@ -201,13 +199,10 @@ public class GUIBoardManager implements Serializable, ILoadable
 		mIceCaveGame.newStage(playerStart, wallWidth);
 
 		ITile[][] board = mIceCaveGame.getBoard();
-		
+
 		// Fill a square (by the smaller size of the screen in current orientation)
 		GUIScreenManager screenManager =
-				new GUIScreenManager(	board[0].length,
-										board.length,
-										mContext.getWidth(),
-										mContext.getWidth());
+				new GUIScreenManager(board[0].length, board.length, mContext.getWidth(), mContext.getWidth());
 
 		// Go through the game board.
 		for (int yAxis = 0; yAxis < board.length; yAxis++)
@@ -268,21 +263,16 @@ public class GUIBoardManager implements Serializable, ILoadable
 	@Override
 	public void onLoad()
 	{
-		// Start creating a new stage
-		LoadingThread load =
-				new LoadingThread(	this,
-									Consts.DEFAULT_START_POS,
-									Consts.DEFAULT_WALL_WIDTH,
-									mContext,
-									getGameTheme());
+		// Start creating a new stage, cancel running one if running		
+		mLoad = new LoadingThread(this, Consts.DEFAULT_START_POS, Consts.DEFAULT_WALL_WIDTH, mContext, getGameTheme());
 
 		// Check if file exists for loading
 		if (mBundleFiles != null && mBundleFiles.length > mBundleIndex)
 		{
-			load.loadStageFromFile(mBundleNameKey + "/" + mBundleFiles[mBundleIndex]);
+			mLoad.loadStageFromFile(mBundleNameKey + "/" + mBundleFiles[mBundleIndex]);
 		}
 
-		load.start();
+		mLoad.start();
 	}
 
 	public void saveStageIndex()
