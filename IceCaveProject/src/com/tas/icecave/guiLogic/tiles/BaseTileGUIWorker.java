@@ -33,11 +33,16 @@ public abstract class BaseTileGUIWorker implements IGUITileWorker
 
 		// Crop theme bitmap to select the specific tile wanted
 		Bitmap croppedTile =
-				Bitmap.createBitmap(theme, width * tilePosition.x, height * tilePosition.y, width, height);
+				Bitmap.createBitmap(theme,
+									width * tilePosition.x,
+									height * tilePosition.y,
+									width, 
+									height);
 
 		// Create matrix to change the scale of the bitmap to fit the screen
 		Matrix matrix = new Matrix();
-		matrix.postScale((float) scaler.getTileWidth() / width, (float) scaler.getTileHeight() / height);
+		matrix.postScale((float) scaler.getTileWidth() / width, 
+						 (float) scaler.getTileHeight() / height);
 
 		// Resize
 		croppedTile = Bitmap.createBitmap(croppedTile, 0, 0, width, height, matrix, true);
