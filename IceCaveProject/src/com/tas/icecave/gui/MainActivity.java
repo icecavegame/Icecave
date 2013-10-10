@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -15,10 +14,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.TextView;
 import com.android.icecave.R;
 import com.android.icecave.error.ExceptionHandler;
 import com.tas.icecave.general.MusicService;
@@ -71,14 +70,14 @@ public class MainActivity extends Activity
 
 		mShared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
 
-		TextView optionsActivity = (TextView) findViewById(R.id.options_button);
-		TextView gameActivity = (TextView) findViewById(R.id.game_starter);
+		ImageView optionsActivity = (ImageView) findViewById(R.id.options_button);
+		ImageView gameActivity = (ImageView) findViewById(R.id.game_starter);
 		mLevelSelect = (RadioGroup) findViewById(R.id.levelSelect);
 
 		// Set styles
-		Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_ICE_AGE);
-		gameActivity.setTypeface(tf);
-		optionsActivity.setTypeface(tf);
+		//Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_ICE_AGE);
+		//gameActivity.setTypeface(tf);
+		//optionsActivity.setTypeface(tf);
 
 		// Load levels dynamically from EDifficulty class
 		loadLevelsToRadioGroup();

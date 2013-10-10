@@ -12,24 +12,27 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <TextView
+    <ImageView
         android:id="@+id/game_starter"
         style="@style/main_activity_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
+        android:contentDescription="@string/start_game"
+        android:src="@drawable/round_blue_play_button_with_focus"
         android:text="@string/start_game"
         android:textColor="@drawable/start_game_state" />
 
-    <TextView
+    <ImageView
         android:id="@+id/options_button"
         style="@style/main_activity_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:contentDescription="@string/settings"
+        android:src="@drawable/settings_icon"
         android:text="@string/settings"
         android:textColor="@drawable/settings_state" />
 

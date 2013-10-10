@@ -1,5 +1,9 @@
 package com.tas.icecave.gui;
 
+import com.tas.icecaveLibrary.general.Consts;
+
+import android.graphics.Typeface;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewPropertyAnimator;
@@ -31,6 +35,11 @@ public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 	{
 		mLoadingMessage = (TextView) findViewById(R.id.loading_screen_text);
 		mLoadingResult = (TextView) findViewById(R.id.loading_screen_result);
+
+		// Set styles
+		Typeface tf = Typeface.createFromAsset(mContext.getAssets(), Consts.STYLE_ICE_AGE);
+		mLoadingMessage.setTypeface(tf);
+		mLoadingResult.setTypeface(tf);
 	}
 
 	@Override
@@ -66,18 +75,18 @@ public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 	public void postLoad(final ILoadable loadableData)
 	{
 		final ViewPropertyAnimator animator = animate();
-//		final Runnable endAction = new Runnable()
-//		{
-//			@Override
-//			public void run()
-//			{
-//
-//			}
-//		};
+		// final Runnable endAction = new Runnable()
+		// {
+		// @Override
+		// public void run()
+		// {
+		//
+		// }
+		// };
 
 		// Hide screen (alpha to 0), set the duration of animation and animate
 		animator.alpha(0).setDuration(loadableData.getAnimationDuration());
-		//animator.withEndAction(endAction);
+		// animator.withEndAction(endAction);
 		animator.start();
 	}
 
