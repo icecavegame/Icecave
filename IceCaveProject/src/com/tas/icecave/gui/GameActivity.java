@@ -1,7 +1,5 @@
 package com.tas.icecave.gui;
 
-import com.google.ads.AdView;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,20 +8,24 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.android.icecave.R;
 import com.android.icecave.error.ExceptionHandler;
+import com.google.ads.AdView;
 import com.tas.icecave.general.MusicService;
 import com.tas.icecave.guiLogic.DrawablePlayer;
 import com.tas.icecave.guiLogic.GUIBoardManager;
@@ -42,7 +44,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private DrawablePlayer mPlayer;
 	private GameTheme mGameTheme;
 	private TilesView mTilesView;
-	private RelativeLayout mActivityLayout;
+	private RelativeLayout mActivityLayout, mExtras;
 	private LoadingScreen mLoadingScreen;
 	private boolean mIsFlagReached, mIsInitialized;
 	private TextView mPlayerMoves, mMinimumMoves;
@@ -79,9 +81,14 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		mPlayerMoves = (TextView) findViewById(R.id.player_moves);
 		mMinimumMoves = (TextView) findViewById(R.id.minimum_moves);
 		mResetButton = (ImageView) findViewById(R.id.reset_button);
+		mExtras = (RelativeLayout) findViewById(R.id.extras);
 		mAd = (AdView) findViewById(R.id.advertisment_game_activity_bottom);
 
-		// Position reset button below the game board
+		final CheckBox muteMusic = (CheckBox) findViewById(R.id.muteMusic);
+
+		// Set styles
+		Typeface iceAge = Typeface.createFromAsset(getAssets(), Consts.STYLE_ICE_AGE);
+		muteMusic.setTypeface(iceAge);
 
 		// Set initialized to false, as the activity is just now being created
 		mIsInitialized = false;
@@ -90,7 +97,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		SharedPreferences mShared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
+		final SharedPreferences shared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
 
 		// Load GUI Board Manager if exists
 		if (savedInstanceState != null)
@@ -100,9 +107,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 		mGameTheme =
 				new GameTheme(	BitmapFactory.decodeResource(getResources(),
-										(mShared.getInt(Consts.THEME_SELECT_TAG, DEFAULT_TILES))),
+										(shared.getInt(Consts.THEME_SELECT_TAG, DEFAULT_TILES))),
 								BitmapFactory.decodeResource(getResources(),
-										(mShared.getInt(Consts.PLAYER_SELECT_TAG, DEFAULT_PLAYER))));
+										(shared.getInt(Consts.PLAYER_SELECT_TAG, DEFAULT_PLAYER))));
 
 		// Set reset button effect
 		mResetButton.setOnClickListener(new OnClickListener()
@@ -115,10 +122,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 				// Re-initialize player on UI level
 				mPlayer.initializePlayer();
-				
+
 				// Reset move count
 				mGBM.resetMoves();
-				
+
 				// Update move counter text
 				setPlayerMoves();
 			}
@@ -133,6 +140,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 				// Set music mode for first time
 				initMusic();
+				
+				// Check according to saved data
+				muteMusic.setChecked(shared.getBoolean(Consts.MUSIC_MUTE_FLAG, false));
 			}
 
 			public void onServiceDisconnected(ComponentName name)
@@ -146,6 +156,19 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		Intent music = new Intent();
 		music.setClass(this, MusicService.class);
 		startService(music);
+
+		muteMusic.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+			{
+				// Save selection
+				shared.edit().putBoolean(Consts.MUSIC_MUTE_FLAG, isChecked).commit();
+
+				// Play/pause music
+				initMusic();
+			}
+		});
 	}
 
 	public boolean isInitialized()
@@ -252,23 +275,24 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		mTilesView = new TilesView(this, mGBM.getTiles());
 
 		// Position the board below the player moves text and add the view
-		mTilesView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-				RelativeLayout.LayoutParams.WRAP_CONTENT));
-		
+		mTilesView.setLayoutParams(new RelativeLayout.LayoutParams(	RelativeLayout.LayoutParams.WRAP_CONTENT,
+																	RelativeLayout.LayoutParams.WRAP_CONTENT));
+
 		// Set the board a little below the texts at the top
-		mTilesView.setTranslationY(mPlayerMoves.getBottom() * 2);
+		mTilesView.setTranslationY(mPlayerMoves.getBottom());
 		mActivityLayout.addView(mTilesView);
 
 		// Set reset button position below board
-		RelativeLayout.LayoutParams resetParams =
-				new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-												ViewGroup.LayoutParams.WRAP_CONTENT);
-		resetParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-		resetParams.topMargin = 12;
-		mResetButton.setLayoutParams(resetParams);
-		
+//		RelativeLayout.LayoutParams resetParams =
+//				new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+//												ViewGroup.LayoutParams.WRAP_CONTENT);
+//		resetParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//		resetParams.topMargin = 12;
+//		mResetButon.setLayoutParams(resetParams);
+
 		// Place reset button 3 tile worth of size below board
-		mResetButton.setTranslationY((Consts.DEFAULT_BOARD_SIZE * mTilesView.getBoardY() * 2) + mTilesView.getTranslationY());
+		mExtras.setTranslationY((Consts.DEFAULT_BOARD_SIZE * mTilesView.getBoardY() * 2) +
+				mTilesView.getTranslationY());
 
 		// Create new player view
 		mPlayer = new DrawablePlayer(this, mGameTheme);
@@ -302,7 +326,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 					// Save the new stage index if stage was loaded from file
 					mGBM.saveStageIndex();
-					
+
 					// Disable the ad while loading screen is active
 					disableButtons();
 
@@ -330,7 +354,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 						// Hide loading screen
 						mLoadingScreen.postLoad(mGBM);
-						
+
 						// Enable the ad
 						enableButtons();
 
@@ -401,10 +425,11 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		// Display player
 		mPlayer.bringToFront();
 
-		// Display text fields
+		// Display various views
 		mMinimumMoves.bringToFront();
 		mPlayerMoves.bringToFront();
-		mResetButton.bringToFront();
+		mExtras.bringToFront();
+		mAd.bringToFront();
 	}
 
 	private void initMusic()
@@ -434,7 +459,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			mIsBound = false;
 		}
 	}
-	
+
 	private void enableButtons()
 	{
 		mAd.setClickable(true);

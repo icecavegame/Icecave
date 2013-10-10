@@ -71,10 +71,10 @@ public class OptionsActivity extends Activity
 		// Set styles
 		Typeface iceAge = Typeface.createFromAsset(getAssets(), Consts.STYLE_ICE_AGE);
 		Typeface robotoThin = Typeface.createFromAsset(getAssets(), Consts.STYLE_ROBOTO_THIN);
-		creditsMain.setTypeface(iceAge);
 		muteMusic.setTypeface(iceAge);
 		selectThemeText.setTypeface(iceAge);
-		gameAndVersion.setTypeface(iceAge);
+		creditsMain.setTypeface(robotoThin);
+		gameAndVersion.setTypeface(robotoThin);
 		creditsSecondary.setTypeface(robotoThin);
 		
 		// Set game and version and make a space after
