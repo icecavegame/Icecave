@@ -52,7 +52,8 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private TextView mPlayerMoves, mMinimumMoves;
 	private ImageView mResetButton;
 	private AdView mAd;
-
+	private SharedPreferences mShared;
+	
 	private final String GUI_BOARD_MANAGER_TAG = "guiBoardManager";
 
 	private final static int DEFAULT_PLAYER = R.drawable.default_player;
@@ -99,7 +100,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		final SharedPreferences shared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
+		mShared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
 
 		// Load GUI Board Manager if exists
 		if (savedInstanceState != null)
@@ -109,9 +110,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 		mGameTheme =
 				new GameTheme(	BitmapFactory.decodeResource(getResources(),
-										(shared.getInt(Consts.THEME_SELECT_TAG, DEFAULT_TILES))),
+										(mShared.getInt(Consts.THEME_SELECT_TAG, DEFAULT_TILES))),
 								BitmapFactory.decodeResource(getResources(),
-										(shared.getInt(Consts.PLAYER_SELECT_TAG, DEFAULT_PLAYER))));
+										(mShared.getInt(Consts.PLAYER_SELECT_TAG, DEFAULT_PLAYER))));
 
 		// Set reset button effect
 		mResetButton.setOnClickListener(new OnClickListener()
@@ -144,7 +145,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				initMusic();
 				
 				// Check according to saved data
-				muteMusic.setChecked(shared.getBoolean(Consts.MUSIC_MUTE_FLAG, false));
+				muteMusic.setChecked(mShared.getBoolean(Consts.MUSIC_MUTE_FLAG, false));
 			}
 
 			public void onServiceDisconnected(ComponentName name)
@@ -165,7 +166,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{
 				// Save selection
-				shared.edit().putBoolean(Consts.MUSIC_MUTE_FLAG, isChecked).commit();
+				mShared.edit().putBoolean(Consts.MUSIC_MUTE_FLAG, isChecked).commit();
 
 				// Play/pause music
 				initMusic();
@@ -319,6 +320,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				// Run a new game if flag is reached
 				if (mIsFlagReached)
 				{
+					// Special condition flag updates!!
+					flagUpdate();
+					
 					// Reset reached flag
 					mIsFlagReached = false;
 
@@ -374,6 +378,14 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 					}
 				});
 			}
+		}
+	}
+
+	private void flagUpdate()
+	{
+		// If a medium difficulty level was solved, unlock hard difficulty
+		if (EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)] == EDifficulty.Medium) { 
+			mShared.edit().putBoolean(Consts.LOCK_HARD_DIFFICULTY, true).commit();
 		}
 	}
 
@@ -433,7 +445,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private void initMusic()
 	{
 		// Initialize music (or pause it) according to saved selection
-		if (getSharedPreferences(Consts.PREFS_FILE_TAG, 0).getBoolean(Consts.MUSIC_MUTE_FLAG, false))
+		if (mShared.getBoolean(Consts.MUSIC_MUTE_FLAG, false))
 		{
 			mServ.pauseMusic();
 		} else

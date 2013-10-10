@@ -32,6 +32,7 @@ public class MainActivity extends Activity
 	private MusicService mServ;
 	private ServiceConnection mScon;
 	private Intent mIntent;
+	private RadioGroup mLevelSelect;
 
 	private void doBindService()
 	{
@@ -72,7 +73,7 @@ public class MainActivity extends Activity
 
 		TextView optionsActivity = (TextView) findViewById(R.id.options_button);
 		TextView gameActivity = (TextView) findViewById(R.id.game_starter);
-		RadioGroup levelSelect = (RadioGroup) findViewById(R.id.levelSelect);
+		mLevelSelect = (RadioGroup) findViewById(R.id.levelSelect);
 
 		// Set styles
 		Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_ICE_AGE);
@@ -80,10 +81,10 @@ public class MainActivity extends Activity
 		optionsActivity.setTypeface(tf);
 
 		// Load levels dynamically from EDifficulty class
-		loadLevelsToRadioGroup(levelSelect);
+		loadLevelsToRadioGroup();
 
 		// Load level selection from prefs if exists
-		levelSelect.check(levelSelect.getChildAt(mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL))
+		mLevelSelect.check(mLevelSelect.getChildAt(mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL))
 				.getId());
 
 		optionsActivity.setOnClickListener(new OnClickListener()
@@ -119,7 +120,7 @@ public class MainActivity extends Activity
 			}
 		});
 
-		levelSelect.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		mLevelSelect.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId)
@@ -167,16 +168,35 @@ public class MainActivity extends Activity
 		}
 	}
 
-	private void loadLevelsToRadioGroup(RadioGroup levelSelect)
+	private void loadLevelsToRadioGroup()
 	{
 		int numOfLevels = EDifficulty.values().length;
 
+		// Clear before creating buttons
+		mLevelSelect.removeAllViews();
+		
 		// Go over levels and add them
 		for (int i = 0; i < numOfLevels; i++)
 		{
 			RadioButton newButton = new RadioButton(this);
 			newButton.setText(EDifficulty.values()[i].name()); // An alternative to this is to set another variable (string id) in the enum
-			levelSelect.addView(newButton);
+			mLevelSelect.addView(newButton);
+		}
+		
+		// Lock hardest difficulty if user never solved a level before
+		lockView(mLevelSelect.getChildAt(mLevelSelect.getChildCount() - 1), mShared.getBoolean(Consts.LOCK_HARD_DIFFICULTY, false));
+	}
+
+	private void lockView(View view, boolean flag)
+	{
+		view.setClickable(flag);
+		
+		// If true make view it look clickable
+		if (flag) {
+			((RadioButton)view).setTextColor(getResources().getColor(R.color.black));
+		} else {
+			// Make view look unclickable
+			((RadioButton)view).setTextColor(getResources().getColor(R.color.light_gray));
 		}
 	}
 
@@ -202,6 +222,9 @@ public class MainActivity extends Activity
 		{
 			initMusic();
 		}
+		
+		// Load levels dynamically from EDifficulty class
+		loadLevelsToRadioGroup();
 
 		// Reset intent
 		mIntent = null;
@@ -229,4 +252,8 @@ public class MainActivity extends Activity
 		
 		super.onActivityResult(requestCode, resultCode, data);
 	}
+	
+//	private void lockView(View view, boolean flag) {
+//		view.setClickable(flag);
+//	}
 }

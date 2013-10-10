@@ -3,6 +3,7 @@ int color android_blue_dark 0x7f080006
 int color android_blue_light 0x7f080007
 int color android_purple_dark 0x7f080008
 int color android_purple_light 0x7f080009
+int color black 0x7f08000a
 int color blueish 0x7f080000
 int color dark_gray 0x7f080004
 int color light_gray 0x7f080002

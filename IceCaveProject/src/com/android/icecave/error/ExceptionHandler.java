@@ -1,5 +1,9 @@
 package com.android.icecave.error;
 
+import android.app.Activity;
+
+import android.widget.Toast;
+
 import android.util.Log;
 import java.lang.Thread.UncaughtExceptionHandler;
 
@@ -16,6 +20,7 @@ public class ExceptionHandler implements UncaughtExceptionHandler
 	{
 		Log.e("Ice Cave", arg1.getMessage());
 		
+		Toast.makeText((Activity)mToHandle, "Sorry, it seems the game has crashed :(", Toast.LENGTH_SHORT).show();
 		// TODO What else do we want to do here?
 	}
 
