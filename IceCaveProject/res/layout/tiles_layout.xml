@@ -6,13 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/dark_gray" >
 
-    <ImageView
-        android:id="@+id/reset_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:alpha="0.8"
-        android:contentDescription="@string/reset_button" />
-
     <TextView
         android:id="@+id/player_moves"
         android:layout_width="wrap_content"
@@ -30,17 +23,39 @@
         android:layout_alignParentTop="true"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
         android:textColor="@color/white" />
-    
-    <com.google.ads.AdView
-            android:id="@+id/advertisment_game_activity_bottom"
+
+    <RelativeLayout
+        android:id="@+id/extras"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/reset_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            ads:adSize="BANNER"
-            ads:adUnitId="ca-app-pub-5393804021684839/3274547109"
-            ads:loadAdOnCreate="true"
-            ads:testDevices="TEST_EMULATOR, 00703500144c11ee" />
+            android:alpha="0.8"
+            android:contentDescription="@string/reset_button" />
+
+        <CheckBox
+            android:id="@+id/muteMusic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/white"
+            android:text="@string/mute_music" />
+    </RelativeLayout>
+
+    <com.google.ads.AdView
+        android:id="@+id/advertisment_game_activity_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-5393804021684839/3274547109"
+        ads:loadAdOnCreate="true"
+        ads:testDevices="TEST_EMULATOR, 00703500144c11ee" />
 
     <com.tas.icecave.gui.LoadingScreen
         android:id="@+id/loading_screen"
