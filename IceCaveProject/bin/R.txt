@@ -40,8 +40,8 @@ int id credits_secondary 0x7f0b0007
 int id extras 0x7f0b000e
 int id game_and_version 0x7f0b0005
 int id game_layout 0x7f0b000b
-int id game_starter 0x7f0b0001
-int id levelSelect 0x7f0b0003
+int id game_starter 0x7f0b0002
+int id level_select 0x7f0b0001
 int id level_selected 0x7f0b000f
 int id loading_bar 0x7f0b0015
 int id loading_screen 0x7f0b0012
@@ -49,7 +49,7 @@ int id loading_screen_result 0x7f0b0013
 int id loading_screen_text 0x7f0b0014
 int id minimum_moves 0x7f0b000d
 int id muteMusic 0x7f0b000a
-int id options_button 0x7f0b0002
+int id options_button 0x7f0b0003
 int id player_moves 0x7f0b000c
 int id reset_button 0x7f0b0010
 int id select_theme 0x7f0b0009
