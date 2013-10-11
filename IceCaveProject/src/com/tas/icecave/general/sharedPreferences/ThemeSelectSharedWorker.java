@@ -18,7 +18,7 @@ public class ThemeSelectSharedWorker extends BaseSharedWorker
 	}
 
 	@Override
-	public Object getObject()
+	public Object get()
 	{
 		final int DEFAULT_THEME = R.drawable.tileset1;
 		
@@ -33,7 +33,7 @@ public class ThemeSelectSharedWorker extends BaseSharedWorker
 	}
 
 	@Override
-	public void putObject(Object value)
+	public void set(Object value)
 	{
 		mShared.edit().putInt(mKey, (Integer) value).commit();
 	}

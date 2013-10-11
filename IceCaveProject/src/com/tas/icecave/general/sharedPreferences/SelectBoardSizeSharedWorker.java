@@ -14,7 +14,7 @@ public class SelectBoardSizeSharedWorker extends BaseSharedWorker
 	}
 
 	@Override
-	public Object getObject()
+	public Object get()
 	{
 		int result = mShared.getInt(mKey, Consts.DEFAULT_BOARD_SIZE);
 		
@@ -27,7 +27,7 @@ public class SelectBoardSizeSharedWorker extends BaseSharedWorker
 	}
 
 	@Override
-	public void putObject(Object value)
+	public void set(Object value)
 	{
 	}
 }

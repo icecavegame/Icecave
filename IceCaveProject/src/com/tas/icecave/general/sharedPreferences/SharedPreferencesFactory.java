@@ -53,7 +53,7 @@ public class SharedPreferencesFactory
 
 		if (mSharedWorkers.containsKey(key))
 		{
-			return mSharedWorkers.get(key).getObject();
+			return mSharedWorkers.get(key).get();
 		}
 
 		return null;
@@ -68,7 +68,7 @@ public class SharedPreferencesFactory
 	{
 		if (mSharedWorkers.containsKey(key))
 		{
-			mSharedWorkers.get(key).putObject(value);
+			mSharedWorkers.get(key).set(value);
 		}
 	}
 }

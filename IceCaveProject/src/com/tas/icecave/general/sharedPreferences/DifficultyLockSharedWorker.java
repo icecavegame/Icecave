@@ -14,7 +14,7 @@ public class DifficultyLockSharedWorker extends BaseSharedWorker
 	}
 
 	@Override
-	public Object getObject()
+	public Object get()
 	{
 		boolean result = mShared.getBoolean(mKey, false);
 		
@@ -23,7 +23,7 @@ public class DifficultyLockSharedWorker extends BaseSharedWorker
 	}
 
 	@Override
-	public void putObject(Object value)
+	public void set(Object value)
 	{
 		mShared.edit().putBoolean(mKey, (Boolean) value).commit();
 	}
