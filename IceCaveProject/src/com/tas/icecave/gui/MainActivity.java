@@ -74,7 +74,7 @@ public class MainActivity extends Activity
 
 		ImageView optionsActivity = (ImageView) findViewById(R.id.options_button);
 		ImageView gameActivity = (ImageView) findViewById(R.id.game_starter);
-		mLevelSelect = (RadioGroup) findViewById(R.id.levelSelect);
+		mLevelSelect = (RadioGroup) findViewById(R.id.level_select);
 
 		// Set styles
 		//Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_ICE_AGE);
