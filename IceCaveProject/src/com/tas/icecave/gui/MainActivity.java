@@ -112,10 +112,10 @@ public class MainActivity extends Activity
 
 				// Load selection from prefs if exists
 				mIntent.putExtra(Consts.LEVEL_SELECT_TAG, (Integer) SharedPreferencesFactory.getInstance()
-						.getObject(Consts.LEVEL_SELECT_TAG));
+						.get(Consts.LEVEL_SELECT_TAG));
 				mIntent.putExtra(Consts.SELECT_BOARD_SIZE_SIZE,
 						(Integer) SharedPreferencesFactory.getInstance()
-								.getObject(Consts.SELECT_BOARD_SIZE_SIZE));
+								.get(Consts.SELECT_BOARD_SIZE_SIZE));
 				startActivityForResult(mIntent, 0);
 			}
 		});
@@ -126,7 +126,7 @@ public class MainActivity extends Activity
 			public void onCheckedChanged(RadioGroup group, int checkedId)
 			{
 				// Save level to prefs
-				SharedPreferencesFactory.getInstance().setObject(Consts.LEVEL_SELECT_TAG,
+				SharedPreferencesFactory.getInstance().set(Consts.LEVEL_SELECT_TAG,
 						group.indexOfChild(group.findViewById(checkedId)));
 			}
 		});
@@ -163,7 +163,7 @@ public class MainActivity extends Activity
 	private void initMusic()
 	{
 		// Initialize music (or pause it) according to saved selection
-		if ((Boolean) SharedPreferencesFactory.getInstance().getObject(Consts.MUSIC_MUTE_FLAG))
+		if ((Boolean) SharedPreferencesFactory.getInstance().get(Consts.MUSIC_MUTE_FLAG))
 		{
 			mServ.pauseMusic();
 		} else
@@ -190,7 +190,7 @@ public class MainActivity extends Activity
 
 		// Lock hardest difficulty if user never solved a level before
 		lockView(mLevelSelect.getChildAt(mLevelSelect.getChildCount() - 1),
-				(Boolean) SharedPreferencesFactory.getInstance().getObject(Consts.LOCK_HARD_DIFFICULTY));
+				(Boolean) SharedPreferencesFactory.getInstance().get(Consts.LOCK_HARD_DIFFICULTY));
 	}
 
 	private void lockView(View view, boolean flag)
@@ -231,7 +231,7 @@ public class MainActivity extends Activity
 
 		// Load level selection from prefs if exists
 		mLevelSelect.check(mLevelSelect.getChildAt((Integer) SharedPreferencesFactory.getInstance()
-				.getObject(Consts.LEVEL_SELECT_TAG)).getId());
+				.get(Consts.LEVEL_SELECT_TAG)).getId());
 	}
 
 	@Override

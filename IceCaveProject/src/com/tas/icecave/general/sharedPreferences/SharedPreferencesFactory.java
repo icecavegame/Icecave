@@ -5,6 +5,11 @@ import com.tas.icecave.gui.MainActivity;
 import com.tas.icecaveLibrary.general.Consts;
 import java.util.HashMap;
 
+/**
+ * Class holding all the SharedPreferences workers.
+ * @author Sagie
+ *
+ */
 public class SharedPreferencesFactory
 {
 	/**
@@ -38,7 +43,12 @@ public class SharedPreferencesFactory
 		return sFactory;
 	}
 
-	public Object getObject(String key)
+	/**
+	 * Get any saved object from the shared preferences
+	 * @param key The key of the saved object
+	 * @return Saved object from the shared preferences
+	 */
+	public Object get(String key)
 	{
 
 		if (mSharedWorkers.containsKey(key))
@@ -49,7 +59,12 @@ public class SharedPreferencesFactory
 		return null;
 	}
 
-	public void setObject(String key, Object value)
+	/**
+	 * Save object to the shared preferences
+	 * @param key The key of the object to save
+	 * @param value The value to save to the shared preferences
+	 */
+	public void set(String key, Object value)
 	{
 		if (mSharedWorkers.containsKey(key))
 		{

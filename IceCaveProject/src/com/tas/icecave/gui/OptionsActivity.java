@@ -99,7 +99,7 @@ public class OptionsActivity extends Activity
 
 		// Set initial values in spinners
 		themeSelect.setSelection(tileThemes.getTilePositionById((Integer) SharedPreferencesFactory.getInstance()
-				.getObject(Consts.THEME_SELECT_TAG)));
+				.get(Consts.THEME_SELECT_TAG)));
 		// playerThemeSelect.setSelection(playerThemes.getTilePositionById(shared.getInt(Consts.PLAYER_SELECT_TAG,
 		// playerThemes.getThemeId(0))));
 
@@ -114,7 +114,7 @@ public class OptionsActivity extends Activity
 				if (isInitialized)
 				{
 					// Save selected tile theme
-					SharedPreferencesFactory.getInstance().setObject(Consts.THEME_SELECT_TAG,
+					SharedPreferencesFactory.getInstance().set(Consts.THEME_SELECT_TAG,
 							tileThemes.getThemeId(pos));
 				}
 
@@ -130,7 +130,7 @@ public class OptionsActivity extends Activity
 		// Since we are limiting to one player tileset (at least for now) this is preset initially
 		// Save selected player theme
 		SharedPreferencesFactory.getInstance()
-				.setObject(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(0));
+				.set(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(0));
 
 		// playerThemeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
 		// {
@@ -167,7 +167,7 @@ public class OptionsActivity extends Activity
 
 				// Check according to saved data
 				muteMusic.setChecked((Boolean) SharedPreferencesFactory.getInstance()
-						.getObject(Consts.MUSIC_MUTE_FLAG));
+						.get(Consts.MUSIC_MUTE_FLAG));
 			}
 
 			public void onServiceDisconnected(ComponentName name)
@@ -188,7 +188,7 @@ public class OptionsActivity extends Activity
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{
 				// Save selection
-				SharedPreferencesFactory.getInstance().setObject(Consts.MUSIC_MUTE_FLAG, isChecked);
+				SharedPreferencesFactory.getInstance().set(Consts.MUSIC_MUTE_FLAG, isChecked);
 
 				// Play/pause music
 				initMusic();

@@ -51,7 +51,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private TextView mPlayerMoves, mMinimumMoves;
 	private ImageView mResetButton;
 	private AdView mAd;
-	
+
 	private final String GUI_BOARD_MANAGER_TAG = "guiBoardManager";
 
 	// Music data
@@ -84,9 +84,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 		final CheckBox muteMusic = (CheckBox) findViewById(R.id.muteMusic);
 		final TextView levelSelected = (TextView) findViewById(R.id.level_selected);
-		
+
 		// Show level name
-		levelSelected.setText(EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)].name());
+		levelSelected.setText(EDifficulty.values()[(Integer) getIntent().getExtras()
+				.get(Consts.LEVEL_SELECT_TAG)].name());
 
 		// Set styles
 		Typeface iceAge = Typeface.createFromAsset(getAssets(), Consts.STYLE_SNOW_TOP);
@@ -110,9 +111,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 		mGameTheme =
 				new GameTheme(	BitmapFactory.decodeResource(getResources(),
-										(Integer) (SharedPreferencesFactory.getInstance().getObject(Consts.THEME_SELECT_TAG))),
+										(Integer) (SharedPreferencesFactory.getInstance().get(Consts.THEME_SELECT_TAG))),
 								BitmapFactory.decodeResource(getResources(),
-										(Integer) (SharedPreferencesFactory.getInstance().getObject(Consts.PLAYER_SELECT_TAG))));
+										(Integer) (SharedPreferencesFactory.getInstance().get(Consts.PLAYER_SELECT_TAG))));
 
 		// Set reset button effect
 		mResetButton.setOnClickListener(new OnClickListener()
@@ -143,9 +144,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 				// Set music mode for first time
 				initMusic();
-				
+
 				// Check according to saved data
-				muteMusic.setChecked((Boolean) SharedPreferencesFactory.getInstance().getObject(Consts.MUSIC_MUTE_FLAG));
+				muteMusic.setChecked((Boolean) SharedPreferencesFactory.getInstance()
+						.get(Consts.MUSIC_MUTE_FLAG));
 			}
 
 			public void onServiceDisconnected(ComponentName name)
@@ -166,7 +168,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{
 				// Save selection
-				SharedPreferencesFactory.getInstance().setObject(Consts.MUSIC_MUTE_FLAG, isChecked);
+				SharedPreferencesFactory.getInstance().set(Consts.MUSIC_MUTE_FLAG, isChecked);
 
 				// Play/pause music
 				initMusic();
@@ -322,7 +324,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				{
 					// Special condition flag updates!!
 					flagUpdate();
-					
+
 					// Reset reached flag
 					mIsFlagReached = false;
 
@@ -383,10 +385,8 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 	private void flagUpdate()
 	{
-		// If a medium difficulty level was solved, unlock hard difficulty
-		if (EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)] == EDifficulty.Medium) { 
-			SharedPreferencesFactory.getInstance().setObject(Consts.LOCK_HARD_DIFFICULTY, true);
-		}
+		// If any difficulty level was solved, unlock hard difficulty
+		SharedPreferencesFactory.getInstance().set(Consts.LOCK_HARD_DIFFICULTY, true);
 	}
 
 	private void setPlayerMoves()
@@ -445,7 +445,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private void initMusic()
 	{
 		// Initialize music (or pause it) according to saved selection
-		if ((Boolean) SharedPreferencesFactory.getInstance().getObject(Consts.MUSIC_MUTE_FLAG))
+		if ((Boolean) SharedPreferencesFactory.getInstance().get(Consts.MUSIC_MUTE_FLAG))
 		{
 			mServ.pauseMusic();
 		} else
