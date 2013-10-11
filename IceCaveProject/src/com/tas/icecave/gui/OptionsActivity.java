@@ -98,7 +98,8 @@ public class OptionsActivity extends Activity
 		// playerThemeSelect.setAdapter(playerAdapter);
 
 		// Set initial values in spinners
-		themeSelect.setSelection(tileThemes.getTilePositionById(SharedPreferencesFactory.getInstance().getInt(Consts.THEME_SELECT_TAG)));
+		themeSelect.setSelection(tileThemes.getTilePositionById((Integer) SharedPreferencesFactory.getInstance()
+				.getObject(Consts.THEME_SELECT_TAG)));
 		// playerThemeSelect.setSelection(playerThemes.getTilePositionById(shared.getInt(Consts.PLAYER_SELECT_TAG,
 		// playerThemes.getThemeId(0))));
 
@@ -113,7 +114,8 @@ public class OptionsActivity extends Activity
 				if (isInitialized)
 				{
 					// Save selected tile theme
-					SharedPreferencesFactory.getInstance().putInt(Consts.THEME_SELECT_TAG, tileThemes.getThemeId(pos));
+					SharedPreferencesFactory.getInstance().putObject(Consts.THEME_SELECT_TAG,
+							tileThemes.getThemeId(pos));
 				}
 
 				isInitialized = true;
@@ -127,7 +129,8 @@ public class OptionsActivity extends Activity
 
 		// Since we are limiting to one player tileset (at least for now) this is preset initially
 		// Save selected player theme
-		SharedPreferencesFactory.getInstance().putInt(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(0));
+		SharedPreferencesFactory.getInstance()
+				.putObject(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(0));
 
 		// playerThemeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
 		// {
@@ -163,7 +166,8 @@ public class OptionsActivity extends Activity
 				initMusic();
 
 				// Check according to saved data
-				muteMusic.setChecked(SharedPreferencesFactory.getInstance().getBoolean(Consts.MUSIC_MUTE_FLAG));
+				muteMusic.setChecked((Boolean) SharedPreferencesFactory.getInstance()
+						.getObject(Consts.MUSIC_MUTE_FLAG));
 			}
 
 			public void onServiceDisconnected(ComponentName name)
@@ -184,7 +188,7 @@ public class OptionsActivity extends Activity
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{
 				// Save selection
-				SharedPreferencesFactory.getInstance().putBoolean(Consts.MUSIC_MUTE_FLAG, isChecked);
+				SharedPreferencesFactory.getInstance().putObject(Consts.MUSIC_MUTE_FLAG, isChecked);
 
 				// Play/pause music
 				initMusic();

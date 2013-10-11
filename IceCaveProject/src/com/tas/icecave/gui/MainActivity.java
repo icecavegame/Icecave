@@ -107,10 +107,11 @@ public class MainActivity extends Activity
 				mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
 				// Load selection from prefs if exists
-				mIntent.putExtra(Consts.LEVEL_SELECT_TAG, SharedPreferencesFactory.getInstance()
-						.getInt(Consts.LEVEL_SELECT_TAG));
-				mIntent.putExtra(Consts.SELECT_BOARD_SIZE_SIZE, SharedPreferencesFactory.getInstance()
-						.getInt(Consts.SELECT_BOARD_SIZE_SIZE));
+				mIntent.putExtra(Consts.LEVEL_SELECT_TAG, (Integer) SharedPreferencesFactory.getInstance()
+						.getObject(Consts.LEVEL_SELECT_TAG));
+				mIntent.putExtra(Consts.SELECT_BOARD_SIZE_SIZE,
+						(Integer) SharedPreferencesFactory.getInstance()
+								.getObject(Consts.SELECT_BOARD_SIZE_SIZE));
 				startActivityForResult(mIntent, 0);
 			}
 		});
@@ -121,7 +122,7 @@ public class MainActivity extends Activity
 			public void onCheckedChanged(RadioGroup group, int checkedId)
 			{
 				// Save level to prefs
-				SharedPreferencesFactory.getInstance().putInt(Consts.LEVEL_SELECT_TAG,
+				SharedPreferencesFactory.getInstance().putObject(Consts.LEVEL_SELECT_TAG,
 						group.indexOfChild(group.findViewById(checkedId)));
 			}
 		});
@@ -158,7 +159,7 @@ public class MainActivity extends Activity
 	private void initMusic()
 	{
 		// Initialize music (or pause it) according to saved selection
-		if (SharedPreferencesFactory.getInstance().getBoolean(Consts.MUSIC_MUTE_FLAG))
+		if ((Boolean) SharedPreferencesFactory.getInstance().getObject(Consts.MUSIC_MUTE_FLAG))
 		{
 			mServ.pauseMusic();
 		} else
@@ -184,7 +185,7 @@ public class MainActivity extends Activity
 
 		// Lock hardest difficulty if user never solved a level before
 		lockView(mLevelSelect.getChildAt(mLevelSelect.getChildCount() - 1),
-				SharedPreferencesFactory.getInstance().getBoolean(Consts.LOCK_HARD_DIFFICULTY));
+				(Boolean) SharedPreferencesFactory.getInstance().getObject(Consts.LOCK_HARD_DIFFICULTY));
 	}
 
 	private void lockView(View view, boolean flag)
@@ -224,8 +225,8 @@ public class MainActivity extends Activity
 		super.onWindowFocusChanged(hasFocus);
 
 		// Load level selection from prefs if exists
-		mLevelSelect.check(mLevelSelect.getChildAt(SharedPreferencesFactory.getInstance()
-				.getInt(Consts.LEVEL_SELECT_TAG)).getId());
+		mLevelSelect.check(mLevelSelect.getChildAt((Integer) SharedPreferencesFactory.getInstance()
+				.getObject(Consts.LEVEL_SELECT_TAG)).getId());
 	}
 
 	@Override

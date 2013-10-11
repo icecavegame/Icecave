@@ -18,23 +18,11 @@ public class ThemeSelectSharedWorker extends BaseSharedWorker
 	}
 
 	@Override
-	public boolean getBoolean(String key)
-	{
-		return false;
-	}
-
-	@Override
-	public float getFloat(String key)
-	{
-		return 0;
-	}
-
-	@Override
-	public int getInt(String key)
+	public Object getObject()
 	{
 		final int DEFAULT_THEME = R.drawable.tileset1;
 		
-		int result = mShared.getInt(key, DEFAULT_THEME);
+		int result = mShared.getInt(mKey, DEFAULT_THEME);
 		
 		// Validate id... very costly though
 		if (BitmapFactory.decodeResource(MainActivity.getMainContext().getResources(), result) == null) {
@@ -45,41 +33,8 @@ public class ThemeSelectSharedWorker extends BaseSharedWorker
 	}
 
 	@Override
-	public long getLong(String key)
+	public void putObject(Object value)
 	{
-		return 0;
+		mShared.edit().putInt(mKey, (Integer) value).commit();
 	}
-
-	@Override
-	public String getString(String key)
-	{
-		return null;
-	}
-	
-	@Override
-	public void putBoolean(String key, boolean value)
-	{
-	}
-
-	@Override
-	public void putFloat(String key, float value)
-	{
-	}
-
-	@Override
-	public void putInt(String key, int value)
-	{
-		mShared.edit().putInt(key, value).commit();
-	}
-
-	@Override
-	public void putLong(String key, long value)
-	{
-	}
-
-	@Override
-	public void putString(String key, String value)
-	{
-	}
-
 }

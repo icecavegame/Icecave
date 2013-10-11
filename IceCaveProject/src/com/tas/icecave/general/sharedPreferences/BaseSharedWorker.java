@@ -14,4 +14,8 @@ public abstract class BaseSharedWorker implements ISharedWorker
 	public boolean isKeyMatch(String newKey) {
 		return mKey.equals(newKey);
 	}
+	
+	public String getKey() {
+		return mKey;
+	}
 }

@@ -15,22 +15,10 @@ public class LevelSelectSharedWorker extends BaseSharedWorker
 	}
 
 	@Override
-	public boolean getBoolean(String key)
-	{
-		return false;
-	}
-
-	@Override
-	public float getFloat(String key)
-	{
-		return 0;
-	}
-
-	@Override
-	public int getInt(String key)
+	public Object getObject()
 	{
 		final int DEFAULT_LEVEL = 0;
-		int result = mShared.getInt(key, DEFAULT_LEVEL);
+		int result = mShared.getInt(mKey, DEFAULT_LEVEL);
 		
 		// Validity check
 		if (result < 0 || result > EDifficulty.values().length) {
@@ -41,41 +29,8 @@ public class LevelSelectSharedWorker extends BaseSharedWorker
 	}
 
 	@Override
-	public long getLong(String key)
+	public void putObject(Object value)
 	{
-		return 0;
+		mShared.edit().putInt(mKey, (Integer) value).commit();
 	}
-
-	@Override
-	public String getString(String key)
-	{
-		return null;
-	}
-
-	@Override
-	public void putBoolean(String key, boolean value)
-	{
-	}
-
-	@Override
-	public void putFloat(String key, float value)
-	{		
-	}
-
-	@Override
-	public void putInt(String key, int value)
-	{
-		mShared.edit().putInt(key, value).commit();
-	}
-
-	@Override
-	public void putLong(String key, long value)
-	{
-	}
-
-	@Override
-	public void putString(String key, String value)
-	{
-	}
-
 }

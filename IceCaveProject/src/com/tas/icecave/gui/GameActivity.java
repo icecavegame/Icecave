@@ -110,9 +110,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 		mGameTheme =
 				new GameTheme(	BitmapFactory.decodeResource(getResources(),
-										(SharedPreferencesFactory.getInstance().getInt(Consts.THEME_SELECT_TAG))),
+										(Integer) (SharedPreferencesFactory.getInstance().getObject(Consts.THEME_SELECT_TAG))),
 								BitmapFactory.decodeResource(getResources(),
-										(SharedPreferencesFactory.getInstance().getInt(Consts.PLAYER_SELECT_TAG))));
+										(Integer) (SharedPreferencesFactory.getInstance().getObject(Consts.PLAYER_SELECT_TAG))));
 
 		// Set reset button effect
 		mResetButton.setOnClickListener(new OnClickListener()
@@ -145,7 +145,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				initMusic();
 				
 				// Check according to saved data
-				muteMusic.setChecked(SharedPreferencesFactory.getInstance().getBoolean(Consts.MUSIC_MUTE_FLAG));
+				muteMusic.setChecked((Boolean) SharedPreferencesFactory.getInstance().getObject(Consts.MUSIC_MUTE_FLAG));
 			}
 
 			public void onServiceDisconnected(ComponentName name)
@@ -166,7 +166,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{
 				// Save selection
-				SharedPreferencesFactory.getInstance().putBoolean(Consts.MUSIC_MUTE_FLAG, isChecked);
+				SharedPreferencesFactory.getInstance().putObject(Consts.MUSIC_MUTE_FLAG, isChecked);
 
 				// Play/pause music
 				initMusic();
@@ -385,7 +385,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	{
 		// If a medium difficulty level was solved, unlock hard difficulty
 		if (EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)] == EDifficulty.Medium) { 
-			SharedPreferencesFactory.getInstance().putBoolean(Consts.LOCK_HARD_DIFFICULTY, true);
+			SharedPreferencesFactory.getInstance().putObject(Consts.LOCK_HARD_DIFFICULTY, true);
 		}
 	}
 
@@ -445,7 +445,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private void initMusic()
 	{
 		// Initialize music (or pause it) according to saved selection
-		if (SharedPreferencesFactory.getInstance().getBoolean(Consts.MUSIC_MUTE_FLAG))
+		if ((Boolean) SharedPreferencesFactory.getInstance().getObject(Consts.MUSIC_MUTE_FLAG))
 		{
 			mServ.pauseMusic();
 		} else
