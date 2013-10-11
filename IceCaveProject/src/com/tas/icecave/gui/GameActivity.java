@@ -56,7 +56,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	
 	private final String GUI_BOARD_MANAGER_TAG = "guiBoardManager";
 
-	private final static int DEFAULT_PLAYER = R.drawable.default_player;
+	private final static int DEFAULT_PLAYER = R.drawable.lior_penguin_sprite;
 	private final static int DEFAULT_TILES = R.drawable.tileset1;
 
 	// Music data

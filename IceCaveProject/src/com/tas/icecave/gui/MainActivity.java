@@ -1,5 +1,7 @@
 package com.tas.icecave.gui;
 
+import android.widget.Toast;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -32,6 +34,8 @@ public class MainActivity extends Activity
 	private ServiceConnection mScon;
 	private Intent mIntent;
 	private RadioGroup mLevelSelect;
+	
+	private final int DEFAULT_LEVEL = 0;
 
 	private void doBindService()
 	{
@@ -66,8 +70,6 @@ public class MainActivity extends Activity
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		final int DEFAULT_LEVEL = 0;
-
 		mShared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
 
 		ImageView optionsActivity = (ImageView) findViewById(R.id.options_button);
@@ -81,10 +83,6 @@ public class MainActivity extends Activity
 
 		// Load levels dynamically from EDifficulty class
 		loadLevelsToRadioGroup();
-
-		// Load level selection from prefs if exists
-		mLevelSelect.check(mLevelSelect.getChildAt(mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL))
-				.getId());
 
 		optionsActivity.setOnClickListener(new OnClickListener()
 		{
@@ -188,7 +186,8 @@ public class MainActivity extends Activity
 
 	private void lockView(View view, boolean flag)
 	{
-		view.setClickable(flag);
+		// Do not allow clicking on this view. Not effective with toast called on click... 
+		//view.setClickable(flag);
 		
 		// If true make view it look clickable
 		if (flag) {
@@ -196,7 +195,32 @@ public class MainActivity extends Activity
 		} else {
 			// Make view look unclickable
 			((RadioButton)view).setTextColor(getResources().getColor(R.color.light_gray));
+			
+			view.setOnClickListener(new OnClickListener()
+			{
+				
+				@Override
+				public void onClick(View v)
+				{
+					// Cancel check of this view
+					Toast.makeText(v.getContext(), R.string.level_lock_warning, Toast.LENGTH_SHORT).show();
+					
+					// Select medium level.. This is a bad way to do this but in the future when packages are going to be used
+					// There won't be any more radio buttons and so this wouldn't matter
+					mLevelSelect.check(mLevelSelect.getChildAt(EDifficulty.Medium.ordinal()).getId());
+				}
+			});
 		}
+	}
+	
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus)
+	{
+		super.onWindowFocusChanged(hasFocus);
+		
+		// Load level selection from prefs if exists
+		mLevelSelect.check(mLevelSelect.getChildAt(mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL))
+				.getId());
 	}
 
 	@Override
