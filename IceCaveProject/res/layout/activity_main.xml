@@ -10,6 +10,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
+    <TextView
+        android:id="@+id/game_title"
+        style="@style/main_activity_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/app_name" />
+
     <RadioGroup
         android:id="@+id/level_select"
         android:layout_width="wrap_content"
@@ -22,8 +31,8 @@
         style="@style/main_activity_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
         android:contentDescription="@string/start_game"
         android:src="@drawable/round_blue_play_button_with_focus"
         android:text="@string/start_game"

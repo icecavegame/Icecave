@@ -40,11 +40,20 @@ public class SharedPreferencesFactory
 
 	public Object getObject(String key)
 	{
-		return mSharedWorkers.get(key).getObject();
+
+		if (mSharedWorkers.containsKey(key))
+		{
+			return mSharedWorkers.get(key).getObject();
+		}
+
+		return null;
 	}
 
-	public void putObject(String key, Object value)
+	public void setObject(String key, Object value)
 	{
-		mSharedWorkers.get(key).putObject(value);
+		if (mSharedWorkers.containsKey(key))
+		{
+			mSharedWorkers.get(key).putObject(value);
+		}
 	}
 }

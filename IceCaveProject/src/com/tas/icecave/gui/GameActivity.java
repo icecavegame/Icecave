@@ -166,7 +166,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{
 				// Save selection
-				SharedPreferencesFactory.getInstance().putObject(Consts.MUSIC_MUTE_FLAG, isChecked);
+				SharedPreferencesFactory.getInstance().setObject(Consts.MUSIC_MUTE_FLAG, isChecked);
 
 				// Play/pause music
 				initMusic();
@@ -385,7 +385,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	{
 		// If a medium difficulty level was solved, unlock hard difficulty
 		if (EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)] == EDifficulty.Medium) { 
-			SharedPreferencesFactory.getInstance().putObject(Consts.LOCK_HARD_DIFFICULTY, true);
+			SharedPreferencesFactory.getInstance().setObject(Consts.LOCK_HARD_DIFFICULTY, true);
 		}
 	}
 

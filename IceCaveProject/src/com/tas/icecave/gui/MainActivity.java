@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
+import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.android.icecave.R;
 import com.android.icecave.error.ExceptionHandler;
@@ -72,10 +74,12 @@ public class MainActivity extends Activity
 
 		ImageView optionsActivity = (ImageView) findViewById(R.id.options_button);
 		ImageView gameActivity = (ImageView) findViewById(R.id.game_starter);
+		TextView gameTitle = (TextView) findViewById(R.id.game_title);
 		mLevelSelect = (RadioGroup) findViewById(R.id.level_select);
 
 		// Set styles
-		// Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_ICE_AGE);
+		 Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_SNOW_TOP);
+		 gameTitle.setTypeface(tf);
 		// gameActivity.setTypeface(tf);
 		// optionsActivity.setTypeface(tf);
 
@@ -122,7 +126,7 @@ public class MainActivity extends Activity
 			public void onCheckedChanged(RadioGroup group, int checkedId)
 			{
 				// Save level to prefs
-				SharedPreferencesFactory.getInstance().putObject(Consts.LEVEL_SELECT_TAG,
+				SharedPreferencesFactory.getInstance().setObject(Consts.LEVEL_SELECT_TAG,
 						group.indexOfChild(group.findViewById(checkedId)));
 			}
 		});
@@ -180,6 +184,7 @@ public class MainActivity extends Activity
 		{
 			RadioButton newButton = new RadioButton(this);
 			newButton.setText(EDifficulty.values()[i].name()); // An alternative to this is to set another variable (string id) in the enum
+			newButton.setTextColor(getResources().getColor(R.color.white));
 			mLevelSelect.addView(newButton);
 		}
 
@@ -196,11 +201,11 @@ public class MainActivity extends Activity
 		// If true make view it look clickable
 		if (flag)
 		{
-			((RadioButton) view).setTextColor(getResources().getColor(R.color.black));
+			((RadioButton) view).setTextColor(getResources().getColor(R.color.white));
 		} else
 		{
 			// Make view look unclickable
-			((RadioButton) view).setTextColor(getResources().getColor(R.color.light_gray));
+			((RadioButton) view).setTextColor(getResources().getColor(R.color.dark_red));
 
 			view.setOnClickListener(new OnClickListener()
 			{

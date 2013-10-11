@@ -114,7 +114,7 @@ public class OptionsActivity extends Activity
 				if (isInitialized)
 				{
 					// Save selected tile theme
-					SharedPreferencesFactory.getInstance().putObject(Consts.THEME_SELECT_TAG,
+					SharedPreferencesFactory.getInstance().setObject(Consts.THEME_SELECT_TAG,
 							tileThemes.getThemeId(pos));
 				}
 
@@ -130,7 +130,7 @@ public class OptionsActivity extends Activity
 		// Since we are limiting to one player tileset (at least for now) this is preset initially
 		// Save selected player theme
 		SharedPreferencesFactory.getInstance()
-				.putObject(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(0));
+				.setObject(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(0));
 
 		// playerThemeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
 		// {
@@ -188,7 +188,7 @@ public class OptionsActivity extends Activity
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{
 				// Save selection
-				SharedPreferencesFactory.getInstance().putObject(Consts.MUSIC_MUTE_FLAG, isChecked);
+				SharedPreferencesFactory.getInstance().setObject(Consts.MUSIC_MUTE_FLAG, isChecked);
 
 				// Play/pause music
 				initMusic();

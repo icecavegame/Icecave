@@ -3,8 +3,10 @@
     <color name="blueish">#447993</color>
     <color name="white">#FFFFFF</color>
     <color name="light_gray">#dbdbdb</color>
+    <color name="light_blue_icy">#8bc6c4</color>
     <color name="orange">#FF7F00</color>
     <color name="dark_gray">#1C1B1A</color>
+    <color name="dark_red">#6D0000</color>
     <color name="red">#F90000</color>
     <color name="android_blue_dark">#0099CC</color>
     <color name="android_blue_light">#33B5E5</color>
