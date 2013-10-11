@@ -69,7 +69,7 @@ public class OptionsActivity extends Activity
 		final SharedPreferences shared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
 		
 		// Set styles
-		Typeface iceAge = Typeface.createFromAsset(getAssets(), Consts.STYLE_ICE_AGE);
+		Typeface iceAge = Typeface.createFromAsset(getAssets(), Consts.STYLE_SNOW_TOP);
 		Typeface robotoThin = Typeface.createFromAsset(getAssets(), Consts.STYLE_ROBOTO_THIN);
 		muteMusic.setTypeface(iceAge);
 		selectThemeText.setTypeface(iceAge);

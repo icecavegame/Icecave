@@ -88,10 +88,17 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		mAd = (AdView) findViewById(R.id.advertisment_game_activity_bottom);
 
 		final CheckBox muteMusic = (CheckBox) findViewById(R.id.muteMusic);
+		final TextView levelSelected = (TextView) findViewById(R.id.level_selected);
+		
+		// Show level name
+		levelSelected.setText(EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)].name());
 
 		// Set styles
-		Typeface iceAge = Typeface.createFromAsset(getAssets(), Consts.STYLE_ICE_AGE);
+		Typeface iceAge = Typeface.createFromAsset(getAssets(), Consts.STYLE_SNOW_TOP);
 		muteMusic.setTypeface(iceAge);
+		mMinimumMoves.setTypeface(iceAge);
+		mPlayerMoves.setTypeface(iceAge);
+		levelSelected.setTypeface(iceAge);
 
 		// Set initialized to false, as the activity is just now being created
 		mIsInitialized = false;

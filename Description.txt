@@ -1,0 +1,9 @@
+Slide(?) 1.0
+Pingo the penguin is out on an adventure. He sets out to explore the mysterious cave on his little island. Help him Slide across the icy tiles to get to the exit of each floor!
+
+To play: 
+* Simply swipe your finger across the screen to move Pingo in the direction you want. He will slide until he hits a boulder or a wall.
+* If you ever get stuck there is a reset button to bring you back to step one!
+* You may select different themes for Pingo to explore in the Settings screen.
+
+This game has been brought to you by ToiletGamesInc
