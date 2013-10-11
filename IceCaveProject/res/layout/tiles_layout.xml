@@ -79,7 +79,7 @@
             android:layout_above="@+id/loading_screen_text"
             android:layout_centerInParent="true"
             android:textAlignment="center"
-            android:textAppearance="@style/medium_bold"
+            android:textSize="@dimen/loading_screen"
             android:textColor="@color/white" />
 
         <TextView
@@ -90,7 +90,7 @@
             android:layout_marginBottom="12dp"
             android:layout_marginTop="12dp"
             android:textAlignment="center"
-            android:textAppearance="@style/medium_bold"
+            android:textSize="@dimen/loading_screen"
             android:textColor="@color/white" />
 
         <ProgressBar

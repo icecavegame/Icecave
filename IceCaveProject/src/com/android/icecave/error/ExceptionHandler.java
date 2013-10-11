@@ -1,5 +1,11 @@
 package com.android.icecave.error;
 
+import com.tas.icecaveLibrary.general.Consts;
+
+import android.content.SharedPreferences;
+
+import com.tas.icecave.gui.MainActivity;
+
 import android.app.Activity;
 
 import android.widget.Toast;
@@ -22,6 +28,11 @@ public class ExceptionHandler implements UncaughtExceptionHandler
 		
 		Toast.makeText((Activity)mToHandle, "Sorry, it seems the game has crashed :(", Toast.LENGTH_SHORT).show();
 		// TODO What else do we want to do here?
+		
+		if (mToHandle instanceof MainActivity) {
+			SharedPreferences shared = ((MainActivity)mToHandle).getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
+			shared.edit().remove(Consts.LEVEL_SELECT_TAG).commit();
+		}
 	}
 
 }

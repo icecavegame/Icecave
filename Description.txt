@@ -12,6 +12,6 @@ To play:
 * If you ever get stuck the reset button will bring you back to step one!
 * The minimum needed number of moves to reach the exit will be presented, 
   how many moves will it take for you to complete the stage? 
-* You may select different themes for Pingo to explore in the Settings screen.
+* You may select different themes for Gavin to explore in the Settings screen.
 
 This game has been brought to you by ToiletGamesInc.

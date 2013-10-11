@@ -1,20 +1,13 @@
 package com.tas.icecave.gui;
 
-import android.content.pm.PackageManager.NameNotFoundException;
-
-import android.graphics.Typeface;
-
-import android.widget.TextView;
-
-import com.android.icecave.error.ExceptionHandler;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -28,11 +21,13 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Spinner;
-
+import android.widget.TextView;
 import com.android.icecave.R;
+import com.android.icecave.error.ExceptionHandler;
 import com.tas.icecave.general.MusicService;
 import com.tas.icecave.general.PlayerThemes;
 import com.tas.icecave.general.TileThemes;
+import com.tas.icecave.general.sharedPreferences.SharedPreferencesFactory;
 import com.tas.icecaveLibrary.general.Consts;
 
 public class OptionsActivity extends Activity
@@ -68,7 +63,6 @@ public class OptionsActivity extends Activity
 
 		final PlayerThemes playerThemes = new PlayerThemes();
 		final TileThemes tileThemes = new TileThemes();
-		final SharedPreferences shared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
 
 		// Set styles
 		Typeface snowTop = Typeface.createFromAsset(getAssets(), Consts.STYLE_SNOW_TOP);
@@ -104,8 +98,7 @@ public class OptionsActivity extends Activity
 		// playerThemeSelect.setAdapter(playerAdapter);
 
 		// Set initial values in spinners
-		themeSelect.setSelection(tileThemes.getTilePositionById(shared.getInt(Consts.THEME_SELECT_TAG,
-				tileThemes.getThemeId(0))));
+		themeSelect.setSelection(tileThemes.getTilePositionById(SharedPreferencesFactory.getInstance().getInt(Consts.THEME_SELECT_TAG)));
 		// playerThemeSelect.setSelection(playerThemes.getTilePositionById(shared.getInt(Consts.PLAYER_SELECT_TAG,
 		// playerThemes.getThemeId(0))));
 
@@ -120,7 +113,7 @@ public class OptionsActivity extends Activity
 				if (isInitialized)
 				{
 					// Save selected tile theme
-					shared.edit().putInt(Consts.THEME_SELECT_TAG, tileThemes.getThemeId(pos)).commit();
+					SharedPreferencesFactory.getInstance().putInt(Consts.THEME_SELECT_TAG, tileThemes.getThemeId(pos));
 				}
 
 				isInitialized = true;
@@ -134,7 +127,7 @@ public class OptionsActivity extends Activity
 
 		// Since we are limiting to one player tileset (at least for now) this is preset initially
 		// Save selected player theme
-		shared.edit().putInt(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(0)).commit();
+		SharedPreferencesFactory.getInstance().putInt(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(0));
 
 		// playerThemeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
 		// {
@@ -170,7 +163,7 @@ public class OptionsActivity extends Activity
 				initMusic();
 
 				// Check according to saved data
-				muteMusic.setChecked(shared.getBoolean(Consts.MUSIC_MUTE_FLAG, false));
+				muteMusic.setChecked(SharedPreferencesFactory.getInstance().getBoolean(Consts.MUSIC_MUTE_FLAG));
 			}
 
 			public void onServiceDisconnected(ComponentName name)
@@ -191,7 +184,7 @@ public class OptionsActivity extends Activity
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{
 				// Save selection
-				shared.edit().putBoolean(Consts.MUSIC_MUTE_FLAG, isChecked).commit();
+				SharedPreferencesFactory.getInstance().putBoolean(Consts.MUSIC_MUTE_FLAG, isChecked);
 
 				// Play/pause music
 				initMusic();

@@ -1,13 +1,10 @@
 package com.tas.icecave.gui;
 
-import android.view.ViewGroup;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -16,6 +13,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
@@ -29,6 +27,7 @@ import com.android.icecave.R;
 import com.android.icecave.error.ExceptionHandler;
 import com.google.ads.AdView;
 import com.tas.icecave.general.MusicService;
+import com.tas.icecave.general.sharedPreferences.SharedPreferencesFactory;
 import com.tas.icecave.guiLogic.DrawablePlayer;
 import com.tas.icecave.guiLogic.GUIBoardManager;
 import com.tas.icecave.guiLogic.TilesView;
@@ -52,12 +51,8 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private TextView mPlayerMoves, mMinimumMoves;
 	private ImageView mResetButton;
 	private AdView mAd;
-	private SharedPreferences mShared;
 	
 	private final String GUI_BOARD_MANAGER_TAG = "guiBoardManager";
-
-	private final static int DEFAULT_PLAYER = R.drawable.lior_penguin_sprite;
-	private final static int DEFAULT_TILES = R.drawable.tileset1;
 
 	// Music data
 	private boolean mIsBound = false;
@@ -107,8 +102,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		mShared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
-
 		// Load GUI Board Manager if exists
 		if (savedInstanceState != null)
 		{
@@ -117,9 +110,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 		mGameTheme =
 				new GameTheme(	BitmapFactory.decodeResource(getResources(),
-										(mShared.getInt(Consts.THEME_SELECT_TAG, DEFAULT_TILES))),
+										(SharedPreferencesFactory.getInstance().getInt(Consts.THEME_SELECT_TAG))),
 								BitmapFactory.decodeResource(getResources(),
-										(mShared.getInt(Consts.PLAYER_SELECT_TAG, DEFAULT_PLAYER))));
+										(SharedPreferencesFactory.getInstance().getInt(Consts.PLAYER_SELECT_TAG))));
 
 		// Set reset button effect
 		mResetButton.setOnClickListener(new OnClickListener()
@@ -152,7 +145,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				initMusic();
 				
 				// Check according to saved data
-				muteMusic.setChecked(mShared.getBoolean(Consts.MUSIC_MUTE_FLAG, false));
+				muteMusic.setChecked(SharedPreferencesFactory.getInstance().getBoolean(Consts.MUSIC_MUTE_FLAG));
 			}
 
 			public void onServiceDisconnected(ComponentName name)
@@ -173,7 +166,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{
 				// Save selection
-				mShared.edit().putBoolean(Consts.MUSIC_MUTE_FLAG, isChecked).commit();
+				SharedPreferencesFactory.getInstance().putBoolean(Consts.MUSIC_MUTE_FLAG, isChecked);
 
 				// Play/pause music
 				initMusic();
@@ -392,7 +385,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	{
 		// If a medium difficulty level was solved, unlock hard difficulty
 		if (EDifficulty.values()[(Integer) getIntent().getExtras().get(Consts.LEVEL_SELECT_TAG)] == EDifficulty.Medium) { 
-			mShared.edit().putBoolean(Consts.LOCK_HARD_DIFFICULTY, true).commit();
+			SharedPreferencesFactory.getInstance().putBoolean(Consts.LOCK_HARD_DIFFICULTY, true);
 		}
 	}
 
@@ -452,7 +445,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private void initMusic()
 	{
 		// Initialize music (or pause it) according to saved selection
-		if (mShared.getBoolean(Consts.MUSIC_MUTE_FLAG, false))
+		if (SharedPreferencesFactory.getInstance().getBoolean(Consts.MUSIC_MUTE_FLAG))
 		{
 			mServ.pauseMusic();
 		} else

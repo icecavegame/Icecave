@@ -1,13 +1,10 @@
 package com.tas.icecave.gui;
 
-import android.widget.Toast;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -20,22 +17,22 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.Toast;
 import com.android.icecave.R;
 import com.android.icecave.error.ExceptionHandler;
 import com.tas.icecave.general.MusicService;
+import com.tas.icecave.general.sharedPreferences.SharedPreferencesFactory;
 import com.tas.icecaveLibrary.general.Consts;
 import com.tas.icecaveLibrary.general.EDifficulty;
 
 public class MainActivity extends Activity
 {
-	private SharedPreferences mShared;
 	private boolean mIsBound = false;
 	private MusicService mServ;
 	private ServiceConnection mScon;
 	private Intent mIntent;
 	private RadioGroup mLevelSelect;
-	
-	private final int DEFAULT_LEVEL = 0;
+	private static Context sContext;
 
 	private void doBindService()
 	{
@@ -60,6 +57,9 @@ public class MainActivity extends Activity
 		// Set an exception handler for this activity first of all
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 
+		// Set static variable
+		sContext = this;
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -70,16 +70,14 @@ public class MainActivity extends Activity
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		mShared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
-
 		ImageView optionsActivity = (ImageView) findViewById(R.id.options_button);
 		ImageView gameActivity = (ImageView) findViewById(R.id.game_starter);
 		mLevelSelect = (RadioGroup) findViewById(R.id.level_select);
 
 		// Set styles
-		//Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_ICE_AGE);
-		//gameActivity.setTypeface(tf);
-		//optionsActivity.setTypeface(tf);
+		// Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_ICE_AGE);
+		// gameActivity.setTypeface(tf);
+		// optionsActivity.setTypeface(tf);
 
 		// Load levels dynamically from EDifficulty class
 		loadLevelsToRadioGroup();
@@ -88,13 +86,13 @@ public class MainActivity extends Activity
 		{
 			@Override
 			public void onClick(View v)
-			{				
+			{
 				mIntent = new Intent(v.getContext(), OptionsActivity.class);
-				
+
 				// No animation between activities
 				mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 				startActivityForResult(mIntent, 0);
-				
+
 			}
 		});
 
@@ -109,10 +107,10 @@ public class MainActivity extends Activity
 				mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
 				// Load selection from prefs if exists
-				mIntent.putExtra(Consts.LEVEL_SELECT_TAG,
-						mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL));
-				mIntent.putExtra(Consts.SELECT_BOARD_SIZE_SIZE,
-						mShared.getInt(Consts.SELECT_BOARD_SIZE_SIZE, Consts.DEFAULT_BOARD_SIZE));
+				mIntent.putExtra(Consts.LEVEL_SELECT_TAG, SharedPreferencesFactory.getInstance()
+						.getInt(Consts.LEVEL_SELECT_TAG));
+				mIntent.putExtra(Consts.SELECT_BOARD_SIZE_SIZE, SharedPreferencesFactory.getInstance()
+						.getInt(Consts.SELECT_BOARD_SIZE_SIZE));
 				startActivityForResult(mIntent, 0);
 			}
 		});
@@ -123,9 +121,8 @@ public class MainActivity extends Activity
 			public void onCheckedChanged(RadioGroup group, int checkedId)
 			{
 				// Save level to prefs
-				mShared.edit()
-						.putInt(Consts.LEVEL_SELECT_TAG, group.indexOfChild(group.findViewById(checkedId)))
-						.commit();
+				SharedPreferencesFactory.getInstance().putInt(Consts.LEVEL_SELECT_TAG,
+						group.indexOfChild(group.findViewById(checkedId)));
 			}
 		});
 
@@ -153,10 +150,15 @@ public class MainActivity extends Activity
 		startService(music);
 	}
 
+	public static Context getMainContext()
+	{
+		return sContext;
+	}
+
 	private void initMusic()
 	{
 		// Initialize music (or pause it) according to saved selection
-		if (mShared.getBoolean(Consts.MUSIC_MUTE_FLAG, false))
+		if (SharedPreferencesFactory.getInstance().getBoolean(Consts.MUSIC_MUTE_FLAG))
 		{
 			mServ.pauseMusic();
 		} else
@@ -171,7 +173,7 @@ public class MainActivity extends Activity
 
 		// Clear before creating buttons
 		mLevelSelect.removeAllViews();
-		
+
 		// Go over levels and add them
 		for (int i = 0; i < numOfLevels; i++)
 		{
@@ -179,32 +181,35 @@ public class MainActivity extends Activity
 			newButton.setText(EDifficulty.values()[i].name()); // An alternative to this is to set another variable (string id) in the enum
 			mLevelSelect.addView(newButton);
 		}
-		
+
 		// Lock hardest difficulty if user never solved a level before
-		lockView(mLevelSelect.getChildAt(mLevelSelect.getChildCount() - 1), mShared.getBoolean(Consts.LOCK_HARD_DIFFICULTY, false));
+		lockView(mLevelSelect.getChildAt(mLevelSelect.getChildCount() - 1),
+				SharedPreferencesFactory.getInstance().getBoolean(Consts.LOCK_HARD_DIFFICULTY));
 	}
 
 	private void lockView(View view, boolean flag)
 	{
-		// Do not allow clicking on this view. Not effective with toast called on click... 
-		//view.setClickable(flag);
-		
+		// Do not allow clicking on this view. Not effective with toast called on click...
+		// view.setClickable(flag);
+
 		// If true make view it look clickable
-		if (flag) {
-			((RadioButton)view).setTextColor(getResources().getColor(R.color.black));
-		} else {
+		if (flag)
+		{
+			((RadioButton) view).setTextColor(getResources().getColor(R.color.black));
+		} else
+		{
 			// Make view look unclickable
-			((RadioButton)view).setTextColor(getResources().getColor(R.color.light_gray));
-			
+			((RadioButton) view).setTextColor(getResources().getColor(R.color.light_gray));
+
 			view.setOnClickListener(new OnClickListener()
 			{
-				
+
 				@Override
 				public void onClick(View v)
 				{
 					// Cancel check of this view
-					Toast.makeText(v.getContext(), R.string.level_lock_warning, Toast.LENGTH_SHORT).show();
-					
+					Toast.makeText(v.getContext(), R.string.level_lock_warning, Toast.LENGTH_LONG).show();
+
 					// Select medium level.. This is a bad way to do this but in the future when packages are going to be used
 					// There won't be any more radio buttons and so this wouldn't matter
 					mLevelSelect.check(mLevelSelect.getChildAt(EDifficulty.Medium.ordinal()).getId());
@@ -212,15 +217,15 @@ public class MainActivity extends Activity
 			});
 		}
 	}
-	
+
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus)
 	{
 		super.onWindowFocusChanged(hasFocus);
-		
+
 		// Load level selection from prefs if exists
-		mLevelSelect.check(mLevelSelect.getChildAt(mShared.getInt(Consts.LEVEL_SELECT_TAG, DEFAULT_LEVEL))
-				.getId());
+		mLevelSelect.check(mLevelSelect.getChildAt(SharedPreferencesFactory.getInstance()
+				.getInt(Consts.LEVEL_SELECT_TAG)).getId());
 	}
 
 	@Override
@@ -245,7 +250,7 @@ public class MainActivity extends Activity
 		{
 			initMusic();
 		}
-		
+
 		// Load levels dynamically from EDifficulty class
 		loadLevelsToRadioGroup();
 
@@ -266,17 +271,17 @@ public class MainActivity extends Activity
 
 		super.onPause();
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		// No fucking animation!
 		overridePendingTransition(0, 0); // 0 for no animation
-		
+
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-	
-//	private void lockView(View view, boolean flag) {
-//		view.setClickable(flag);
-//	}
+
+	// private void lockView(View view, boolean flag) {
+	// view.setClickable(flag);
+	// }
 }
