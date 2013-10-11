@@ -5,20 +5,28 @@
     android:layout_height="match_parent"
     android:layout_gravity="center_vertical|center_horizontal"
     android:background="@drawable/background_portrait"
-    android:gravity="center"
+    android:gravity="start"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
+    <RadioGroup
+        android:id="@+id/levelSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" >
+    </RadioGroup>
+
     <ImageView
         android:id="@+id/game_starter"
         style="@style/main_activity_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/levelSelect"
+        android:layout_marginBottom="26dp"
+        android:layout_toRightOf="@+id/levelSelect"
         android:contentDescription="@string/start_game"
         android:src="@drawable/round_blue_play_button_with_focus"
         android:text="@string/start_game"
@@ -30,17 +38,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="14dp"
+        android:layout_marginLeft="20dp"
         android:contentDescription="@string/settings"
         android:src="@drawable/settings_icon"
         android:text="@string/settings"
         android:textColor="@drawable/settings_state" />
-
-    <RadioGroup
-        android:id="@+id/levelSelect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" >
-    </RadioGroup>
 
 </RelativeLayout>
