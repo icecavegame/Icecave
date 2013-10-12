@@ -39,6 +39,7 @@
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">1</item>
+        <item name="android:textColor">@color/light_blue_icy</item>
     </style>
 
 </resources>

@@ -1,18 +1,13 @@
 package com.tas.icecave.gui;
 
-import android.graphics.Typeface;
-
-import android.widget.TextView;
-
-import com.android.icecave.error.ExceptionHandler;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -26,11 +21,13 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Spinner;
-
+import android.widget.TextView;
 import com.android.icecave.R;
+import com.android.icecave.error.ExceptionHandler;
 import com.tas.icecave.general.MusicService;
 import com.tas.icecave.general.PlayerThemes;
 import com.tas.icecave.general.TileThemes;
+import com.tas.icecave.general.sharedPreferences.SharedPreferencesFactory;
 import com.tas.icecaveLibrary.general.Consts;
 
 public class OptionsActivity extends Activity
@@ -43,10 +40,10 @@ public class OptionsActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		
+
 		// Set an exception handler for this activity first of all
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
-		
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_options);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -66,19 +63,27 @@ public class OptionsActivity extends Activity
 
 		final PlayerThemes playerThemes = new PlayerThemes();
 		final TileThemes tileThemes = new TileThemes();
-		final SharedPreferences shared = getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
-		
+
 		// Set styles
-		Typeface iceAge = Typeface.createFromAsset(getAssets(), Consts.STYLE_ICE_AGE);
-		Typeface robotoThin = Typeface.createFromAsset(getAssets(), Consts.STYLE_ROBOTO_THIN);
-		muteMusic.setTypeface(iceAge);
-		selectThemeText.setTypeface(iceAge);
-		creditsMain.setTypeface(robotoThin);
-		gameAndVersion.setTypeface(robotoThin);
-		creditsSecondary.setTypeface(robotoThin);
-		
+		Typeface snowTop = Typeface.createFromAsset(getAssets(), Consts.STYLE_SNOW_TOP);
+		Typeface robotoBlack = Typeface.createFromAsset(getAssets(), Consts.STYLE_ROBOTO_BLACK);
+		muteMusic.setTypeface(snowTop);
+		selectThemeText.setTypeface(snowTop);
+		creditsMain.setTypeface(robotoBlack);
+		gameAndVersion.setTypeface(robotoBlack);
+		creditsSecondary.setTypeface(robotoBlack);
+
+		String versionName = null;
+		try
+		{
+			versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+		} catch (NameNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+
 		// Set game and version and make a space after
-		gameAndVersion.setText(getString(R.string.app_name) + " " + getString(R.string.version_number) + "\n");
+		gameAndVersion.setText(getString(R.string.app_name) + " " + versionName + "\n");
 
 		ArrayAdapter<String> tileAdapter =
 				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
@@ -86,17 +91,17 @@ public class OptionsActivity extends Activity
 		tileAdapter.addAll(tileThemes.getThemeNames());
 		themeSelect.setAdapter(tileAdapter);
 
-//		ArrayAdapter<String> playerAdapter =
-//				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-//		playerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//		playerAdapter.addAll(playerThemes.getThemeNames());
-//		playerThemeSelect.setAdapter(playerAdapter);
+		// ArrayAdapter<String> playerAdapter =
+		// new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+		// playerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// playerAdapter.addAll(playerThemes.getThemeNames());
+		// playerThemeSelect.setAdapter(playerAdapter);
 
 		// Set initial values in spinners
-	themeSelect.setSelection(tileThemes.getTilePositionById(shared.getInt(Consts.THEME_SELECT_TAG,
-			tileThemes.getThemeId(0))));
-//		playerThemeSelect.setSelection(playerThemes.getTilePositionById(shared.getInt(Consts.PLAYER_SELECT_TAG,
-//				playerThemes.getThemeId(0))));
+		themeSelect.setSelection(tileThemes.getTilePositionById((Integer) SharedPreferencesFactory.getInstance()
+				.get(Consts.THEME_SELECT_TAG)));
+		// playerThemeSelect.setSelection(playerThemes.getTilePositionById(shared.getInt(Consts.PLAYER_SELECT_TAG,
+		// playerThemes.getThemeId(0))));
 
 		themeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
 		{
@@ -109,7 +114,8 @@ public class OptionsActivity extends Activity
 				if (isInitialized)
 				{
 					// Save selected tile theme
-					shared.edit().putInt(Consts.THEME_SELECT_TAG, tileThemes.getThemeId(pos)).commit();
+					SharedPreferencesFactory.getInstance().set(Consts.THEME_SELECT_TAG,
+							tileThemes.getThemeId(pos));
 				}
 
 				isInitialized = true;
@@ -120,33 +126,34 @@ public class OptionsActivity extends Activity
 			{
 			}
 		});
-		
+
 		// Since we are limiting to one player tileset (at least for now) this is preset initially
 		// Save selected player theme
-		shared.edit().putInt(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(0)).commit();
+		SharedPreferencesFactory.getInstance()
+				.set(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(0));
 
-//		playerThemeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
-//		{
-//			boolean isInitialized = false;
-//
-//			@Override
-//			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
-//			{
-//				// Avoid automatic selected of first item at creation
-//				if (isInitialized)
-//				{
-//					// Save selected player theme
-//					shared.edit().putInt(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(pos)).commit();
-//				}
-//
-//				isInitialized = true;
-//			}
-//
-//			@Override
-//			public void onNothingSelected(AdapterView<?> arg0)
-//			{
-//			}
-//		});
+		// playerThemeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
+		// {
+		// boolean isInitialized = false;
+		//
+		// @Override
+		// public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
+		// {
+		// // Avoid automatic selected of first item at creation
+		// if (isInitialized)
+		// {
+		// // Save selected player theme
+		// shared.edit().putInt(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(pos)).commit();
+		// }
+		//
+		// isInitialized = true;
+		// }
+		//
+		// @Override
+		// public void onNothingSelected(AdapterView<?> arg0)
+		// {
+		// }
+		// });
 
 		mScon = new ServiceConnection()
 		{
@@ -154,12 +161,13 @@ public class OptionsActivity extends Activity
 			public void onServiceConnected(ComponentName name, IBinder binder)
 			{
 				mServ = ((MusicService.ServiceBinder) binder).getService();
-				
+
 				// Set music mode for first time. Can't count on checkbox because flag may not "change" from its initialized value
 				initMusic();
 
 				// Check according to saved data
-				muteMusic.setChecked(shared.getBoolean(Consts.MUSIC_MUTE_FLAG, false));
+				muteMusic.setChecked((Boolean) SharedPreferencesFactory.getInstance()
+						.get(Consts.MUSIC_MUTE_FLAG));
 			}
 
 			public void onServiceDisconnected(ComponentName name)
@@ -175,19 +183,19 @@ public class OptionsActivity extends Activity
 		startService(music);
 
 		muteMusic.setOnCheckedChangeListener(new OnCheckedChangeListener()
-		{			
+		{
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{
-					// Save selection
-					shared.edit().putBoolean(Consts.MUSIC_MUTE_FLAG, isChecked).commit();
+				// Save selection
+				SharedPreferencesFactory.getInstance().set(Consts.MUSIC_MUTE_FLAG, isChecked);
 
-					// Play/pause music
-					initMusic();
+				// Play/pause music
+				initMusic();
 			}
 		});
 	}
-	
+
 	private void initMusic()
 	{
 		// Initialize music (or pause it) according to saved selection
@@ -215,19 +223,20 @@ public class OptionsActivity extends Activity
 			mIsBound = false;
 		}
 	}
-	
+
 	@Override
 	protected void onResume()
 	{
 		// Resume music if mute flag is off
-		if (mServ != null && !getSharedPreferences(Consts.PREFS_FILE_TAG, 0).getBoolean(Consts.MUSIC_MUTE_FLAG, false))
+		if (mServ != null &&
+				!getSharedPreferences(Consts.PREFS_FILE_TAG, 0).getBoolean(Consts.MUSIC_MUTE_FLAG, false))
 		{
 			mServ.resumeMusic();
 		}
-		
+
 		super.onResume();
 	}
-	
+
 	@Override
 	protected void onPause()
 	{
@@ -236,13 +245,13 @@ public class OptionsActivity extends Activity
 		{
 			mServ.pauseMusic();
 		}
-		
+
 		super.onPause();
 	}
 
 	@Override
 	protected void onDestroy()
-	{		
+	{
 		doUnbindService();
 		super.onDestroy();
 	}

@@ -4,7 +4,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
         <dimen name="medium_font_size">25dp</dimen>
+        <dimen name="loading_screen">22dp</dimen>
         <dimen name="dimen_credits_main">20dp</dimen>
         <dimen name="dimen_credits_secondary">15dp</dimen>
-        <dimen name="large_font_size">30dp</dimen>
+        <dimen name="large_font_size">35dp</dimen>
+        <dimen name="small_font_size">8dp</dimen>
 </resources>

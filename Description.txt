@@ -1,0 +1,17 @@
+Slide(?) 1.0
+Gavin the penguin is out on an adventure. 
+He sets out to explore the mysterious cave on his little island. 
+But now it's time to get back, mom probably worries.
+But what is the way back?
+
+Help Gavin Slide across the icy floor and get back home!
+
+To play: 
+* Simply swipe your finger across the screen to move Gavin in the direction you want. 
+* Gavin will slide on the floor up until the next obstacle.
+* If you ever get stuck the reset button will bring you back to step one!
+* The minimum needed number of moves to reach the exit will be presented, 
+  how many moves will it take for you to complete the stage? 
+* You may select different themes for Gavin to explore in the Settings screen.
+
+This game has been brought to you by ToiletGamesInc.

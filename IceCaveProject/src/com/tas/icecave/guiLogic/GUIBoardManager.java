@@ -1,7 +1,7 @@
 package com.tas.icecave.guiLogic;
 
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
-import com.android.icecave.R;
 import com.tas.icecave.gui.GameActivity;
 import com.tas.icecave.gui.GameTheme;
 import com.tas.icecave.gui.ILoadable;
@@ -110,6 +110,16 @@ public class GUIBoardManager implements Serializable, ILoadable
 		// Get the tiles
 		mTiles = new Bitmap[boardSizeHeight][boardSizeWidth];
 
+		String versionName = null;
+		try
+		{
+			versionName =
+					mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName;
+		} catch (NameNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+
 		// Get the map bundle for the selected configurations
 		BaseBundleMetaData mData =
 				new BaseBundleMetaData(	Consts.DEFAULT_START_POS,
@@ -118,7 +128,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 										boardSizeHeight,
 										boardSizeWidth,
 										boardSizeHeight * boardSizeWidth / Consts.DEFAULT_BOULDER_RELATION,
-										mContext.getString(R.string.version_number),
+										versionName,
 										Consts.DEFAULT_WALL_WIDTH);
 
 		try
@@ -263,8 +273,13 @@ public class GUIBoardManager implements Serializable, ILoadable
 	@Override
 	public void onLoad()
 	{
-		// Start creating a new stage, cancel running one if running		
-		mLoad = new LoadingThread(this, Consts.DEFAULT_START_POS, Consts.DEFAULT_WALL_WIDTH, mContext, getGameTheme());
+		// Start creating a new stage, cancel running one if running
+		mLoad =
+				new LoadingThread(	this,
+									Consts.DEFAULT_START_POS,
+									Consts.DEFAULT_WALL_WIDTH,
+									mContext,
+									getGameTheme());
 
 		// Check if file exists for loading
 		if (mBundleFiles != null && mBundleFiles.length > mBundleIndex)

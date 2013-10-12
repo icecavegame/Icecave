@@ -1,10 +1,8 @@
 package com.android.icecave.error;
 
 import android.app.Activity;
-
-import android.widget.Toast;
-
 import android.util.Log;
+import android.widget.Toast;
 import java.lang.Thread.UncaughtExceptionHandler;
 
 public class ExceptionHandler implements UncaughtExceptionHandler
