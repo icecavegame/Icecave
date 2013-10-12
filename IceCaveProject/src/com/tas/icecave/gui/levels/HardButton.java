@@ -1,11 +1,12 @@
 package com.tas.icecave.gui.levels;
 
+import com.tas.icecave.R;
+
 import android.content.Context;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-import com.android.icecave.R;
 import com.tas.icecave.gui.ILockableView;
 
 public class HardButton extends RadioButton implements ILockableView

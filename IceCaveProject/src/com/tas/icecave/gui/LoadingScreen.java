@@ -1,5 +1,7 @@
 package com.tas.icecave.gui;
 
+import com.tas.icecave.R;
+
 import com.tas.icecaveLibrary.general.Consts;
 
 import android.graphics.Typeface;
@@ -9,7 +11,6 @@ import android.util.AttributeSet;
 import android.view.ViewPropertyAnimator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.android.icecave.R;
 import com.tas.icecaveLibrary.general.GeneralServiceProvider;
 
 public class LoadingScreen extends RelativeLayout implements ILoadingScreen

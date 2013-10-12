@@ -1,7 +1,8 @@
 package com.tas.icecave.general.sharedPreferences;
 
+import com.tas.icecave.R;
+
 import android.graphics.BitmapFactory;
-import com.android.icecave.R;
 import com.tas.icecave.gui.MainActivity;
 
 import com.tas.icecaveLibrary.general.Consts;

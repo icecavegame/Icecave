@@ -1,6 +1,6 @@
 package com.tas.icecave.guiLogic;
 
-import com.android.icecave.R;
+import com.tas.icecave.R;
 
 public class ScoreManager
 {

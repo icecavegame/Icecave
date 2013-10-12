@@ -1,5 +1,9 @@
 package com.tas.icecave.gui;
 
+import com.tas.icecave.R;
+
+import com.tas.icecave.error.ExceptionHandler;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -22,8 +26,6 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
-import com.android.icecave.R;
-import com.android.icecave.error.ExceptionHandler;
 import com.tas.icecave.general.MusicService;
 import com.tas.icecave.general.PlayerThemes;
 import com.tas.icecave.general.TileThemes;

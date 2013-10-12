@@ -1,5 +1,9 @@
 package com.tas.icecave.gui;
 
+import com.tas.icecave.R;
+
+import com.tas.icecave.error.ExceptionHandler;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -17,8 +21,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.android.icecave.R;
-import com.android.icecave.error.ExceptionHandler;
 import com.tas.icecave.general.MusicService;
 import com.tas.icecave.general.sharedPreferences.SharedPreferencesFactory;
 import com.tas.icecave.gui.levels.ILevelSelect;

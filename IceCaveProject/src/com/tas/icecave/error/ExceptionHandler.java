@@ -1,4 +1,4 @@
-package com.android.icecave.error;
+package com.tas.icecave.error;
 
 import android.app.Activity;
 import android.util.Log;

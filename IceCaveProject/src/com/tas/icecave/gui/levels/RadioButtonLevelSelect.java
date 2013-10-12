@@ -1,11 +1,12 @@
 package com.tas.icecave.gui.levels;
 
+import com.tas.icecave.R;
+
 import android.app.Activity;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
-import com.android.icecave.R;
 import com.tas.icecave.general.sharedPreferences.SharedPreferencesFactory;
 import com.tas.icecaveLibrary.general.Consts;
 import com.tas.icecaveLibrary.general.EDifficulty;

@@ -1,5 +1,9 @@
 package com.tas.icecave.gui;
 
+import com.tas.icecave.R;
+
+import com.tas.icecave.error.ExceptionHandler;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -22,8 +26,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.android.icecave.R;
-import com.android.icecave.error.ExceptionHandler;
 import com.google.ads.AdView;
 import com.tas.icecave.general.MusicService;
 import com.tas.icecave.general.sharedPreferences.SharedPreferencesFactory;

@@ -1,6 +1,7 @@
 package com.tas.icecave.general;
 
-import com.android.icecave.R;
+import com.tas.icecave.R;
+
 import com.tas.icecave.gui.ITheme;
 import com.tas.icecave.guiLogic.theme.ThemeHolder;
 
