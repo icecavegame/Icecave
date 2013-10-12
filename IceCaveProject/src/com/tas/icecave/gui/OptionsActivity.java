@@ -129,8 +129,7 @@ public class OptionsActivity extends Activity
 
 		// Since we are limiting to one player tileset (at least for now) this is preset initially
 		// Save selected player theme
-		SharedPreferencesFactory.getInstance()
-				.set(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(0));
+		SharedPreferencesFactory.getInstance().set(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(0));
 
 		// playerThemeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
 		// {

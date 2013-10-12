@@ -12,8 +12,8 @@ public class PlayerThemes implements ITheme
 	{
 		mHolders =
 				new ThemeHolder[]
-					{ new ThemeHolder(R.drawable.lior_penguin_sprite, "Pingo"),
-				  	  new ThemeHolder(R.drawable.penguin_player, "Penguini") };
+					{ new ThemeHolder(R.drawable.penguin_player, "Gavin"),
+				  	  new ThemeHolder(R.drawable.lior_penguin_sprite, "Pingo") };
 	}
 
 	@Override

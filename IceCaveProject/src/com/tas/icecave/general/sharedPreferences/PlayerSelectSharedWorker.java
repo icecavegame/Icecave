@@ -22,7 +22,7 @@ public class PlayerSelectSharedWorker extends BaseSharedWorker
 	@Override
 	public Object get()
 	{
-		final int DEFAULT_PLAYER = R.drawable.lior_penguin_sprite;
+		final int DEFAULT_PLAYER = R.drawable.penguin_player;
 		
 		int result = mShared.getInt(mKey, DEFAULT_PLAYER);
 		

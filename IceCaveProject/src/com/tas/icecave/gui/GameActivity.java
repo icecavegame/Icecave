@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
@@ -30,6 +29,7 @@ import com.tas.icecave.general.MusicService;
 import com.tas.icecave.general.sharedPreferences.SharedPreferencesFactory;
 import com.tas.icecave.guiLogic.DrawablePlayer;
 import com.tas.icecave.guiLogic.GUIBoardManager;
+import com.tas.icecave.guiLogic.ScoreManager;
 import com.tas.icecave.guiLogic.TilesView;
 import com.tas.icecaveLibrary.general.Consts;
 import com.tas.icecaveLibrary.general.EDifficulty;
@@ -48,9 +48,11 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private RelativeLayout mActivityLayout, mExtras;
 	private LoadingScreen mLoadingScreen;
 	private boolean mIsFlagReached, mIsInitialized;
-	private TextView mPlayerMoves, mMinimumMoves;
+	private TextView mPlayerMoves, mMinimumMoves, mMovesPercent, mLevelSelected;
 	private ImageView mResetButton;
 	private AdView mAd;
+	private ScoreManager mScoreManager;
+	private CheckBox mMuteMusic;
 
 	private final String GUI_BOARD_MANAGER_TAG = "guiBoardManager";
 
@@ -78,23 +80,24 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		mLoadingScreen = (LoadingScreen) findViewById(R.id.loading_screen);
 		mPlayerMoves = (TextView) findViewById(R.id.player_moves);
 		mMinimumMoves = (TextView) findViewById(R.id.minimum_moves);
+		mMovesPercent = (TextView) findViewById(R.id.moves_percent);
 		mResetButton = (ImageView) findViewById(R.id.reset_button);
 		mExtras = (RelativeLayout) findViewById(R.id.extras);
 		mAd = (AdView) findViewById(R.id.advertisment_game_activity_bottom);
 
-		final CheckBox muteMusic = (CheckBox) findViewById(R.id.muteMusic);
-		final TextView levelSelected = (TextView) findViewById(R.id.level_selected);
+		mMuteMusic = (CheckBox) findViewById(R.id.mute_music);
+		mLevelSelected = (TextView) findViewById(R.id.level_selected);
 
 		// Show level name
-		levelSelected.setText(EDifficulty.values()[(Integer) getIntent().getExtras()
+		mLevelSelected.setText(EDifficulty.values()[(Integer) getIntent().getExtras()
 				.get(Consts.LEVEL_SELECT_TAG)].name());
 
 		// Set styles
 		Typeface iceAge = Typeface.createFromAsset(getAssets(), Consts.STYLE_SNOW_TOP);
-		muteMusic.setTypeface(iceAge);
+		mMuteMusic.setTypeface(iceAge);
 		mMinimumMoves.setTypeface(iceAge);
 		mPlayerMoves.setTypeface(iceAge);
-		levelSelected.setTypeface(iceAge);
+		mLevelSelected.setTypeface(iceAge);
 
 		// Set initialized to false, as the activity is just now being created
 		mIsInitialized = false;
@@ -115,6 +118,8 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 								BitmapFactory.decodeResource(getResources(),
 										(Integer) (SharedPreferencesFactory.getInstance().get(Consts.PLAYER_SELECT_TAG))));
 
+		mScoreManager = new ScoreManager();
+
 		// Set reset button effect
 		mResetButton.setOnClickListener(new OnClickListener()
 		{
@@ -128,10 +133,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				mPlayer.initializePlayer();
 
 				// Reset move count
-				mGBM.resetMoves();
+				// mGBM.resetMoves(); Not for now
 
 				// Update move counter text
-				setPlayerMoves();
+				updateMovesData();
 			}
 		});
 
@@ -146,7 +151,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				initMusic();
 
 				// Check according to saved data
-				muteMusic.setChecked((Boolean) SharedPreferencesFactory.getInstance()
+				mMuteMusic.setChecked((Boolean) SharedPreferencesFactory.getInstance()
 						.get(Consts.MUSIC_MUTE_FLAG));
 			}
 
@@ -162,7 +167,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		music.setClass(this, MusicService.class);
 		startService(music);
 
-		muteMusic.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		mMuteMusic.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
@@ -274,8 +279,8 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	// Create the tiles view and add it to the layout
 	private void createLayouts()
 	{
-		// Set up reset button image
-		mResetButton.setImageResource(R.drawable.reset_button_states);
+		// Show hidden views
+		showViews();
 
 		mTilesView = new TilesView(this, mGBM.getTiles());
 
@@ -287,14 +292,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		mTilesView.setTranslationY(mPlayerMoves.getBottom());
 		mActivityLayout.addView(mTilesView);
 
-		// Set reset button position below board
-		RelativeLayout.LayoutParams resetParams =
-				new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-												ViewGroup.LayoutParams.WRAP_CONTENT);
-		resetParams.addRule(RelativeLayout.ABOVE, mAd.getId());
-		resetParams.bottomMargin = 12;
-		mExtras.setLayoutParams(resetParams);
-
 		// Create new player view
 		mPlayer = new DrawablePlayer(this, mGameTheme);
 		mPlayer.setLayoutParams(new FrameLayout.LayoutParams(	FrameLayout.LayoutParams.WRAP_CONTENT,
@@ -303,6 +300,14 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 		// Register swipe events to the layout
 		mTilesView.setOnTouchListener(new ActivitySwipeDetector(this));
+	}
+
+	// Shows views after the layout has been created. This is to avoid having a "blink" of random text before load
+	private void showViews()
+	{
+		mResetButton.setVisibility(View.VISIBLE);
+		mMuteMusic.setVisibility(View.VISIBLE);
+		mLevelSelected.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -317,7 +322,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			if (updateBundle.getNotificationId() == Consts.PLAYER_FINISH_MOVE_UPDATE)
 			{
 				// Update counter
-				setPlayerMoves();
+				updateMovesData();
 
 				// Run a new game if flag is reached
 				if (mIsFlagReached)
@@ -367,7 +372,11 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 						// Reset move texts
 						setMinimumMoves();
-						setPlayerMoves();
+
+						// Increase score manager counter
+						mScoreManager.updateOverAllMinMoves(mGBM.getMinimalMovesForStage());
+
+						updateMovesData();
 
 						// Re-initialize player (must do this on the UI thread)
 						mPlayer.initializePlayer();
@@ -389,7 +398,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		SharedPreferencesFactory.getInstance().set(Consts.LOCK_HARD_DIFFICULTY, false);
 	}
 
-	private void setPlayerMoves()
+	private void updateMovesData()
 	{
 		// Must run this update on UI thread because it may be called from the update() function
 		runOnUiThread(new Runnable()
@@ -402,14 +411,14 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 						Integer.toString(mGBM.getMovesCarriedOutThisStage()));
 
 				// Color text differently if player exceeded the minimum moves
-				if (mGBM.getMovesCarriedOutThisStage() > mGBM.getMinimalMovesForStage())
-				{
-					mPlayerMoves.setTextColor(getResources().getColor(R.color.orange));
-				} else if (mGBM.getMovesCarriedOutThisStage() == 0)
-				{
-					// Color text white if player moves reset
-					mPlayerMoves.setTextColor(getResources().getColor(R.color.white));
-				}
+				mPlayerMoves.setTextColor(getResources().getColor(mScoreManager.getColorOverMinMoves(mGBM.getMovesCarriedOutThisStage(),
+						mGBM.getMinimalMovesForStage())));
+
+				// Update percent data and color
+				mMovesPercent.setText(mScoreManager.getTotalMovesPercent(mGBM.getOverAllMovesForGame(),
+						mScoreManager.getOverAllMinMoves()));
+				mMovesPercent.setTextColor(getResources().getColor(mScoreManager.getColorByTotalMoves(mGBM.getOverAllMovesForGame(),
+						mScoreManager.getOverAllMinMoves())));
 			}
 		});
 	}
@@ -439,6 +448,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		mMinimumMoves.bringToFront();
 		mPlayerMoves.bringToFront();
 		mExtras.bringToFront();
+		mResetButton.bringToFront();
 		mAd.bringToFront();
 	}
 

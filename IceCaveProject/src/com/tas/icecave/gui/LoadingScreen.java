@@ -46,12 +46,13 @@ public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 	public void preLoad(ILoadable loadableData)
 	{
 		bringToFront();
-
+		
 		// Show summary text if not initial loading screen
 		if (!loadableData.isInitialLoading())
 		{
 			// Show how much moves player made / minimum moves required, then a random phrase
-			mLoadingResult.setText(mContext.getString(R.string.finish_level_message) + " " +
+			mLoadingResult.setText(
+					//mContext.getString(R.string.finish_level_message) + " " +
 					Integer.toString(loadableData.getMovesCarriedOutThisStage()) + "/" +
 					Integer.toString(loadableData.getMinimalMovesForStage()));
 		} else
