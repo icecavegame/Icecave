@@ -25,7 +25,13 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" >
     </RadioGroup>
-
+	<RadioButton android:id="@+id/reset_statistics"
+	             android:layout_width="wrap_content"
+        		 android:layout_height="wrap_content"
+        		 android:layout_below="@+id/level_select"
+        		 android:layout_centerHorizontal="true"
+        		 android:layout_marginTop="35dip">"
+    </RadioButton>
     <ImageView
         android:id="@+id/game_starter"
         style="@style/main_activity_text"

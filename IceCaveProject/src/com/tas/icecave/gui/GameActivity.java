@@ -386,7 +386,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private void flagUpdate()
 	{
 		// If any difficulty level was solved, unlock hard difficulty
-		SharedPreferencesFactory.getInstance().set(Consts.LOCK_HARD_DIFFICULTY, true);
+		SharedPreferencesFactory.getInstance().set(Consts.LOCK_HARD_DIFFICULTY, false);
 	}
 
 	private void setPlayerMoves()

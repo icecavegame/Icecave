@@ -16,7 +16,7 @@ public class DifficultyLockSharedWorker extends BaseSharedWorker
 	@Override
 	public Object get()
 	{
-		boolean result = mShared.getBoolean(mKey, false);
+		boolean result = mShared.getBoolean(mKey, true);
 		
 		// No validity check
 		return result;
