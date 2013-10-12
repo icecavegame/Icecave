@@ -16,7 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import com.android.icecave.R;
 import com.android.icecave.error.ExceptionHandler;
 import com.tas.icecave.general.MusicService;
@@ -75,8 +75,8 @@ public class MainActivity extends Activity
 		TextView gameTitle = (TextView) findViewById(R.id.game_title);
 
 		// Set styles
-		 Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_SNOW_TOP);
-		 gameTitle.setTypeface(tf);
+		Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_SNOW_TOP);
+		gameTitle.setTypeface(tf);
 		// gameActivity.setTypeface(tf);
 		// optionsActivity.setTypeface(tf);
 
@@ -102,19 +102,23 @@ public class MainActivity extends Activity
 			@Override
 			public void onClick(View v)
 			{
-				mIntent = new Intent(v.getContext(), GameActivity.class);
+				if (mLevelSelect.isChecked())
+				{
+					mIntent = new Intent(v.getContext(), GameActivity.class);
 
-				// No animation between activities
-				mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+					// No animation between activities
+					mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-				// Load selection from prefs if exists
-				mIntent.putExtra(Consts.LEVEL_SELECT_TAG,
-						(Integer) SharedPreferencesFactory.getInstance()
-						.get(Consts.LEVEL_SELECT_TAG));
-				mIntent.putExtra(Consts.SELECT_BOARD_SIZE_SIZE,
-						(Integer) SharedPreferencesFactory.getInstance()
-								.get(Consts.SELECT_BOARD_SIZE_SIZE));
-				startActivityForResult(mIntent, 0);
+					// Load selection from prefs if exists
+					mIntent.putExtra(Consts.LEVEL_SELECT_TAG,
+							(Integer) SharedPreferencesFactory.getInstance().get(Consts.LEVEL_SELECT_TAG));
+					mIntent.putExtra(Consts.SELECT_BOARD_SIZE_SIZE,
+							(Integer) SharedPreferencesFactory.getInstance()
+									.get(Consts.SELECT_BOARD_SIZE_SIZE));
+					startActivityForResult(mIntent, 0);
+				} else {
+					Toast.makeText(v.getContext(), R.string.no_level_select_msg, Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 
@@ -163,7 +167,7 @@ public class MainActivity extends Activity
 	public void onWindowFocusChanged(boolean hasFocus)
 	{
 		super.onWindowFocusChanged(hasFocus);
-		
+
 		mLevelSelect.refresh();
 	}
 
@@ -194,7 +198,7 @@ public class MainActivity extends Activity
 		// TODO: Can this be null on onResume? if not then change calling
 		// the CTOR here to calling a load function.
 		mLevelSelect.refresh();
-		
+
 		// Reset intent
 		mIntent = null;
 

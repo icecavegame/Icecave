@@ -28,7 +28,7 @@ public class RadioButtonLevelSelect implements ILevelSelect
 	/**
 	 * The reset statistics button.
 	 */
-	RadioButton mResetStatistics;
+	//RadioButton mResetStatistics;
 	
 	/**
 	 * Create a new instance of the radio button level select.
@@ -39,12 +39,12 @@ public class RadioButtonLevelSelect implements ILevelSelect
 	public RadioButtonLevelSelect(Activity activity)
 	{
 		mLevelSelect = (RadioGroup) activity.findViewById(R.id.level_select);
-		mResetStatistics = (RadioButton) activity.findViewById(R.id.reset_statistics);
+		//mResetStatistics = (RadioButton) activity.findViewById(R.id.reset_statistics);
 		
 		// Clear before creating buttons
 		mLevelSelect.removeAllViews();
 		
-		mResetStatistics.setChecked(false);
+		//mResetStatistics.setChecked(false);
 		
 		for (EDifficulty difficulty : EDifficulty.values())
 		{
@@ -58,7 +58,7 @@ public class RadioButtonLevelSelect implements ILevelSelect
 			}
 			else
 			{
-				newButton = new HardButton(activity);
+				newButton = new HardButton(activity, mLevelSelect);
 			}
 			
 			// An alternative to this is to set another variable (string id) in the enum
@@ -109,5 +109,11 @@ public class RadioButtonLevelSelect implements ILevelSelect
 
 		// TODO: This should be more generic, not by index.
 		mLevelSelect.check(mLevelSelect.getChildAt(currentDifficulty).getId());
+	}
+
+	@Override
+	public boolean isChecked()
+	{
+		return mLevelSelect.getCheckedRadioButtonId() != -1;
 	}
 }
