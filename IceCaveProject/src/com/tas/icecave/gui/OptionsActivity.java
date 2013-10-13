@@ -1,9 +1,5 @@
 package com.tas.icecave.gui;
 
-import com.tas.icecave.R;
-
-import com.tas.icecave.error.ExceptionHandler;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -15,20 +11,15 @@ import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Spinner;
 import android.widget.TextView;
+import com.tas.icecave.R;
+import com.tas.icecave.error.ExceptionHandler;
 import com.tas.icecave.general.MusicService;
-import com.tas.icecave.general.PlayerThemes;
-import com.tas.icecave.general.TileThemes;
 import com.tas.icecave.general.sharedPreferences.SharedPreferencesFactory;
 import com.tas.icecaveLibrary.general.Consts;
 
@@ -56,24 +47,18 @@ public class OptionsActivity extends Activity
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		Spinner themeSelect = (Spinner) findViewById(R.id.select_theme);
 		TextView creditsMain = (TextView) findViewById(R.id.credits_main);
 		TextView creditsSecondary = (TextView) findViewById(R.id.credits_secondary);
 		TextView gameAndVersion = (TextView) findViewById(R.id.game_and_version);
-		TextView selectThemeText = (TextView) findViewById(R.id.select_theme_text);
 		final CheckBox muteMusic = (CheckBox) findViewById(R.id.muteMusic);
-
-		final PlayerThemes playerThemes = new PlayerThemes();
-		final TileThemes tileThemes = new TileThemes();
 
 		// Set styles
 		Typeface snowTop = Typeface.createFromAsset(getAssets(), Consts.STYLE_SNOW_TOP);
-		Typeface robotoBlack = Typeface.createFromAsset(getAssets(), Consts.STYLE_ROBOTO_BLACK);
+		Typeface roboto = Typeface.createFromAsset(getAssets(), Consts.STYLE_ROBOTO_CONDENSED_LIGHT);
 		muteMusic.setTypeface(snowTop);
-		selectThemeText.setTypeface(snowTop);
-		creditsMain.setTypeface(robotoBlack);
-		gameAndVersion.setTypeface(robotoBlack);
-		creditsSecondary.setTypeface(robotoBlack);
+		creditsMain.setTypeface(roboto);
+		gameAndVersion.setTypeface(roboto);
+		creditsSecondary.setTypeface(roboto);
 
 		String versionName = null;
 		try
@@ -86,75 +71,6 @@ public class OptionsActivity extends Activity
 
 		// Set game and version and make a space after
 		gameAndVersion.setText(getString(R.string.app_name) + " " + versionName + "\n");
-
-		ArrayAdapter<String> tileAdapter =
-				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-		tileAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		tileAdapter.addAll(tileThemes.getThemeNames());
-		themeSelect.setAdapter(tileAdapter);
-
-		// ArrayAdapter<String> playerAdapter =
-		// new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-		// playerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		// playerAdapter.addAll(playerThemes.getThemeNames());
-		// playerThemeSelect.setAdapter(playerAdapter);
-
-		// Set initial values in spinners
-		themeSelect.setSelection(tileThemes.getTilePositionById((Integer) SharedPreferencesFactory.getInstance()
-				.get(Consts.THEME_SELECT_TAG)));
-		// playerThemeSelect.setSelection(playerThemes.getTilePositionById(shared.getInt(Consts.PLAYER_SELECT_TAG,
-		// playerThemes.getThemeId(0))));
-
-		themeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
-		{
-			boolean isInitialized = false;
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
-			{
-				// Avoid automatic selected of first item at creation
-				if (isInitialized)
-				{
-					// Save selected tile theme
-					SharedPreferencesFactory.getInstance().set(Consts.THEME_SELECT_TAG,
-							tileThemes.getThemeId(pos));
-				}
-
-				isInitialized = true;
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0)
-			{
-			}
-		});
-
-		// Since we are limiting to one player tileset (at least for now) this is preset initially
-		// Save selected player theme
-		SharedPreferencesFactory.getInstance().set(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(0));
-
-		// playerThemeSelect.setOnItemSelectedListener(new OnItemSelectedListener()
-		// {
-		// boolean isInitialized = false;
-		//
-		// @Override
-		// public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
-		// {
-		// // Avoid automatic selected of first item at creation
-		// if (isInitialized)
-		// {
-		// // Save selected player theme
-		// shared.edit().putInt(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(pos)).commit();
-		// }
-		//
-		// isInitialized = true;
-		// }
-		//
-		// @Override
-		// public void onNothingSelected(AdapterView<?> arg0)
-		// {
-		// }
-		// });
 
 		mScon = new ServiceConnection()
 		{

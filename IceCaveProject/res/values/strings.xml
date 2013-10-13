@@ -14,6 +14,7 @@
     <string name="reset_button">Reset Button</string>
     <string name="finish_level_message">Moves to complete stage:</string>
     <string name="empty"></string>
+    <string name="infinity">∞</string>
     <string name="no_level_select_msg">Please select a difficulty before starting a game</string>
     <string name="level_lock_warning">Woah! Hey there pal how about you solve a level of easier difficulty before playing hard mode?</string>
 

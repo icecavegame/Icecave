@@ -1,5 +1,8 @@
 package com.tas.icecave.gui;
 
+import com.tas.icecave.general.PlayerThemes;
+import com.tas.icecave.general.TileThemes;
+
 import com.tas.icecave.R;
 
 import com.tas.icecave.error.ExceptionHandler;
@@ -84,6 +87,13 @@ public class MainActivity extends Activity
 
 		// Load levels dynamically from EDifficulty class
 		mLevelSelect = new RadioButtonLevelSelect(this);
+		
+		// Since we are limiting to one theme (at least for now) this is preset initially
+		// Save selected player theme, and game theme
+		final PlayerThemes playerThemes = new PlayerThemes();
+		final TileThemes tileThemes = new TileThemes();
+		SharedPreferencesFactory.getInstance().set(Consts.PLAYER_SELECT_TAG, playerThemes.getThemeId(0));
+		SharedPreferencesFactory.getInstance().set(Consts.THEME_SELECT_TAG, tileThemes.getThemeId(2));
 
 		optionsActivity.setOnClickListener(new OnClickListener()
 		{

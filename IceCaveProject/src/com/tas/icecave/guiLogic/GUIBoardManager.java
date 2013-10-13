@@ -37,6 +37,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 	private String[] mBundleFiles;
 	private String mBundleNameKey;
 	private transient LoadingThread mLoad;
+	private final int NO_KEY = -1;
 
 	public GUIBoardManager(GameActivity context)
 	{
@@ -145,7 +146,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 			mBundleNameKey = BundleHasher.hashToString(hasher.createMapBundleHash(mData));
 
 			// Attempt to get index of user progress in current difficulty
-			mBundleIndex = mContext.getSharedPreferences(Consts.PREFS_FILE_TAG, 0).getInt(mBundleNameKey, 0);
+			mBundleIndex = mContext.getSharedPreferences(Consts.PREFS_FILE_TAG, 0).getInt(mBundleNameKey, NO_KEY);
 		} catch (NoSuchAlgorithmException e)
 		{
 			e.printStackTrace();
@@ -281,8 +282,8 @@ public class GUIBoardManager implements Serializable, ILoadable
 									mContext,
 									getGameTheme());
 
-		// Check if file exists for loading
-		if (mBundleFiles != null && mBundleFiles.length > mBundleIndex)
+		// Check if file exists for loading (make sure bundle index is not NO_KEY value)
+		if (mBundleFiles != null && mBundleFiles.length > mBundleIndex && mBundleIndex != NO_KEY)
 		{
 			mLoad.loadStageFromFile(mBundleNameKey + "/" + mBundleFiles[mBundleIndex]);
 		}
@@ -290,13 +291,22 @@ public class GUIBoardManager implements Serializable, ILoadable
 		mLoad.start();
 	}
 
-	public void saveStageIndex()
+	/**
+	 * Save the stage index
+	 * @return Index of new stage. NO_KEY if not a loaded stage
+	 */
+	public int saveStageIndex()
 	{
+		int result = NO_KEY;
+		
 		// Check if file exists and if index is still within file range
 		if (mBundleFiles != null && mBundleFiles.length > mBundleIndex)
 		{
 			// Increase index
 			mBundleIndex++;
+			
+			// Set result
+			result = mBundleIndex;
 
 			// Set index of user progress in current difficulty
 			mContext.getSharedPreferences(Consts.PREFS_FILE_TAG, 0)
@@ -304,6 +314,13 @@ public class GUIBoardManager implements Serializable, ILoadable
 					.putInt(mBundleNameKey, mBundleIndex)
 					.commit();
 		}
+		
+		return result;
+	}
+	
+	// Get the bunleIndex for the current difficulty
+	public int getBundleIndex() {
+		return mBundleIndex;
 	}
 
 	public void resetMoves()

@@ -90,10 +90,6 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		mMuteMusic = (CheckBox) findViewById(R.id.mute_music);
 		mLevelSelected = (TextView) findViewById(R.id.level_selected);
 
-		// Show level name
-		mLevelSelected.setText(EDifficulty.values()[(Integer) getIntent().getExtras()
-				.get(Consts.LEVEL_SELECT_TAG)].name());
-
 		// Set styles
 		Typeface iceAge = Typeface.createFromAsset(getAssets(), Consts.STYLE_SNOW_TOP);
 		mMuteMusic.setTypeface(iceAge);
@@ -270,6 +266,9 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 			// Set views references for the loading screen
 			mLoadingScreen.setViews();
+			
+			// Set level index for the first time..
+			updateLevelIndex(mGBM.getBundleIndex());
 
 			// Create the first stage
 			mLoadingScreen.preLoad(mGBM);
@@ -335,8 +334,8 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 					// Reset reached flag
 					mIsFlagReached = false;
 
-					// Save the new stage index if stage was loaded from file
-					mGBM.saveStageIndex();
+					// Save the new stage index if stage was loaded from file.. and update the level index text
+					updateLevelIndex(mGBM.saveStageIndex());
 
 					// Disable the ad while loading screen is active
 					disableButtons();
@@ -392,6 +391,14 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				});
 			}
 		}
+	}
+
+	// Update the level selected name + the index of the current stage
+	private void updateLevelIndex(int levelIndex)
+	{
+		// Show level name + level index. Show infinity if no index +1 for readability 
+		mLevelSelected.setText(EDifficulty.values()[(Integer) getIntent().getExtras()
+				.get(Consts.LEVEL_SELECT_TAG)].name() + ": " + ((levelIndex != -1) ? levelIndex  + 1 : getString(R.string.infinity)));
 	}
 
 	private void flagUpdate()

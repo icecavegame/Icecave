@@ -41,22 +41,6 @@
             android:text="@string/credits_secondary" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/select_theme_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/select_theme"
-        android:layout_alignParentLeft="true"
-        android:text="@string/select_theme"
-        style="@style/medium_bold" />
-
-    <Spinner
-        android:id="@+id/select_theme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true" />
-
     <CheckBox
         android:id="@+id/muteMusic"
         android:layout_width="wrap_content"
