@@ -1,0 +1,6 @@
+* Character Development. Add a story to Gavin. Background, history, family, hobbies.. Everything... The stories will fit into "senarios" in between levels or something.. 
+-They would be put into short paragraphs on top of suitable background pictures. (not to be shown on the loading screen)
+
+* More random sentences for the loading screen
+
+* Move the ad between the texts and the board? will most likely generate more clicks
