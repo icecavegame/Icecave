@@ -1,0 +1,3 @@
+Note!!!
+
+**If new maps created for board size 20x20 medium/hard with other parameters similar to those of version 1.2 MUST RESET!

@@ -1,5 +1,7 @@
 package com.tas.icecave.guiLogic;
 
+import com.tas.icecave.general.sharedPreferences.SharedPreferencesFactory;
+
 import android.graphics.Bitmap;
 import com.tas.icecave.gui.GameActivity;
 import com.tas.icecave.gui.GameTheme;
@@ -134,6 +136,9 @@ public class GUIBoardManager implements Serializable, ILoadable
 			// Get the name of the hash and use it as the key for the index
 			mBundleNameKey = BundleHasher.hashToString(hasher.createMapBundleHash(mData));
 
+			// Attempt to reset shared data (of level index) before getting the index incase required
+			resetSharedData();
+			
 			// Attempt to get index of user progress in current difficulty
 			mBundleIndex = mContext.getSharedPreferences(Consts.PREFS_FILE_TAG, 0).getInt(mBundleNameKey, 0);
 		} catch (NoSuchAlgorithmException e)
@@ -315,5 +320,17 @@ public class GUIBoardManager implements Serializable, ILoadable
 	public void resetMoves()
 	{
 		mIceCaveGame.resetMoves();
+	}
+	
+	private void resetSharedData() {
+		// Reset some shared data if reset number value doesn't match current reset number value
+		// Thus every time that value is hardcodedly increased, a reset will occur
+		if (Consts.RESET_NUMBER != (Integer)SharedPreferencesFactory.getInstance().get(Consts.RESET_SHARED_DATA_TAG)) {
+			// Reset level index variables (for now just that)
+			mContext.getSharedPreferences(Consts.PREFS_FILE_TAG, 0).edit().putInt(mBundleNameKey, 0).commit();
+			
+			// Finally save new reset number value
+			SharedPreferencesFactory.getInstance().set(Consts.RESET_SHARED_DATA_TAG, Consts.RESET_NUMBER);
+		}
 	}
 }

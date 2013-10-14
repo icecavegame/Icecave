@@ -29,6 +29,7 @@ public class SharedPreferencesFactory
 		SelectBoardSizeSharedWorker sbsWorker = new SelectBoardSizeSharedWorker(mShared);
 		ThemeSelectSharedWorker tsWorker = new ThemeSelectSharedWorker(mShared);
 		DifficultyLockSharedWorker dlWorker = new DifficultyLockSharedWorker(mShared);
+		ResetNumberSharedWorker rnWorker = new ResetNumberSharedWorker(mShared);
 
 		mSharedWorkers.put(lsWorker.getKey(), lsWorker);
 		mSharedWorkers.put(mWorker.getKey(), mWorker);
@@ -36,6 +37,7 @@ public class SharedPreferencesFactory
 		mSharedWorkers.put(sbsWorker.getKey(), sbsWorker);
 		mSharedWorkers.put(tsWorker.getKey(), tsWorker);
 		mSharedWorkers.put(dlWorker.getKey(), dlWorker);
+		mSharedWorkers.put(rnWorker.getKey(), rnWorker);
 	}
 
 	public static SharedPreferencesFactory getInstance()
