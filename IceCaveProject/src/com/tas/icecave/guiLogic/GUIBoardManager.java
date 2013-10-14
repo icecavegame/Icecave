@@ -1,6 +1,5 @@
 package com.tas.icecave.guiLogic;
 
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import com.tas.icecave.gui.GameActivity;
 import com.tas.icecave.gui.GameTheme;
@@ -111,16 +110,6 @@ public class GUIBoardManager implements Serializable, ILoadable
 		// Get the tiles
 		mTiles = new Bitmap[boardSizeHeight][boardSizeWidth];
 
-		String versionName = null;
-		try
-		{
-			versionName =
-					mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionName;
-		} catch (NameNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-
 		// Get the map bundle for the selected configurations
 		BaseBundleMetaData mData =
 				new BaseBundleMetaData(	Consts.DEFAULT_START_POS,
@@ -129,7 +118,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 										boardSizeHeight,
 										boardSizeWidth,
 										boardSizeHeight * boardSizeWidth / Consts.DEFAULT_BOULDER_RELATION,
-										versionName,
+										Consts.MAP_GEN_VERSION,
 										Consts.DEFAULT_WALL_WIDTH);
 
 		try
@@ -146,7 +135,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 			mBundleNameKey = BundleHasher.hashToString(hasher.createMapBundleHash(mData));
 
 			// Attempt to get index of user progress in current difficulty
-			mBundleIndex = mContext.getSharedPreferences(Consts.PREFS_FILE_TAG, 0).getInt(mBundleNameKey, NO_KEY);
+			mBundleIndex = mContext.getSharedPreferences(Consts.PREFS_FILE_TAG, 0).getInt(mBundleNameKey, 0);
 		} catch (NoSuchAlgorithmException e)
 		{
 			e.printStackTrace();
@@ -282,8 +271,8 @@ public class GUIBoardManager implements Serializable, ILoadable
 									mContext,
 									getGameTheme());
 
-		// Check if file exists for loading (make sure bundle index is not NO_KEY value)
-		if (mBundleFiles != null && mBundleFiles.length > mBundleIndex && mBundleIndex != NO_KEY)
+		// Check if file exists for loading
+		if (mBundleFiles != null && mBundleFiles.length > mBundleIndex)
 		{
 			mLoad.loadStageFromFile(mBundleNameKey + "/" + mBundleFiles[mBundleIndex]);
 		}
@@ -318,9 +307,9 @@ public class GUIBoardManager implements Serializable, ILoadable
 		return result;
 	}
 	
-	// Get the bunleIndex for the current difficulty
+	// Get the bunleIndex for the current difficulty. If there are no files in the bundle return NO KEY
 	public int getBundleIndex() {
-		return mBundleIndex;
+		return (mBundleFiles.length == 0) ? NO_KEY : mBundleIndex;
 	}
 
 	public void resetMoves()

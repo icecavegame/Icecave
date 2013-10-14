@@ -1,0 +1,2 @@
+* More pictures - Whole new sprite of the player + scenario pictures made of a background picture and short notes that provide plot for the game story.
+* More sentences for loading screen
