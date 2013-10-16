@@ -28,7 +28,7 @@ public class PlayerSelectSharedWorker extends BaseSharedWorker
 		int result = mShared.getInt(mKey, DEFAULT_PLAYER);
 		
 		// Validate id... very costly though
-		if (BitmapFactory.decodeResource(MainActivity.getMainContext().getResources(), result) == null) {
+		if (BitmapFactory.decodeResource(MainActivity.getMainActivity().getResources(), result) == null) {
 			result = DEFAULT_PLAYER;
 		}
 		

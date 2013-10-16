@@ -26,7 +26,7 @@ public class ThemeSelectSharedWorker extends BaseSharedWorker
 		int result = mShared.getInt(mKey, DEFAULT_THEME);
 		
 		// Validate id... very costly though
-		if (BitmapFactory.decodeResource(MainActivity.getMainContext().getResources(), result) == null) {
+		if (BitmapFactory.decodeResource(MainActivity.getMainActivity().getResources(), result) == null) {
 			result = DEFAULT_THEME;
 		}
 		

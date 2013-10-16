@@ -1,13 +1,11 @@
 package com.tas.icecave.gui.levels;
 
-import com.tas.icecave.R;
-
-import android.app.Activity;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-
+import com.tas.icecave.R;
 import com.tas.icecave.general.sharedPreferences.SharedPreferencesFactory;
+import com.tas.icecave.gui.MainActivity;
 import com.tas.icecaveLibrary.general.Consts;
 import com.tas.icecaveLibrary.general.EDifficulty;
 
@@ -18,9 +16,7 @@ import com.tas.icecaveLibrary.general.EDifficulty;
  *
  */
 public class RadioButtonLevelSelect implements ILevelSelect
-{
-	final String LEVEL_SELECT_TAG = "levelSelect";
-	
+{	
 	/**
 	 * The radio group for selecting a level.
 	 */
@@ -33,13 +29,10 @@ public class RadioButtonLevelSelect implements ILevelSelect
 	
 	/**
 	 * Create a new instance of the radio button level select.
-	 * @param activity - The main activity. 
-	 * TODO: We need to use the trick that let us use the main activity
-	 * context globally and stop sending it in functions.
 	 */
-	public RadioButtonLevelSelect(Activity activity)
+	public RadioButtonLevelSelect()
 	{
-		mLevelSelect = (RadioGroup) activity.findViewById(R.id.level_select);
+		mLevelSelect = (RadioGroup) MainActivity.getMainActivity().findViewById(R.id.level_select);
 		//mResetStatistics = (RadioButton) activity.findViewById(R.id.reset_statistics);
 		
 		// Clear before creating buttons
@@ -54,12 +47,12 @@ public class RadioButtonLevelSelect implements ILevelSelect
 			// Check if hard.
 			if(!difficulty.equals(EDifficulty.Hard))
 			{
-				newButton = new RadioButton(activity);
-				newButton.setTextColor(activity.getResources().getColor(R.color.white));
+				newButton = new RadioButton(MainActivity.getMainActivity());
+				newButton.setTextColor(MainActivity.getMainActivity().getResources().getColor(R.color.white));
 			}
 			else
 			{
-				newButton = new HardButton(activity, mLevelSelect);
+				newButton = new HardButton(MainActivity.getMainActivity(), mLevelSelect);
 			}
 			
 			// An alternative to this is to set another variable (string id) in the enum
@@ -73,7 +66,7 @@ public class RadioButtonLevelSelect implements ILevelSelect
 			public void onCheckedChanged(RadioGroup group, int checkedId)
 			{
 				// Save level to prefs
-				SharedPreferencesFactory.getInstance().set(LEVEL_SELECT_TAG,
+				SharedPreferencesFactory.getInstance().set(Consts.LEVEL_SELECT_TAG,
 						group.indexOfChild(group.findViewById(checkedId)));
 			}
 		});
@@ -106,7 +99,7 @@ public class RadioButtonLevelSelect implements ILevelSelect
 			}
 		}
 		int currentDifficulty = 
-				(Integer)SharedPreferencesFactory.getInstance().get(LEVEL_SELECT_TAG);
+				(Integer)SharedPreferencesFactory.getInstance().get(Consts.LEVEL_SELECT_TAG);
 
 		// TODO: This should be more generic, not by index.
 		mLevelSelect.check(mLevelSelect.getChildAt(currentDifficulty).getId());

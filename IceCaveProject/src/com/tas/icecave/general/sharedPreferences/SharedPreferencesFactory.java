@@ -21,7 +21,7 @@ public class SharedPreferencesFactory
 
 	private SharedPreferencesFactory()
 	{
-		mShared = MainActivity.getMainContext().getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
+		mShared = MainActivity.getMainActivity().getSharedPreferences(Consts.PREFS_FILE_TAG, 0);
 		mSharedWorkers = new HashMap<String, ISharedWorker>();
 		LevelSelectSharedWorker lsWorker = new LevelSelectSharedWorker(mShared);
 		MusicSharedWorker mWorker = new MusicSharedWorker(mShared);

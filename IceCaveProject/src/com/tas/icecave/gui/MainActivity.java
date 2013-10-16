@@ -37,7 +37,7 @@ public class MainActivity extends Activity
 	private ServiceConnection mScon;
 	private Intent mIntent;
 	private ILevelSelect mLevelSelect;
-	private static Context sContext;
+	private static MainActivity sActivity;
 
 	private void doBindService()
 	{
@@ -63,7 +63,7 @@ public class MainActivity extends Activity
 		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 
 		// Set static variable
-		sContext = this;
+		sActivity = this;
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
@@ -86,7 +86,7 @@ public class MainActivity extends Activity
 		// optionsActivity.setTypeface(tf);
 
 		// Load levels dynamically from EDifficulty class
-		mLevelSelect = new RadioButtonLevelSelect(this);
+		mLevelSelect = new RadioButtonLevelSelect();
 		
 		// Since we are limiting to one theme (at least for now) this is preset initially
 		// Save selected player theme, and game theme
@@ -158,9 +158,9 @@ public class MainActivity extends Activity
 		startService(music);
 	}
 
-	public static Context getMainContext()
+	public static MainActivity getMainActivity()
 	{
-		return sContext;
+		return sActivity;
 	}
 
 	private void initMusic()
