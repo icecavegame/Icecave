@@ -15,7 +15,7 @@ public class BreakableTheme extends BaseObjectTheme
 	 */
 	public BreakableTheme() {
 		// Define breakable tile positions
-		final Point BREAKABLE_1 = new Point(2, 2);
+		final Point BREAKABLE_1 = new Point(2, 1);
 		
 		mTileLocations = new ArrayList<Point>();
 		mTileLocations.add(BREAKABLE_1);

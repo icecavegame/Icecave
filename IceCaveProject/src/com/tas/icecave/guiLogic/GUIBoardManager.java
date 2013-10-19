@@ -205,14 +205,6 @@ public class GUIBoardManager implements Serializable, ILoadable
 	{
 		mIceCaveGame.newStage(playerStart, wallWidth);
 
-		updateBoard(gameTheme);
-	}
-
-	/**
-	 * @param gameTheme
-	 */
-	public void updateBoard(GameTheme gameTheme)
-	{
 		ITile[][] board = mIceCaveGame.getBoard().getBoard();
 
 		// Fill a square (by the smaller size of the screen in current orientation)
@@ -233,6 +225,26 @@ public class GUIBoardManager implements Serializable, ILoadable
 								.getTiles(board[yAxis][xAxis], screenManager, gameTheme);
 			}
 		}
+	}
+
+	/**
+	 * @param gameTheme
+	 */
+	public void updateBoard(Point toUpdate, GameTheme gameTheme)
+	{
+		ITile[][] board = mIceCaveGame.getBoard().getBoard();
+		
+		// Fill a square (by the smaller size of the screen in current orientation)
+		GUIScreenManager screenManager =
+				new GUIScreenManager(board[0].length, 
+									 board.length, 
+									 mContext.getWidth(), 
+									 mContext.getWidth());
+		
+		mTiles[toUpdate.y][toUpdate.x] =
+				GUILogicServiceProvider.getInstance()
+						.getTileFactory()
+						.getTiles(board[toUpdate.y][toUpdate.x], screenManager, gameTheme);
 	}
 
 	/**

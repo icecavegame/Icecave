@@ -1,11 +1,11 @@
 package com.tas.icecave.guiLogic.tiles;
 
-import java.util.ArrayList;
-
+import com.tas.icecave.guiLogic.theme.BreakableTheme;
 import com.tas.icecave.guiLogic.theme.ThemeMap;
-import com.tas.icecave.guiLogic.theme.WallTheme;
-import com.tas.icecaveLibrary.mapLogic.tiles.WallTile;
+import com.tas.icecaveLibrary.general.GeneralServiceProvider;
+import com.tas.icecaveLibrary.mapLogic.tiles.BreakableBoulderTile;
 import com.tas.icecaveLibrary.utils.Point;
+import java.util.ArrayList;
 
 public class BreakableBoulderTileGUIWorker extends BaseTileGUIWorker
 {
@@ -13,13 +13,18 @@ public class BreakableBoulderTileGUIWorker extends BaseTileGUIWorker
 	public Point getTilePointInSprite(ThemeMap map)
 	{
 		// Get the boulder theme.
-		WallTheme theme = 
-				(WallTheme) map.getTheme(WallTile.class);
+		BreakableTheme theme = 
+				(BreakableTheme) map.getTheme(BreakableBoulderTile.class);
 		
 		// Get the tiles positions.
 		ArrayList<Point> tilePositions = theme.getTilesPositions();
 		
-		// Peek the first.
-		return tilePositions.get(0);
+		// Get a random tile index.
+		int tileIndex = 
+				GeneralServiceProvider.getInstance()
+				.getRandom()
+				.nextInt(tilePositions.size());
+		
+		return tilePositions.get(tileIndex);
 	}
 }

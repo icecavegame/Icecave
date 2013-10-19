@@ -1,9 +1,5 @@
 package com.tas.icecave.gui;
 
-import com.tas.icecave.R;
-
-import com.tas.icecave.error.ExceptionHandler;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -27,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.google.ads.AdView;
+import com.tas.icecave.R;
+import com.tas.icecave.error.ExceptionHandler;
 import com.tas.icecave.general.MusicService;
 import com.tas.icecave.general.sharedPreferences.SharedPreferencesFactory;
 import com.tas.icecave.guiLogic.DrawablePlayer;
@@ -37,7 +35,9 @@ import com.tas.icecaveLibrary.general.Consts;
 import com.tas.icecaveLibrary.general.EDifficulty;
 import com.tas.icecaveLibrary.general.EDirection;
 import com.tas.icecaveLibrary.mapLogic.IIceCaveGameStatus;
+import com.tas.icecaveLibrary.utils.Point;
 import com.tas.icecaveLibrary.utils.UpdateDataBundle;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -55,6 +55,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	private AdView mAd;
 	private ScoreManager mScoreManager;
 	private CheckBox mMuteMusic;
+	private ArrayList<Point> mChangedTiles;
 
 	private final String GUI_BOARD_MANAGER_TAG = "guiBoardManager";
 
@@ -243,9 +244,8 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			// Set game ended value
 			mIsFlagReached = iceCaveGameStatus.getIsStageEnded();
 
-			if(iceCaveGameStatus.getBoardChanged()){
-				mGBM.updateBoard(mGameTheme);
-			}
+			// Set board changed flag value
+			mChangedTiles = iceCaveGameStatus.getBoardChanged(); 
 			
 			// Make movement animation
 			mPlayer.movePlayer(direction, 
@@ -348,6 +348,14 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 					// Show loading screen in the meantime
 					mLoadingScreen.preLoad(mGBM);
+				}
+				
+				// Animate breaking of a boulder if broken
+				if (mChangedTiles != null) {
+					// For now only updating board regularly
+					for (int i = 0; i < mChangedTiles.size(); i++) {
+					mGBM.updateBoard(mChangedTiles.get(i), mGameTheme);
+					}
 				}
 			} else if (updateBundle.getNotificationId() == Consts.LOADING_LEVEL_FINISHED_UPDATE) // Level creation complete
 			{
