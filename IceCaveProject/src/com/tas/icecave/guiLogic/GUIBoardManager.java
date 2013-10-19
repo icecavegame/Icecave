@@ -160,14 +160,15 @@ public class GUIBoardManager implements Serializable, ILoadable
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 * @throws StreamCorruptedException
+	 * @throws CloneNotSupportedException 
 	 */
 	public void newStage(InputStream mapFileStream, GameTheme gameTheme) throws StreamCorruptedException,
 			IOException,
-			ClassNotFoundException
+			ClassNotFoundException, CloneNotSupportedException
 	{
 		mIceCaveGame.newStage(mapFileStream);
 
-		ITile[][] board = mIceCaveGame.getBoard();
+		ITile[][] board = mIceCaveGame.getBoard().getBoard();
 
 		// Get the tiles
 		mTiles = new Bitmap[board.length][board[0].length];
@@ -198,12 +199,13 @@ public class GUIBoardManager implements Serializable, ILoadable
 	 *            - Width of the wall in tiles.
 	 * @param context
 	 *            - Current activity context.
+	 * @throws CloneNotSupportedException 
 	 */
-	public void newStage(Point playerStart, int wallWidth, GameTheme gameTheme)
+	public void newStage(Point playerStart, int wallWidth, GameTheme gameTheme) throws CloneNotSupportedException
 	{
 		mIceCaveGame.newStage(playerStart, wallWidth);
 
-		ITile[][] board = mIceCaveGame.getBoard();
+		ITile[][] board = mIceCaveGame.getBoard().getBoard();
 
 		// Fill a square (by the smaller size of the screen in current orientation)
 		GUIScreenManager screenManager =
