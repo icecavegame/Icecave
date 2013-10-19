@@ -205,11 +205,22 @@ public class GUIBoardManager implements Serializable, ILoadable
 	{
 		mIceCaveGame.newStage(playerStart, wallWidth);
 
+		updateBoard(gameTheme);
+	}
+
+	/**
+	 * @param gameTheme
+	 */
+	public void updateBoard(GameTheme gameTheme)
+	{
 		ITile[][] board = mIceCaveGame.getBoard().getBoard();
 
 		// Fill a square (by the smaller size of the screen in current orientation)
 		GUIScreenManager screenManager =
-				new GUIScreenManager(board[0].length, board.length, mContext.getWidth(), mContext.getWidth());
+				new GUIScreenManager(board[0].length, 
+									 board.length, 
+									 mContext.getWidth(), 
+									 mContext.getWidth());
 
 		// Go through the game board.
 		for (int yAxis = 0; yAxis < board.length; yAxis++)
@@ -244,7 +255,6 @@ public class GUIBoardManager implements Serializable, ILoadable
 	 */
 	public IIceCaveGameStatus movePlayer(EDirection direction)
 	{
-
 		return mIceCaveGame.movePlayer(direction);
 	}
 
