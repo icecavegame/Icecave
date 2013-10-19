@@ -80,7 +80,8 @@ public class DrawablePlayer extends ImageView
 		// Move player to the new position in the new direction
 		update(getPositionOnScreen(newPosition),
 				direction,
-				Math.abs((newPosition.x - mPlayerPosition.x) + (newPosition.y - mPlayerPosition.y)));
+				Math.abs((newPosition.x - mPlayerPosition.x) + 
+						 (newPosition.y - mPlayerPosition.y)));
 		mIsAnimationRunning = true;
 		animate().start();
 

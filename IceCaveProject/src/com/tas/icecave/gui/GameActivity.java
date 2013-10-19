@@ -243,8 +243,13 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			// Set game ended value
 			mIsFlagReached = iceCaveGameStatus.getIsStageEnded();
 
+			if(iceCaveGameStatus.getBoardChanged()){
+				mGBM.updateBoard(mGameTheme);
+			}
+			
 			// Make movement animation
-			mPlayer.movePlayer(direction, iceCaveGameStatus.getPlayerPoint());
+			mPlayer.movePlayer(direction, 
+						       iceCaveGameStatus.getPlayerPoint());
 		}
 	}
 
