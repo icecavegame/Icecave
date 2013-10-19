@@ -64,7 +64,7 @@ public class LoadingThread extends Thread
 	@Override
 	public void run()
 	{
-		final long MINIMUM_LOADING_TIME = 2000; // Shoudl be enough time to read the texts on the screen
+		final long MINIMUM_LOADING_TIME = 2500; // Should be enough time to read the texts on the screen
 
 		// Shuffle the theme.
 		mTheme.getThemeMap().shuffle();

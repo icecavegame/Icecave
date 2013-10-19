@@ -38,7 +38,7 @@ public class LoadingScreen extends RelativeLayout implements ILoadingScreen
 		mLoadingResult = (TextView) findViewById(R.id.loading_screen_result);
 
 		// Set styles
-		Typeface tf = Typeface.createFromAsset(mContext.getAssets(), Consts.STYLE_SNOW_TOP);
+		Typeface tf = Typeface.createFromAsset(mContext.getAssets(), Consts.STYLE_PIXELART);
 		mLoadingMessage.setTypeface(tf);
 		mLoadingResult.setTypeface(tf);
 	}

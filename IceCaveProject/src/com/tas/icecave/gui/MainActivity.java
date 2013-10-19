@@ -32,13 +32,14 @@ import com.tas.icecaveLibrary.general.Consts;
 
 public class MainActivity extends Activity
 {
-	private boolean mIsBound = false;
-	private MusicService mServ;
-	private ServiceConnection mScon;
 	private Intent mIntent;
 	private ILevelSelect mLevelSelect;
 	private static MainActivity sActivity;
 
+	private boolean mIsBound = false;
+	private MusicService mServ;
+	private ServiceConnection mScon;
+	
 	private void doBindService()
 	{
 		bindService(new Intent(this, MusicService.class), mScon, Context.BIND_AUTO_CREATE);
@@ -66,10 +67,10 @@ public class MainActivity extends Activity
 		sActivity = this;
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_main);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		setContentView(R.layout.activity_main);
 
 		// Hide the Status Bar
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -80,7 +81,7 @@ public class MainActivity extends Activity
 		TextView gameTitle = (TextView) findViewById(R.id.game_title);
 
 		// Set styles
-		Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_SNOW_TOP);
+		Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_PIXELART);
 		gameTitle.setTypeface(tf);
 		// gameActivity.setTypeface(tf);
 		// optionsActivity.setTypeface(tf);

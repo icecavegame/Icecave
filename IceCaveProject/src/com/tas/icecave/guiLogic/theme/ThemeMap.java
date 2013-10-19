@@ -29,6 +29,7 @@ public class ThemeMap implements IShuffelableTheme
 		mThemes.put(EmptyTile.class, new EmptyTheme());
 		mThemes.put(FlagTile.class, new FlagTheme());
 		mThemes.put(WallTile.class, new WallTheme());
+		mThemes.put(BreakableTheme.class, new BreakableTheme());
 	}
 
 	/**

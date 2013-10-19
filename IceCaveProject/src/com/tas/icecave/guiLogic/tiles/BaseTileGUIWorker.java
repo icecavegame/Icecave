@@ -45,7 +45,7 @@ public abstract class BaseTileGUIWorker implements IGUITileWorker
 						 (float) scaler.getTileHeight() / height);
 
 		// Resize
-		croppedTile = Bitmap.createBitmap(croppedTile, 0, 0, width, height, matrix, true);
+		croppedTile = Bitmap.createBitmap(croppedTile, 0, 0, width, height, matrix, false);
 
 		return croppedTile;
 	}
@@ -73,7 +73,7 @@ public abstract class BaseTileGUIWorker implements IGUITileWorker
 		matrix.postScale((float) scaler.getTileWidth() / width, (float) scaler.getTileHeight() / height);
 
 		// Resize
-		croppedTile = Bitmap.createBitmap(croppedTile, 0, 0, width, height, matrix, true);
+		croppedTile = Bitmap.createBitmap(croppedTile, 0, 0, width, height, matrix, false);
 
 		return croppedTile;
 	}

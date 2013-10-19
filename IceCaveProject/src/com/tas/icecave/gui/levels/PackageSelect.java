@@ -1,11 +1,12 @@
 package com.tas.icecave.gui.levels;
 
+import com.tas.icecaveLibrary.general.Consts;
+
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
-import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +18,6 @@ import java.util.ArrayList;
 public class PackageSelect implements ILevelSelect
 {
 	private ArrayList<ImageView> mPackageButtons;
-	private ArrayList<TextView> mPackageStatistics;
 
 	/**
 	 * Create a new instance of the package list items
@@ -25,9 +25,8 @@ public class PackageSelect implements ILevelSelect
 	public PackageSelect()
 	{
 		mPackageButtons = new ArrayList<ImageView>();
-		mPackageStatistics = new ArrayList<TextView>();
-		
-		loadPackages();
+
+		createPackageButtons();
 
 		// RelativeLayout packageList = (RelativeLayout) MainActivity.getMainActivity().findViewById(R.id.package_list);
 
@@ -35,27 +34,25 @@ public class PackageSelect implements ILevelSelect
 		LayoutParams packageButtonParams =
 				new LayoutParams(new RelativeLayout.LayoutParams(	RelativeLayout.LayoutParams.WRAP_CONTENT,
 																	RelativeLayout.LayoutParams.WRAP_CONTENT));
-		packageButtonParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-		LayoutParams packageStatisticParams =
-				new LayoutParams(new RelativeLayout.LayoutParams(	RelativeLayout.LayoutParams.WRAP_CONTENT,
-																	RelativeLayout.LayoutParams.WRAP_CONTENT));
-		packageStatisticParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-		
+		packageButtonParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+
 		// Clear views first if exist, then add new views
 		// packageList.removeAllViews();
-		for (int i = 0; i < mPackageButtons.size(); i++) {
+		for (int i = 0; i < mPackageButtons.size(); i++)
+		{
 			// Set parameters for current views and add to the layout
 			mPackageButtons.get(i).setLayoutParams(packageButtonParams);
-			mPackageStatistics.get(i).setLayoutParams(packageStatisticParams);
 			// packageList.addView(mPackageButtons.get(i));
-			// packageList.addView(mPackageStatistics.get(i));
-			
+
+			final int index = i;
 			mPackageButtons.get(i).setOnClickListener(new OnClickListener()
 			{
+				final String PACKAGE_NAME = Consts.PACKAGE_NAMES[index]; // Use this as the id of a package?
+				
 				@Override
 				public void onClick(View v)
 				{
-					// TODO Complete. Start game activity with selected package (current level index is selected in GameActivity..)
+					// TODO Complete. Start select level activity & send selected package data to it
 				}
 			});
 		}
@@ -73,11 +70,12 @@ public class PackageSelect implements ILevelSelect
 		// TODO Irrelevant, remove when finished with radio button format
 		return false;
 	}
-	
+
 	/**
-	 * Load packages to view lists
+	 * Load package buttons to view lists
 	 */
-	private void loadPackages() {
-		// TODO Complete
+	private void createPackageButtons()
+	{
+		// TODO Complete. Should be receiving an id of some sort to suit an image to its button, or maybe just use name index from PACKAGE_NAMES...
 	}
 }

@@ -53,12 +53,12 @@ public class OptionsActivity extends Activity
 		final CheckBox muteMusic = (CheckBox) findViewById(R.id.muteMusic);
 
 		// Set styles
-		Typeface snowTop = Typeface.createFromAsset(getAssets(), Consts.STYLE_SNOW_TOP);
-		Typeface roboto = Typeface.createFromAsset(getAssets(), Consts.STYLE_ROBOTO_CONDENSED_LIGHT);
-		muteMusic.setTypeface(snowTop);
-		creditsMain.setTypeface(roboto);
-		gameAndVersion.setTypeface(roboto);
-		creditsSecondary.setTypeface(roboto);
+		Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_PIXELART);
+		//Typeface roboto = Typeface.createFromAsset(getAssets(), Consts.STYLE_ROBOTO_CONDENSED_LIGHT);
+		muteMusic.setTypeface(tf);
+		creditsMain.setTypeface(tf);
+		gameAndVersion.setTypeface(tf);
+		creditsSecondary.setTypeface(tf);
 
 		String versionName = null;
 		try
@@ -116,7 +116,7 @@ public class OptionsActivity extends Activity
 	private void initMusic()
 	{
 		// Initialize music (or pause it) according to saved selection
-		if (getSharedPreferences(Consts.PREFS_FILE_TAG, 0).getBoolean(Consts.MUSIC_MUTE_FLAG, false))
+		if ((Boolean) SharedPreferencesFactory.getInstance().get(Consts.MUSIC_MUTE_FLAG))
 		{
 			mServ.pauseMusic();
 		} else
@@ -146,7 +146,7 @@ public class OptionsActivity extends Activity
 	{
 		// Resume music if mute flag is off
 		if (mServ != null &&
-				!getSharedPreferences(Consts.PREFS_FILE_TAG, 0).getBoolean(Consts.MUSIC_MUTE_FLAG, false))
+				!(Boolean) SharedPreferencesFactory.getInstance().get(Consts.MUSIC_MUTE_FLAG))
 		{
 			mServ.resumeMusic();
 		}

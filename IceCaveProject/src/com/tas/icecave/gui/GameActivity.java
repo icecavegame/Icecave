@@ -91,11 +91,12 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		mLevelSelected = (TextView) findViewById(R.id.level_selected);
 
 		// Set styles
-		Typeface iceAge = Typeface.createFromAsset(getAssets(), Consts.STYLE_SNOW_TOP);
-		mMuteMusic.setTypeface(iceAge);
-		mMinimumMoves.setTypeface(iceAge);
-		mPlayerMoves.setTypeface(iceAge);
-		mLevelSelected.setTypeface(iceAge);
+		Typeface tf = Typeface.createFromAsset(getAssets(), Consts.STYLE_PIXELART);
+		mMuteMusic.setTypeface(tf);
+		mMinimumMoves.setTypeface(tf);
+		mPlayerMoves.setTypeface(tf);
+		mLevelSelected.setTypeface(tf);
+		mMovesPercent.setTypeface(tf);
 
 		// Set initialized to false, as the activity is just now being created
 		mIsInitialized = false;

@@ -1,5 +1,7 @@
 package com.tas.icecave.general;
 
+import com.tas.icecaveLibrary.general.Consts;
+
 import com.tas.icecave.R;
 
 import com.tas.icecave.gui.ITheme;
@@ -10,9 +12,9 @@ public class TileThemes implements ITheme
 	ThemeHolder[] mHolders;
 	
 	public TileThemes() {
-		mHolders = new ThemeHolder[] {new ThemeHolder(R.drawable.tileset1, "Hidden Tomb"),
-									  new ThemeHolder(R.drawable.tileset2, "Frozen Caverns"),
-									  new ThemeHolder(R.drawable.tileset3, "Ancient Rooms")};
+		mHolders = new ThemeHolder[] {new ThemeHolder(R.drawable.tileset1, Consts.PACKAGE_NAMES[0]),
+									  new ThemeHolder(R.drawable.tileset2, Consts.PACKAGE_NAMES[1]),
+									  new ThemeHolder(R.drawable.tileset3, Consts.PACKAGE_NAMES[2])};
 	}
 
 	@Override
