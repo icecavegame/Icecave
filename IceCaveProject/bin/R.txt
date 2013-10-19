@@ -62,7 +62,8 @@ int id player_moves 0x7f0b000b
 int id reset_button 0x7f0b0012
 int layout activity_main 0x7f030000
 int layout activity_options 0x7f030001
-int layout tiles_layout 0x7f030002
+int layout activity_select_level 0x7f030002
+int layout tiles_layout 0x7f030003
 int menu main 0x7f0a0000
 int raw card_game_in_progress 0x7f040000
 int string action_settings 0x7f060001
