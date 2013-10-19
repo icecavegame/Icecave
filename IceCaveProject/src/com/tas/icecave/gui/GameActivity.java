@@ -38,6 +38,7 @@ import com.tas.icecaveLibrary.mapLogic.IIceCaveGameStatus;
 import com.tas.icecaveLibrary.utils.Point;
 import com.tas.icecaveLibrary.utils.UpdateDataBundle;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -129,6 +130,16 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				// Reset player position on logic level
 				mGBM.resetPlayer(Consts.DEFAULT_START_POS);
 
+				// Reset board
+				try
+				{
+					mGBM.resetStage();
+					mTilesView.invalidate();
+				} catch (CloneNotSupportedException e)
+				{
+					e.printStackTrace();
+				}
+				
 				// Re-initialize player on UI level
 				mPlayer.initializePlayer();
 
@@ -245,11 +256,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			mIsFlagReached = iceCaveGameStatus.getIsStageEnded();
 
 			// Set board changed flag value
-			mChangedTiles = iceCaveGameStatus.getBoardChanged(); 
-			
+			mChangedTiles = new ArrayList<Point>(Arrays.asList(iceCaveGameStatus.getPointToUpdate()));
+
 			// Make movement animation
-			mPlayer.movePlayer(direction, 
-						       iceCaveGameStatus.getPlayerPoint());
+			mPlayer.movePlayer(direction, iceCaveGameStatus.getPlayerPoint());
 		}
 	}
 
@@ -272,7 +282,7 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 
 			// Set views references for the loading screen
 			mLoadingScreen.setViews();
-			
+
 			// Set level index for the first time..
 			updateLevelIndex(mGBM.getBundleIndex());
 
@@ -349,13 +359,18 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 					// Show loading screen in the meantime
 					mLoadingScreen.preLoad(mGBM);
 				}
-				
+
 				// Animate breaking of a boulder if broken
-				if (mChangedTiles != null) {
+				if (mChangedTiles != null)
+				{
 					// For now only updating board regularly
-					for (int i = 0; i < mChangedTiles.size(); i++) {
-					mGBM.updateBoard(mChangedTiles.get(i), mGameTheme);
+					for (int i = 0; i < mChangedTiles.size(); i++)
+					{
+						mGBM.updateBoard(mChangedTiles.get(i), mGameTheme);
 					}
+					
+					// Update view
+					mTilesView.invalidate();
 				}
 			} else if (updateBundle.getNotificationId() == Consts.LOADING_LEVEL_FINISHED_UPDATE) // Level creation complete
 			{
@@ -410,9 +425,11 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 	// Update the level selected name + the index of the current stage
 	private void updateLevelIndex(int levelIndex)
 	{
-		// Show level name + level index. Show infinity if no index +1 for readability 
+		// Show level name + level index. Show infinity if no index +1 for readability
 		mLevelSelected.setText(EDifficulty.values()[(Integer) getIntent().getExtras()
-				.get(Consts.LEVEL_SELECT_TAG)].name() + ": " + ((levelIndex != -1) ? levelIndex  + 1 : getString(R.string.infinity)));
+				.get(Consts.LEVEL_SELECT_TAG)].name() +
+				": " +
+				((levelIndex != -1) ? levelIndex + 1 : getString(R.string.infinity)));
 	}
 
 	private void flagUpdate()

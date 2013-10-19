@@ -205,6 +205,37 @@ public class GUIBoardManager implements Serializable, ILoadable
 	{
 		mIceCaveGame.newStage(playerStart, wallWidth);
 
+		updateBoard(gameTheme);
+	}
+
+	/**
+	 * Update the selected tile on the board
+	 * @param gameTheme
+	 * @param toUpdate
+	 */
+	public void updateBoard(Point toUpdate, GameTheme gameTheme)
+	{
+		ITile[][] board = mIceCaveGame.getBoard().getBoard();
+		
+		// Fill a square (by the smaller size of the screen in current orientation)
+		GUIScreenManager screenManager =
+				new GUIScreenManager(board[0].length, 
+									 board.length, 
+									 mContext.getWidth(), 
+									 mContext.getWidth());
+		
+		mTiles[toUpdate.y][toUpdate.x] =
+				GUILogicServiceProvider.getInstance()
+						.getTileFactory()
+						.getTiles(board[toUpdate.y][toUpdate.x], screenManager, gameTheme);
+	}
+	
+	/**
+	 * Update the entire board
+	 * @param gameTheme
+	 */
+	public void updateBoard(GameTheme gameTheme)
+	{
 		ITile[][] board = mIceCaveGame.getBoard().getBoard();
 
 		// Fill a square (by the smaller size of the screen in current orientation)
@@ -226,26 +257,8 @@ public class GUIBoardManager implements Serializable, ILoadable
 			}
 		}
 	}
-
-	/**
-	 * @param gameTheme
-	 */
-	public void updateBoard(Point toUpdate, GameTheme gameTheme)
-	{
-		ITile[][] board = mIceCaveGame.getBoard().getBoard();
-		
-		// Fill a square (by the smaller size of the screen in current orientation)
-		GUIScreenManager screenManager =
-				new GUIScreenManager(board[0].length, 
-									 board.length, 
-									 mContext.getWidth(), 
-									 mContext.getWidth());
-		
-		mTiles[toUpdate.y][toUpdate.x] =
-				GUILogicServiceProvider.getInstance()
-						.getTileFactory()
-						.getTiles(board[toUpdate.y][toUpdate.x], screenManager, gameTheme);
-	}
+	
+	
 
 	/**
 	 * Get the tiles of the current board.
@@ -344,6 +357,15 @@ public class GUIBoardManager implements Serializable, ILoadable
 	public void resetMoves()
 	{
 		mIceCaveGame.resetMoves();
+	}
+	
+	/**
+	 * Reset the stage.
+	 * @throws CloneNotSupportedException 
+	 */
+	public void resetStage() throws CloneNotSupportedException {
+		mIceCaveGame.resetStage();
+		updateBoard(getGameTheme());
 	}
 	
 	private void resetSharedData() {
