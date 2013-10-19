@@ -86,10 +86,23 @@ public class LoadingThread extends Thread
 			{
 				e.printStackTrace();
 			}
+			catch (CloneNotSupportedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else
 		{
 			// Create new stage
-			mBoardManager.newStage(mPlayerPosition, mWallWidth, mTheme);
+			try
+			{
+				mBoardManager.newStage(mPlayerPosition, mWallWidth, mTheme);
+			}
+			catch (CloneNotSupportedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		// Get loading time

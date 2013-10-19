@@ -8,6 +8,7 @@ import com.tas.icecave.gui.GameTheme;
 import com.tas.icecave.guiLogic.ITileScale;
 import com.tas.icecaveLibrary.general.Consts;
 import com.tas.icecaveLibrary.mapLogic.tiles.BoulderTile;
+import com.tas.icecaveLibrary.mapLogic.tiles.BreakableBoulderTile;
 import com.tas.icecaveLibrary.mapLogic.tiles.EmptyTile;
 import com.tas.icecaveLibrary.mapLogic.tiles.FlagTile;
 import com.tas.icecaveLibrary.mapLogic.tiles.ITile;
@@ -31,6 +32,7 @@ public class GUITileFactory
 	public GUITileFactory(){
 		mTileWorkers = new HashMap<Class<?>, IGUITileWorker>();
 		
+		mTileWorkers.put(BreakableBoulderTile.class, new BreakableBoulderTileGUIWorker());
 		mTileWorkers.put(BoulderTile.class, new BoulderTileGUIWorker());
 		mTileWorkers.put(EmptyTile.class, new EmptyTileGUIWorker());
 		mTileWorkers.put(WallTile.class, new WallTileGUIWorker());
