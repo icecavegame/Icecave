@@ -10,11 +10,11 @@ import java.util.ArrayList;
 public class BreakableBoulderTileGUIWorker extends BaseTileGUIWorker
 {
 	@Override
-	public Point getTilePointInSprite(ThemeMap map)
+	public Point getRandomTileImage(ThemeMap themeMap)
 	{
 		// Get the boulder theme.
 		BreakableTheme theme = 
-				(BreakableTheme) map.getTheme(BreakableBoulderTile.class);
+				(BreakableTheme) themeMap.getTheme(BreakableBoulderTile.class);
 		
 		// Get the tiles positions.
 		ArrayList<Point> tilePositions = theme.getTilesPositions();

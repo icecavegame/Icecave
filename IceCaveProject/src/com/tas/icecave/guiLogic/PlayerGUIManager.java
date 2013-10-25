@@ -50,11 +50,11 @@ public class PlayerGUIManager extends BaseTileGUIWorker
 						gameTheme.getPlayerTheme(), 
 						Consts.DEFAULT_PLAYER_BMP_ROWS, 
 						Consts.DEFAULT_PLAYER_BMP_COLUMNS,
-						null);
+						mCurrentSprite);
 	}
 
 	@Override
-	public Point getTilePointInSprite(ThemeMap map)
+	public Point getRandomTileImage(ThemeMap themeMap)
 	{
 		return mCurrentSprite;
 	}

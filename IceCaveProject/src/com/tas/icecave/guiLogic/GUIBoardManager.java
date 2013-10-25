@@ -31,6 +31,7 @@ import java.security.NoSuchAlgorithmException;
 public class GUIBoardManager implements Serializable, ILoadable
 {
 	private transient Bitmap[][] mTiles;
+	private Point[][] mRandomTileImages;
 	private IceCaveGame mIceCaveGame;
 	private final long HIDE_SHOW_TIME = 300;
 	private transient GameActivity mContext;
@@ -111,6 +112,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 
 		// Get the tiles
 		mTiles = new Bitmap[boardSizeHeight][boardSizeWidth];
+		mRandomTileImages = new Point[boardSizeHeight][boardSizeWidth];
 
 		// Get the map bundle for the selected configurations
 		BaseBundleMetaData mData =
@@ -138,7 +140,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 
 			// Attempt to reset shared data (of level index) before getting the index incase required
 			resetSharedData();
-			
+
 			// Attempt to get index of user progress in current difficulty
 			mBundleIndex = mContext.getSharedPreferences(Consts.PREFS_FILE_TAG, 0).getInt(mBundleNameKey, 0);
 		} catch (NoSuchAlgorithmException e)
@@ -160,18 +162,104 @@ public class GUIBoardManager implements Serializable, ILoadable
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 * @throws StreamCorruptedException
-	 * @throws CloneNotSupportedException 
+	 * @throws CloneNotSupportedException
 	 */
 	public void newStage(InputStream mapFileStream, GameTheme gameTheme) throws StreamCorruptedException,
 			IOException,
-			ClassNotFoundException, CloneNotSupportedException
+			ClassNotFoundException,
+			CloneNotSupportedException
 	{
 		mIceCaveGame.newStage(mapFileStream);
-
+		
+		// Set random tiles for this stage
 		ITile[][] board = mIceCaveGame.getBoard().getBoard();
+		
+		for (int yAxis = 0; yAxis < board.length; yAxis++)
+		{
+			for (int xAxis = 0; xAxis < board[0].length; xAxis++)
+			{
+				// Shuffle tile to select an image before loading them
+				mRandomTileImages[yAxis][xAxis] =
+						GUILogicServiceProvider.getInstance()
+								.getTileFactory()
+								.shuffleTile(board[yAxis][xAxis], gameTheme.getThemeMap());
+			}
+		}
 
 		// Get the tiles
-		mTiles = new Bitmap[board.length][board[0].length];
+		mTiles =
+				new Bitmap[mIceCaveGame.getBoard().getBoard().length][mIceCaveGame.getBoard().getBoard()[0].length];
+
+		updateBoard(gameTheme);
+	}
+
+	/**
+	 * Start a new stage.
+	 * 
+	 * @param playerStart
+	 *            - Starting location of the player.
+	 * @param wallWidth
+	 *            - Width of the wall in tiles.
+	 * @param context
+	 *            - Current activity context.
+	 * @throws CloneNotSupportedException
+	 */
+	public void
+			newStage(Point playerStart, int wallWidth, GameTheme gameTheme) throws CloneNotSupportedException
+	{
+		mIceCaveGame.newStage(playerStart, wallWidth);
+		
+		// Set random tiles for this stage
+		ITile[][] board = mIceCaveGame.getBoard().getBoard();
+		
+		for (int yAxis = 0; yAxis < board.length; yAxis++)
+		{
+			for (int xAxis = 0; xAxis < board[0].length; xAxis++)
+			{
+				// Shuffle tile to select an image before loading them
+				mRandomTileImages[yAxis][xAxis] =
+						GUILogicServiceProvider.getInstance()
+								.getTileFactory()
+								.shuffleTile(board[yAxis][xAxis], gameTheme.getThemeMap());
+			}
+		}
+
+		updateBoard(gameTheme);
+	}
+
+	/**
+	 * Update the selected tile on the board
+	 * 
+	 * @param gameTheme
+	 * @param toUpdate
+	 */
+	public void updateBoard(Point toUpdate, GameTheme gameTheme)
+	{
+		ITile[][] board = mIceCaveGame.getBoard().getBoard();
+
+		// Fill a square (by the smaller size of the screen in current orientation)
+		GUIScreenManager screenManager =
+				new GUIScreenManager(board[0].length, board.length, mContext.getWidth(), mContext.getWidth());
+				
+		mTiles[toUpdate.y][toUpdate.x] =
+				GUILogicServiceProvider.getInstance()
+						.getTileFactory()
+						.getTiles(board[toUpdate.y][toUpdate.x],
+								screenManager,
+								gameTheme,
+								GUILogicServiceProvider.getInstance()
+								.getTileFactory()
+								.shuffleTile(board[toUpdate.y][toUpdate.x], gameTheme.getThemeMap()));
+	}
+
+	/**
+	 * Update the entire board
+	 * 
+	 * @param gameTheme
+	 */
+	public void updateBoard(GameTheme gameTheme)
+	{
+		ITile[][] board = mIceCaveGame.getBoard().getBoard();
 
 		// Fill a square (by the smaller size of the screen in current orientation)
 		GUIScreenManager screenManager =
@@ -185,80 +273,13 @@ public class GUIBoardManager implements Serializable, ILoadable
 				mTiles[yAxis][xAxis] =
 						GUILogicServiceProvider.getInstance()
 								.getTileFactory()
-								.getTiles(board[yAxis][xAxis], screenManager, gameTheme);
+								.getTiles(board[yAxis][xAxis],
+										screenManager,
+										gameTheme,
+										mRandomTileImages[yAxis][xAxis]);
 			}
 		}
 	}
-
-	/**
-	 * Start a new stage.
-	 * 
-	 * @param playerStart
-	 *            - Starting location of the player.
-	 * @param wallWidth
-	 *            - Width of the wall in tiles.
-	 * @param context
-	 *            - Current activity context.
-	 * @throws CloneNotSupportedException 
-	 */
-	public void newStage(Point playerStart, int wallWidth, GameTheme gameTheme) throws CloneNotSupportedException
-	{
-		mIceCaveGame.newStage(playerStart, wallWidth);
-
-		updateBoard(gameTheme);
-	}
-
-	/**
-	 * Update the selected tile on the board
-	 * @param gameTheme
-	 * @param toUpdate
-	 */
-	public void updateBoard(Point toUpdate, GameTheme gameTheme)
-	{
-		ITile[][] board = mIceCaveGame.getBoard().getBoard();
-		
-		// Fill a square (by the smaller size of the screen in current orientation)
-		GUIScreenManager screenManager =
-				new GUIScreenManager(board[0].length, 
-									 board.length, 
-									 mContext.getWidth(), 
-									 mContext.getWidth());
-		
-		mTiles[toUpdate.y][toUpdate.x] =
-				GUILogicServiceProvider.getInstance()
-						.getTileFactory()
-						.getTiles(board[toUpdate.y][toUpdate.x], screenManager, gameTheme);
-	}
-	
-	/**
-	 * Update the entire board
-	 * @param gameTheme
-	 */
-	public void updateBoard(GameTheme gameTheme)
-	{
-		ITile[][] board = mIceCaveGame.getBoard().getBoard();
-
-		// Fill a square (by the smaller size of the screen in current orientation)
-		GUIScreenManager screenManager =
-				new GUIScreenManager(board[0].length, 
-									 board.length, 
-									 mContext.getWidth(), 
-									 mContext.getWidth());
-
-		// Go through the game board.
-		for (int yAxis = 0; yAxis < board.length; yAxis++)
-		{
-			for (int xAxis = 0; xAxis < board[0].length; xAxis++)
-			{
-				mTiles[yAxis][xAxis] =
-						GUILogicServiceProvider.getInstance()
-								.getTileFactory()
-								.getTiles(board[yAxis][xAxis], screenManager, gameTheme);
-			}
-		}
-	}
-	
-	
 
 	/**
 	 * Get the tiles of the current board.
@@ -324,18 +345,19 @@ public class GUIBoardManager implements Serializable, ILoadable
 
 	/**
 	 * Save the stage index
+	 * 
 	 * @return Index of new stage. NO_KEY if not a loaded stage
 	 */
 	public int saveStageIndex()
 	{
 		int result = NO_KEY;
-		
+
 		// Check if file exists and if index is still within file range
 		if (mBundleFiles != null && mBundleFiles.length > mBundleIndex)
 		{
 			// Increase index
 			mBundleIndex++;
-			
+
 			// Set result
 			result = mBundleIndex;
 
@@ -345,12 +367,13 @@ public class GUIBoardManager implements Serializable, ILoadable
 					.putInt(mBundleNameKey, mBundleIndex)
 					.commit();
 		}
-		
+
 		return result;
 	}
-	
+
 	// Get the bunleIndex for the current difficulty. If there are no files in the bundle return NO KEY
-	public int getBundleIndex() {
+	public int getBundleIndex()
+	{
 		return (mBundleFiles.length == 0) ? NO_KEY : mBundleIndex;
 	}
 
@@ -358,23 +381,28 @@ public class GUIBoardManager implements Serializable, ILoadable
 	{
 		mIceCaveGame.resetMoves();
 	}
-	
+
 	/**
 	 * Reset the stage.
-	 * @throws CloneNotSupportedException 
+	 * 
+	 * @throws CloneNotSupportedException
 	 */
-	public void resetStage() throws CloneNotSupportedException {
+	public void resetStage() throws CloneNotSupportedException
+	{
 		mIceCaveGame.resetStage();
 		updateBoard(getGameTheme());
 	}
-	
-	private void resetSharedData() {
+
+	private void resetSharedData()
+	{
 		// Reset some shared data if reset number value doesn't match current reset number value
 		// Thus every time that value is hardcodedly increased, a reset will occur
-		if (Consts.RESET_NUMBER != (Integer)SharedPreferencesFactory.getInstance().get(Consts.RESET_SHARED_DATA_TAG)) {
+		if (Consts.RESET_NUMBER != (Integer) SharedPreferencesFactory.getInstance()
+				.get(Consts.RESET_SHARED_DATA_TAG))
+		{
 			// Reset level index variables (for now just that)
 			mContext.getSharedPreferences(Consts.PREFS_FILE_TAG, 0).edit().putInt(mBundleNameKey, 0).commit();
-			
+
 			// Finally save new reset number value
 			SharedPreferencesFactory.getInstance().set(Consts.RESET_SHARED_DATA_TAG, Consts.RESET_NUMBER);
 		}

@@ -11,11 +11,11 @@ import com.tas.icecaveLibrary.utils.Point;
 public class BoulderTileGUIWorker extends BaseTileGUIWorker
 {
 	@Override
-	public Point getTilePointInSprite(ThemeMap map)
+	public Point getRandomTileImage(ThemeMap themeMap)
 	{
 		// Get the boulder theme.
 		BoulderTheme theme = 
-				(BoulderTheme) map.getTheme(BoulderTile.class);
+				(BoulderTheme) themeMap.getTheme(BoulderTile.class);
 		
 		// Get the tiles positions.
 		ArrayList<Point> tilePositions = theme.getTilesPositions();

@@ -1,10 +1,10 @@
 package com.tas.icecave.guiLogic.tiles;
 
 import android.graphics.Bitmap;
-
 import com.tas.icecave.guiLogic.ITileScale;
 import com.tas.icecave.guiLogic.theme.ThemeMap;
 import com.tas.icecaveLibrary.mapLogic.tiles.ITile;
+import com.tas.icecaveLibrary.utils.Point;
 
 public interface IGUITileWorker
 {
@@ -21,7 +21,7 @@ public interface IGUITileWorker
 	                       int themeRows,
 	                       int themeCols,
 	                       ITile[] tiles,
-	                       ThemeMap map);
+	                       Point tilePositionInTheme);
 	
 	/**
 	 * Create a tiles.
@@ -34,5 +34,12 @@ public interface IGUITileWorker
 	                       Bitmap theme,
 	                       int themeRows,
 	                       int themeCols,
-	                       ThemeMap map);
+	                       Point tilePositionInTheme);
+	
+	/**
+	 * Get random tile image from the values of the theme map
+	 * @param themeMap 
+	 * @return
+	 */
+	public Point getRandomTileImage(ThemeMap themeMap);
 }
