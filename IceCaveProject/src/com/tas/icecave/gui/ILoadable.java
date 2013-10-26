@@ -6,6 +6,8 @@ public interface ILoadable
 	public long getAnimationDuration();
 
 	public void onLoad();
+	
+	public void cancelLoad();
 
 	public GameTheme getGameTheme();
 

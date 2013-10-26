@@ -127,18 +127,8 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 			@Override
 			public void onClick(View v)
 			{
-				// Reset player position on logic level
-				mGBM.resetPlayer(Consts.DEFAULT_START_POS);
-
 				// Reset board
-				try
-				{
-					mGBM.resetStage();
-					mTilesView.invalidate();
-				} catch (CloneNotSupportedException e)
-				{
-					e.printStackTrace();
-				}
+				mGBM.reset();
 				
 				// Re-initialize player on UI level
 				mPlayer.initializePlayer();
@@ -190,6 +180,10 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 				initMusic();
 			}
 		});
+	}
+	
+	public void refreshBoardView() {
+		mTilesView.invalidate();
 	}
 
 	public boolean isInitialized()
@@ -570,5 +564,12 @@ public class GameActivity extends Activity implements ISwipeDetector, Observer
 		}
 
 		super.onPause();
+	}
+	
+	@Override
+	public void onBackPressed()
+	{
+		mLoadingScreen.cancelLoad(mGBM);
+		super.onBackPressed();
 	}
 }

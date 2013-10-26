@@ -62,7 +62,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 	 * @param startLoc
 	 *            - Starting location of the player to restart to.
 	 */
-	public void resetPlayer(Point startLoc)
+	private void resetPlayer(Point startLoc)
 	{
 		mIceCaveGame.resetPlayer(startLoc);
 	}
@@ -240,7 +240,8 @@ public class GUIBoardManager implements Serializable, ILoadable
 		// Fill a square (by the smaller size of the screen in current orientation)
 		GUIScreenManager screenManager =
 				new GUIScreenManager(board[0].length, board.length, mContext.getWidth(), mContext.getWidth());
-				
+
+		// Warning! Will not work if would allow more than one empty tile to be selected
 		mTiles[toUpdate.y][toUpdate.x] =
 				GUILogicServiceProvider.getInstance()
 						.getTileFactory()
@@ -342,6 +343,12 @@ public class GUIBoardManager implements Serializable, ILoadable
 
 		mLoad.start();
 	}
+	
+	@Override
+	public void cancelLoad()
+	{
+		//mLoad.interrupt(); // FIXME STOP THREAD SOMEHOW!!!
+	}
 
 	/**
 	 * Save the stage index
@@ -377,7 +384,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 		return (mBundleFiles.length == 0) ? NO_KEY : mBundleIndex;
 	}
 
-	public void resetMoves()
+	private void resetMoves()
 	{
 		mIceCaveGame.resetMoves();
 	}
@@ -387,10 +394,28 @@ public class GUIBoardManager implements Serializable, ILoadable
 	 * 
 	 * @throws CloneNotSupportedException
 	 */
-	public void resetStage() throws CloneNotSupportedException
+	private void resetStage() throws CloneNotSupportedException
 	{
 		mIceCaveGame.resetStage();
 		updateBoard(getGameTheme());
+	}
+	
+	/**
+	 * Reset the board and player position
+	 */
+	public void reset() {
+		// Reset player position on logic level
+		resetPlayer(Consts.DEFAULT_START_POS);
+		
+		// Reset board
+		try
+		{
+			resetStage();
+			mContext.refreshBoardView();
+		} catch (CloneNotSupportedException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	private void resetSharedData()
