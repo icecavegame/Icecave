@@ -347,7 +347,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 	@Override
 	public void cancelLoad()
 	{
-		//mLoad.interrupt(); // FIXME STOP THREAD SOMEHOW!!!
+		mLoad.interrupt();
 	}
 
 	/**

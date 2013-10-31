@@ -118,6 +118,7 @@ public class LoadingThread extends Thread
 			}
 		} catch (InterruptedException e)
 		{
+			// This is pretty normal. Nothing special to do in this case
 			e.printStackTrace();
 		}
 
