@@ -51,6 +51,7 @@ public class GUIBoardManager implements Serializable, ILoadable
 	 * 
 	 * @return Minimal moves for stage.
 	 */
+	@Override
 	public int getMinimalMovesForStage()
 	{
 		return mIceCaveGame.getStageMoves();
@@ -72,19 +73,10 @@ public class GUIBoardManager implements Serializable, ILoadable
 	 * 
 	 * @return Moves player made in stage.
 	 */
+	@Override
 	public int getMovesCarriedOutThisStage()
 	{
 		return mIceCaveGame.getCurrentStageTakenMoves();
-	}
-
-	/**
-	 * Return the overall moves for the current game.
-	 * 
-	 * @return Overall moves in game.
-	 */
-	public int getOverAllMovesForGame()
-	{
-		return mIceCaveGame.getOverallMoves();
 	}
 
 	/**
@@ -241,7 +233,6 @@ public class GUIBoardManager implements Serializable, ILoadable
 		GUIScreenManager screenManager =
 				new GUIScreenManager(board[0].length, board.length, mContext.getWidth(), mContext.getWidth());
 
-		// Warning! Will not work if would allow more than one empty tile to be selected
 		mTiles[toUpdate.y][toUpdate.x] =
 				GUILogicServiceProvider.getInstance()
 						.getTileFactory()
@@ -407,15 +398,19 @@ public class GUIBoardManager implements Serializable, ILoadable
 		// Reset player position on logic level
 		resetPlayer(Consts.DEFAULT_START_POS);
 		
+		// Reset move count
+		resetMoves();
+		
+		// TODO Must use this for refreshing board when using breakables
 		// Reset board
-		try
+		/*try
 		{
 			resetStage();
 			mContext.refreshBoardView();
 		} catch (CloneNotSupportedException e)
 		{
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	private void resetSharedData()

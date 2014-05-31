@@ -42,7 +42,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 	{
 		super.onCreate();
 
-		mPlayer = MediaPlayer.create(this, R.raw.card_game_in_progress);
+		mPlayer = MediaPlayer.create(this, R.raw.for_ice_cave);
 		mPlayer.setOnErrorListener(this);
 
 		if (mPlayer != null)
@@ -53,6 +53,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 		mPlayer.setOnErrorListener(new OnErrorListener()
 		{
 
+			@Override
 			public boolean onError(MediaPlayer mp, int what, int extra)
 			{
 
@@ -136,6 +137,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 		}
 	}
 
+	@Override
 	public boolean onError(MediaPlayer mp, int what, int extra)
 	{
 
